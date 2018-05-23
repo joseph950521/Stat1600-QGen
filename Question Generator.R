@@ -35,20 +35,20 @@ for(i in 1:n)
 {
 points <- sample(c(rep(0,answers-1),100),replace=F)
 corr.ind <- 6 + which.max(points)
-data <- rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30))
-corr.ans <- mean(data)
-ans.text <- rnorm(answers,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.75*rt(answers,df=30))
+data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = 1)
+corr.ans <- round(mean(data), digits = 1)
+ans.text <- round(rnorm(answers,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.75*rt(answers,df=30)), digits = 1)
 hint <- "Watch out for negatives!"
 feedback <- "Did you sum the numbers (subtracting any negatives) and divide by the sample size?"
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
            rep("Option", answers),"Hint","Feedback")
 content <- c(type, "MeanMC1", "Find the Mean", paste(quest.txt,
-                                                     paste(as.character(round(data,digits=3)),
-                                                           collapse=", ",sep=""),
+                                                     paste(as.character(data),
+                                                           collapse=", ",sep="")),
                                                      collapse = ""),
              points.per.q, difficulty, points, hint, feedback)
-options <- c(rep("",6), round(ans.text, digits = 3), rep("",2))
-options[corr.ind] <- round(corr.ans,digits = 3)
+options <- c(rep("",6), ans.text, rep("",2))
+options[corr.ind] <- corr.ans
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
@@ -69,8 +69,8 @@ for(i in 1:n)
   dat.size = sample(c(5,6), size = 1)
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  data <- rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30))
-  corr.ans <- median(data)
+  data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = 1)
+  corr.ans <- round(median(data), digits = 1)
   ans.text <- sample(c(median(data)-15.2, sd(data),
                        rnorm(answers-2,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(answers-2,df=30))),
                      replace = F)
@@ -79,12 +79,12 @@ for(i in 1:n)
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
   content <- c(type, "MedianMC1", "Find the Median", paste(quest.txt,
-                                                           paste(as.character(round(data,digits=3)),
+                                                           paste(as.character(data),
                                                                  collapse=", ",sep=""),
                                                            collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), round(ans.text, digits = 3), rep("",2))
-  options[corr.ind] <- round(corr.ans,digits = 3)
+  options <- c(rep("",6), ans.text, rep("",2))
+  options[corr.ind] <- corr.ans
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
@@ -105,22 +105,22 @@ for(i in 1:n)
 {
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  data <- rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30))
-  corr.ans <- sd(data)
-  ans.text <- sample(c(sd(data)^2, sqrt(sd(data)^2*(dat.size-1)),
+  data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = 1)
+  corr.ans <- round(sd(data), digits = 1)
+  ans.text <- round(sample(c(sd(data)^2, sqrt(sd(data)^2*(dat.size-1)),
                        rnorm(answers-2,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(answers-2,df=30))),
-                     replace = F)
+                     replace = F), digits = 1)
   hint <- "Don't forget to take a square root at the end."
   feedback <- "1: Mean. 2: Squared differences. 3: Sum. 4: Divide. 5. Square Root. "
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
   content <- c(type, "SDMC1", "Find the SD", paste(quest.txt,
-                                                       paste(as.character(round(data,digits=3)),
+                                                       paste(as.character(data),
                                                              collapse=", ",sep=""),
                                                        collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), round(ans.text, digits = 3), rep("",2))
-  options[corr.ind] <- round(corr.ans,digits = 3)
+  options <- c(rep("",6), ans.text, rep("",2))
+  options[corr.ind] <- corr.ans
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
@@ -148,12 +148,12 @@ for(i in 1:n)
   data2 <- runif(dat.size, 65, 150)
   data3 <- sample(c(runif(dat.size, data1 - 180, data1 - 5),
                   runif(dat.size, data1 + 5, data1 + 180)), size = 1)
-  corr.ans <- pnorm(data3, data1, data2)
+  corr.ans <- pnorm(round(((data3 - data1)/data2), digits = 2))
   up.min <- corr.ans + .05
   down.max <- corr.ans - .05
-  ans.text <- sample(c(runif(2, ifelse(up.min < 1, up.min, 0), ifelse(up.min < 1, 1.05, down.max)),
-                       runif(2, ifelse(down.max > 0, -0.05, up.min), ifelse(down.max > 0, down.max, 1))),
-                     replace = F)
+  ans.text <- sample(c(runif(ceiling(answers/2), ifelse(up.min < 1, up.min, 0), ifelse(up.min < 1, 1.05, down.max)),
+                       runif(ceiling(answers/2), ifelse(down.max > 0, -0.05, up.min), ifelse(down.max > 0, down.max, 1))),
+                     size = answers, replace = F)
   hint <- "You'll need your Z-table for this question."
   feedback <- "1: Calculate Z. 2: Find area below on the Z-table."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -192,12 +192,12 @@ for(i in 1:n)
   data2 <- runif(dat.size, 65, 150)
   data3 <- sample(c(runif(dat.size, data1 - 180, data1 - 5),
                     runif(dat.size, data1 + 5, data1 + 180)), size = 1)
-  corr.ans <- 1 - pnorm(data3, data1, data2)
+  corr.ans <- 1 - pnorm(round(((data3-data1)/data2), digits = 2))
   up.min <- corr.ans + .05
   down.max <- corr.ans - .05
-  ans.text <- sample(c(runif(2, ifelse(up.min < 1, up.min, 0), ifelse(up.min < 1, 1.05, down.max)),
-                       runif(2, ifelse(down.max > 0, -0.05, up.min), ifelse(down.max > 0, down.max, 1))),
-                     replace = F)
+  ans.text <- sample(c(runif(ceiling(answers/2), ifelse(up.min < 1, up.min, 0), ifelse(up.min < 1, 1.05, down.max)),
+                       runif(ceiling(answers/2), ifelse(down.max > 0, -0.05, up.min), ifelse(down.max > 0, down.max, 1))),
+                     size = answers, replace = F)
   hint <- "You'll need your Z-table for this question."
   feedback <- "1: Calculate Z. 2: Find area below on the Z-table. 3: Take 1 - area below."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
