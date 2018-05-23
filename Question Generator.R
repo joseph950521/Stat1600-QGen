@@ -54,7 +54,7 @@ questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="QBank.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file="MeanMC1.csv", row.names=F, col.names=F)
 
 ##### MedianMC1 #####
 n = 200
@@ -90,7 +90,7 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="QBank.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file="MedianMC1.csv", row.names=F, col.names=F)
 
 ##### SDMC1 #####
 n = 200
@@ -126,7 +126,7 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="QBank.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file="SDMC1.csv", row.names=F, col.names=F)
 
 ##### NormDistMC1 #####
 n = 200
@@ -170,7 +170,7 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="QBank.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file="NormDistMC1.csv", row.names=F, col.names=F)
 
 ##### NormDistMC2 #####
 n = 200
@@ -214,7 +214,7 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="QBank.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file="NormDistMC2.csv", row.names=F, col.names=F)
 
 ##### RobustMC1 #####
 n = 200
@@ -250,4 +250,4 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[((9+answers)):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="QBank.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file="RobustMC1.csv", row.names=F, col.names=F)
