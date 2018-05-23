@@ -44,7 +44,7 @@ param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
            rep("Option", answers),"Hint","Feedback")
 content <- c(type, "MeanMC1", "Find the Mean", paste(quest.txt,
                                                      paste(as.character(data),
-                                                           collapse=", ",sep="")),
+                                                           collapse=", ",sep=""),
                                                      collapse = ""),
              points.per.q, difficulty, points, hint, feedback)
 options <- c(rep("",6), ans.text, rep("",2))
