@@ -8,7 +8,7 @@
 ##### code to replace the test banks at least once per year. The longest part   #####
 ##### of the process is waiting on the e-learning uploads of the CSVs so-created. ###                                                               #####
 
-##### 6/25 Generators for test 1 completed  #####
+##### 7/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -23,6 +23,7 @@
 ##### multiple choice question about a mean.                                    #####
 
 ##### MeanMC1 #####
+ID <- "MeanMC1"
 n = 200
 type <- "MC"
 answers <- 4
@@ -42,7 +43,7 @@ hint <- "Watch out for negatives!"
 feedback <- "Did you sum the numbers (subtracting any negatives) and divide by the sample size?"
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
            rep("Option", answers),"Hint","Feedback")
-content <- c(type, "MeanMC1", "Find the Mean", paste(quest.txt,
+content <- c(type, ID, "Find the Mean", paste(quest.txt,
                                                      paste(as.character(data),
                                                            collapse=", ",sep=""),
                                                      collapse = ""),
@@ -54,9 +55,11 @@ questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="MeanMC1.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file=paste(ID, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
 ##### MedianMC1 #####
+ID <- "MedianMC1"
 n = 200
 type <- "MC"
 answers <- 4
@@ -78,7 +81,7 @@ for(i in 1:n)
   feedback <- "Sort and find the middle number, or take the average of the two middle numbers."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
-  content <- c(type, "MedianMC1", "Find the Median", paste(quest.txt,
+  content <- c(type, ID, "Find the Median", paste(quest.txt,
                                                            paste(as.character(data),
                                                                  collapse=", ",sep=""),
                                                            collapse = ""),
@@ -90,9 +93,11 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="MedianMC1.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file=paste(ID, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
 ##### SDMC1 #####
+ID <- "SDMC1"
 n = 200
 type <- "MC"
 answers <- 4
@@ -114,7 +119,7 @@ for(i in 1:n)
   feedback <- "1: Mean. 2: Squared differences. 3: Sum. 4: Divide. 5. Square Root. "
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
-  content <- c(type, "SDMC1", "Find the SD", paste(quest.txt,
+  content <- c(type, ID, "Find the SD", paste(quest.txt,
                                                        paste(as.character(data),
                                                              collapse=", ",sep=""),
                                                        collapse = ""),
@@ -126,9 +131,11 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="SDMC1.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file=paste(ID, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
 ##### NormDistMC1 #####
+ID <- "NormDistMC1"
 n = 200
 type <- "MC"
 answers <- 4
@@ -147,7 +154,7 @@ for(i in 1:n)
   data1 <- rnorm(dat.size,mean=rnorm(1,mean=900,sd=300),sd=100) + (0.25*rt(dat.size,df=30))
   data2 <- runif(dat.size, 65, 150)
   data3 <- sample(c(runif(dat.size, data1 - 180, data1 - 5),
-                  runif(dat.size, data1 + 5, data1 + 180)), size = 1)
+                  runif(dat.size, data1 + 5, data1 + 180)), size = dat.size)
   corr.ans <- pnorm(round(((data3 - data1)/data2), digits = 2))
   up.min <- corr.ans + .05
   down.max <- corr.ans - .05
@@ -158,7 +165,7 @@ for(i in 1:n)
   feedback <- "1: Calculate Z. 2: Find area below on the Z-table."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
-  content <- c(type, "NormDistMC1", "Normal Probability", paste(quest.txt1, round(data1, digits=3), quest.txt2,
+  content <- c(type, ID, "Normal Probability", paste(quest.txt1, round(data1, digits=3), quest.txt2,
                                                                 round(data2, digits=3), quest.txt3, 
                                                                 round(data3, digits = 3), quest.txt4,
                                                                 collapse = "", sep= ""),
@@ -170,9 +177,11 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="NormDistMC1.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file=paste(ID, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
 ##### NormDistMC2 #####
+ID <- "NormDistMC2"
 n = 200
 type <- "MC"
 answers <- 4
@@ -191,7 +200,7 @@ for(i in 1:n)
   data1 <- rnorm(dat.size,mean=rnorm(1,mean=900,sd=300),sd=100) + (0.25*rt(dat.size,df=30))
   data2 <- runif(dat.size, 65, 150)
   data3 <- sample(c(runif(dat.size, data1 - 180, data1 - 5),
-                    runif(dat.size, data1 + 5, data1 + 180)), size = 1)
+                    runif(dat.size, data1 + 5, data1 + 180)), size = dat.size)
   corr.ans <- 1 - pnorm(round(((data3-data1)/data2), digits = 2))
   up.min <- corr.ans + .05
   down.max <- corr.ans - .05
@@ -202,7 +211,7 @@ for(i in 1:n)
   feedback <- "1: Calculate Z. 2: Find area below on the Z-table. 3: Take 1 - area below."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
-  content <- c(type, "NormDistMC2", "Normal Probability", paste(quest.txt1, round(data1, digits=3), quest.txt2,
+  content <- c(type, ID, "Normal Probability", paste(quest.txt1, round(data1, digits=3), quest.txt2,
                                                                 round(data2, digits=3), quest.txt3, 
                                                                 round(data3, digits = 3), quest.txt4,
                                                                 collapse = "", sep= ""),
@@ -214,9 +223,57 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="NormDistMC2.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file=paste(ID, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### InvNormMC1 #####
+ID <- "InvNormMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Given that some normally distributed data has a mean of "
+quest.txt2 <- " and a standard deviation of "
+quest.txt3 <- ". What is the value x of this dataset where "
+quest.txt4 <- "% of all other data values are "
+dat.size = 1
+questions <- data.frame()
+for(i in 1:n)
+{
+  points <- sample(c(rep(0,answers-1),100), replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- rnorm(dat.size,mean=rnorm(1,mean=900,sd=300),sd=100) + (0.25*rt(dat.size,df=30))
+  data2 <- runif(dat.size, 65, 150)
+  data3 <- round(runif(dat.size, .05, .95), digits = 2)
+  data4 <- sample(c("less?", "greater?"), size = 1)
+  corr.ans <- ifelse(data4 == "less?", (data2*round(qnorm(data3), digits=2) + data1),
+                     (data2*round(qnorm(data3, lower.tail = F), digits = 2) + data1))
+  up.min <- corr.ans + 5
+  down.max <- corr.ans - 5
+  ans.text <- sample(c(runif(ceiling(answers/2), (data1 - 5*data2), down.max),
+                       runif(ceiling(answers/2), up.min, (data1 + 5*data2))),
+                     size = answers, replace = F)
+  hint <- "This is an inverted or 'backward' Z-table question. Pick the closest answer."
+  feedback <- "1: Find the closest probability on the Z-table. 2: Find the Z value. 3: Calculate the value x."
+  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+             rep("Option", answers),"Hint","Feedback")
+  content <- c(type, ID, "Inverse Normal Probability", paste(quest.txt1, data1, quest.txt2,
+                                                                data2, quest.txt3, data3, quest.txt4,
+                                                                quest.txt5, collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), round(ans.text, digits = 3), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = 3)
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(ID, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
 ##### RobustMC1 #####
+ID <- "RobustMC1"
 n = 200
 type <- "MC"
 answers <- 5
@@ -240,7 +297,7 @@ for(i in 1:n)
   feedback <- "The mean is least robust, and the median is most robust."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
-  content <- c(type, "RobustMC1", "Robust Concept", paste(quest.txt1, data, quest.txt2,
+  content <- c(type, ID, "Robust Concept", paste(quest.txt1, data, quest.txt2,
                                                           collapse = "", sep = ""),
                points.per.q, difficulty, points, hint, feedback)
   options <- c(rep("",6), ans.text, rep("",2))
@@ -250,4 +307,6 @@ for(i in 1:n)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[((9+answers)):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file="RobustMC1.csv", row.names=F, col.names=F)
+write.table(questions, sep=",", file=paste(ID, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
