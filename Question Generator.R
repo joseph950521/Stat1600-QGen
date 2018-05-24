@@ -158,9 +158,11 @@ for(i in 1:n)
   corr.ans <- pnorm(round(((data3 - data1)/data2), digits = 2))
   up.min <- corr.ans + .05
   down.max <- corr.ans - .05
-  ans.text <- sample(c(runif(ceiling(answers/2), ifelse(up.min < 1, up.min, 0), ifelse(up.min < 1, 1.05, down.max)),
-                       runif(ceiling(answers/2), ifelse(down.max > 0, -0.05, up.min), ifelse(down.max > 0, down.max, 1))),
-                     size = answers, replace = F)
+  ans.txt <- sample(if(corr.ans < .025){runif(answers, up.min, 1.05)}
+                    else{if(corr.ans > .975){runif(answers, -0.05, down.max)}
+                      else{c(runif(ceiling(answers/2), -0.05, down.max),
+                             runif(ceiling(answers/2), up.min, 1.05))}},
+                    size = answers, replace = F)
   hint <- "You'll need your Z-table for this question."
   feedback <- "1: Calculate Z. 2: Find area below on the Z-table."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -204,9 +206,11 @@ for(i in 1:n)
   corr.ans <- 1 - pnorm(round(((data3-data1)/data2), digits = 2))
   up.min <- corr.ans + .05
   down.max <- corr.ans - .05
-  ans.text <- sample(c(runif(ceiling(answers/2), ifelse(up.min < 1, up.min, 0), ifelse(up.min < 1, 1.05, down.max)),
-                       runif(ceiling(answers/2), ifelse(down.max > 0, -0.05, up.min), ifelse(down.max > 0, down.max, 1))),
-                     size = answers, replace = F)
+  ans.txt <- sample(if(corr.ans < .025){runif(answers, up.min, 1.05)}
+                    else{if(corr.ans > .975){runif(answers, -0.05, down.max)}
+                         else{c(runif(ceiling(answers/2), -0.05, down.max),
+                                runif(ceiling(answers/2), up.min, 1.05))}},
+                    size = answers, replace = F)
   hint <- "You'll need your Z-table for this question."
   feedback <- "1: Calculate Z. 2: Find area below on the Z-table. 3: Take 1 - area below."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -249,8 +253,8 @@ for(i in 1:n)
   data4 <- sample(c("less?", "greater?"), size = 1)
   corr.ans <- ifelse(data4 == "less?", (data2*round(qnorm(data3), digits=2) + data1),
                      (data2*round(qnorm(data3, lower.tail = F), digits = 2) + data1))
-  up.min <- corr.ans + 5
-  down.max <- corr.ans - 5
+  up.min <- corr.ans + data2/3
+  down.max <- corr.ans - data2/3
   ans.text <- sample(c(runif(ceiling(answers/2), (data1 - 5*data2), down.max),
                        runif(ceiling(answers/2), up.min, (data1 + 5*data2))),
                      size = answers, replace = F)
