@@ -5,8 +5,8 @@
 ##### single function with many adaptive arguments, or a suite of functions.    #####
 
 ##### These will help streamline test writing, requiring only that one runs the #####
-##### code to replace the test banks at least once per year. The longest part   #####
-##### of the process is waiting on the e-learning uploads of the CSVs so-created. ###                                                               #####
+##### code and occasionally re-uploads the test banks. The longest part of the  #####
+##### process is waiting on the e-learning uploads of the CSVs so-created.      #####                                                               #####
 
 ##### 7/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
@@ -247,27 +247,32 @@ for(i in 1:n)
 {
   points <- sample(c(rep(0,answers-1),100), replace=F)
   corr.ind <- 6 + which.max(points)
-  data1 <- rnorm(dat.size,mean=rnorm(1,mean=900,sd=300),sd=100) + (0.25*rt(dat.size,df=30))
-  data2 <- runif(dat.size, 65, 150)
-  data3 <- round(runif(dat.size, .05, .95), digits = 2)
+  data1 <- round((rnorm(dat.size,mean=rnorm(1,mean=900,sd=300),sd=100) + (0.25*rt(dat.size,df=30))), digits = 1)
+  data2 <- round(runif(dat.size, 65, 150), digits = 1) 
+  data3 <- round(runif(dat.size, 3, 97), digits = 0)
   data4 <- sample(c("less?", "greater?"), size = 1)
-  corr.ans <- ifelse(data4 == "less?", (data2*round(qnorm(data3), digits=2) + data1),
-                     (data2*round(qnorm(data3, lower.tail = F), digits = 2) + data1))
+  corr.ans <- ifelse(data4 == "less?", (data2*round(qnorm(data3/100), digits=2) + data1),
+                     (data2*round(qnorm(data3/100, lower.tail = F), digits = 2) + data1))
   up.min <- corr.ans + data2/3
   down.max <- corr.ans - data2/3
-  ans.text <- sample(c(runif(ceiling(answers/2), (data1 - 5*data2), down.max),
-                       runif(ceiling(answers/2), up.min, (data1 + 5*data2))),
-                     size = answers, replace = F)
+  #ans.text <- sample(c(runif(ceiling(answers/2), (data1 - 5*data2), down.max),
+  #                     runif(ceiling(answers/2), up.min, (data1 + 5*data2))),
+  #                   size = answers, replace = F)
+  ans.txt <- sample(if(corr.ans < (data1 - 2*data2)){runif(answers, up.min, (data1 + 4*data2))}
+                       else{if(corr.ans > (data1 + 2*data2)){runif(answers, (data1 - 4*data2), down.max)}
+                            else{c(runif(ceiling(answers/2), (data1 - 4*data2), down.max),
+                                   runif(ceiling(answers/2), up.min, (data1 + 4*data2)))}},
+                    size = answers, replace = F)
   hint <- "This is an inverted or 'backward' Z-table question. Pick the closest answer."
   feedback <- "1: Find the closest probability on the Z-table. 2: Find the Z value. 3: Calculate the value x."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, "Inverse Normal Probability", paste(quest.txt1, data1, quest.txt2,
                                                                 data2, quest.txt3, data3, quest.txt4,
-                                                                quest.txt5, collapse = "", sep= ""),
+                                                                data4, collapse = "", sep= ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), round(ans.text, digits = 3), rep("",2))
-  options[corr.ind] <- round(corr.ans,digits = 3)
+  options <- c(rep("",6), round(ans.text, digits = 1), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = 1)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
