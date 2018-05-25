@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the CSVs so-created.      #####                                                               #####
 
-##### 7/25 Generators for test 1 completed  #####
+##### 8/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -387,8 +387,45 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### VarTypeMC1 #####
-
-
+title <- "VarTypeMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A student wants to visualize data that is "
+quest.txt2 <- ". What kind of graph should she select for this purpose?"
+dat.size = 
+digits = 
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data <- sample(c("categorical", "numerical"), size = 1)
+  cat.ans <- c("Bar Graph", "Pie Graph")
+  cat.supp <- c("None of These", "All of These")
+  num.ans <- c("Stem & Leaf Plot", "Histogram", "Dot Plot", "Box Plot")
+  corr.ans <- ifelse(data == "categorical", sample(cat.ans, size = 1), sample(num.ans, size = 1))
+  ans.txt <- if(data == "categorical"){sample(num.ans, size = answers)}
+             else{c(sample(cat.ans, size = length(cat.ans)), sample(cat.supp, size = length(cat.supp)))}
+  hint <- "Focus on the variable type: categorical vs. numeric."
+  feedback <- "Categorical: Bar or Pie. Numeric: Stem & Leaf, Histogram, Dot, or Box."
+  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+             rep("Option", answers),"Hint","Feedback")
+  content <- c(type, ID, ID, paste(quest.txt1, data, quest.txt2,
+                                   collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[((9+answers)):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
 ##### VarTypeMC2 #####
 
