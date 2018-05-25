@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the CSVs so-created.      #####                                                               #####
 
-##### 8/25 Generators for test 1 completed  #####
+##### 9/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -428,4 +428,49 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### VarTypeMC2 #####
-
+title <- "VarTypeMC2"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A student decides to take a survey for her class project. She surveys other students and records their "
+quest.txt2 <- ". She decides to use a "
+quest.txt3 <- " to visualize this data. Did she choose a correct graphic?"
+dat.size = 
+digits = 
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  num.data1 <- c("heights in raw inches", "weights in raw lbs", "GPAs in raw points",
+                "time spent sleeping per night in raw hours", "time spent studying per day in raw hours")
+  cat.data1 <- c("heights in ranges (5.0-5.5 ft, 5.5-6 ft, etc)", "weights in ranges (100-125 lbs, 125-150 lbs, etc.)",
+                "racial demographics (white, black, etc.)", "countries of origin", "emotional states (sad, happy, etc.)")
+  data1 <- sample(c(num.data1, cat.data1), size = 1)
+  num.data2 <- c("relative frequency table", "stem & leaf plot", "histogram",
+                       "dotplot", "boxplot")
+  cat.data2 <- c("relative frequency table","bar graph", "pie graph")
+  data2 <- sample(c(num.data2, cat.data2), size = 1)
+  corr.ans <- if(((data1 %in% cat.data1) & (data2 %in% cat.data2)) |
+                 ((data1 %in% num.data1) & (data2 %in% num.data2))){"Yes"}
+              else{"No"}
+  ans.txt <- rep(if(corr.ans == "Yes"){"No"}else{"Yes"}, 2)
+  hint <- "What is the variable's type: categorical or numeric?"
+  feedback <- "Categorical: Bar, RF table, or Pie. Numeric: Stem & Leaf, RF table, Histogram, Dot, or Box."
+  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+             rep("Option", answers),"Hint","Feedback")
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
+                                   collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[((9+answers)):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
