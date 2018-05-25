@@ -268,9 +268,6 @@ for(i in 1:n)
                      (data2*round(qnorm(data3/100, lower.tail = F), digits = 2) + data1))
   up.min <- corr.ans + data2/3
   down.max <- corr.ans - data2/3
-  #ans.text <- sample(c(runif(ceiling(answers/2), (data1 - 5*data2), down.max),
-  #                     runif(ceiling(answers/2), up.min, (data1 + 5*data2))),
-  #                   size = answers, replace = F)
   ans.txt <- sample(if(corr.ans < (data1 - 2*data2)){runif(answers, up.min, (data1 + 4*data2))}
                        else{if(corr.ans > (data1 + 2*data2)){runif(answers, (data1 - 4*data2), down.max)}
                             else{c(runif(ceiling(answers/2), (data1 - 4*data2), down.max),
@@ -343,10 +340,11 @@ points.per.q <- 4
 difficulty <- 1
 quest.txt1 <- "Given that some normally distributed data has a mean of "
 quest.txt2 <- " and a standard deviation of "
-quest.txt3 <- ". What is the value x of this dataset where "
-quest.txt4 <- "% of all other data values are "
+quest.txt3 <- ". What is the "
+quest.txt4 <- " endpoint of the interval that is centered on the mean and includes "
+quest.txt5 <- "% of all the data?"
 dat.size = 1
-digits = 1
+digits = 2
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -354,28 +352,29 @@ for(i in 1:n)
   points <- sample(c(rep(0,answers-1),100), replace=F)
   corr.ind <- 6 + which.max(points)
   data1 <- round((rnorm(dat.size,mean=rnorm(1,mean=900,sd=300),sd=100) + (0.25*rt(dat.size,df=30))), digits = digits)
-  data2 <- round(runif(dat.size, 65, 150), digits = digits) 
-  data3 <- round(runif(dat.size, 3, 97), digits = 0)
-  data4 <- sample(c("less?", "greater?"), size = 1)
-  corr.ans <- ifelse(data4 == "less?", (data2*round(qnorm(data3/100), digits = 2) + data1),
-                     (data2*round(qnorm(data3/100, lower.tail = F), digits = 2) + data1))
+  data2 <- round(runif(dat.size, 65, 150), digits = digits)
+  data3 <- sample(c("lower", "upper"), size = 1)
+  data4 <- sample(c(68, 95, 99.7), size = 1)
+  corr.ans <- ifelse((data3 == "lower"), (data1 - data2*if(data4 == 68){1}
+                                                       else{if(data4 == 95){2}
+                                                            else{3}}),
+                     (data1 + data2*if(data4 == 68){1}
+                                    else{if(data4 == 95){2}
+                                         else{3}}))
   up.min <- corr.ans + data2/3
   down.max <- corr.ans - data2/3
-  #ans.text <- sample(c(runif(ceiling(answers/2), (data1 - 5*data2), down.max),
-  #                     runif(ceiling(answers/2), up.min, (data1 + 5*data2))),
-  #                   size = answers, replace = F)
-  ans.txt <- sample(if(corr.ans < (data1 - 2*data2)){runif(answers, up.min, (data1 + 4*data2))}
-                    else{if(corr.ans > (data1 + 2*data2)){runif(answers, (data1 - 4*data2), down.max)}
+  ans.txt <- sample(if(corr.ans == data1 - 3*data2){runif(answers, up.min, (data1 + 4*data2))}
+                    else{if(corr.ans == (data1 + 3*data2)){runif(answers, (data1 - 4*data2), down.max)}
                       else{c(runif(ceiling(answers/2), (data1 - 4*data2), down.max),
                              runif(ceiling(answers/2), up.min, (data1 + 4*data2)))}},
                     size = answers, replace = F)
-  hint <- "This is an inverted or 'backward' Z-table question. Pick the closest answer."
-  feedback <- "1: Find the closest probability on the Z-table. 2: Find the Z value. 3: Calculate the value x."
+  hint <- "This is an empirical rule question."
+  feedback <- "1: Determine if the endpoint is lower or upper. 2: Find the probability centered on the mean (68, 95, or 99.7%). 3: Subtract or add 1, 2, or 3 SDs from the mean depending on steps 1 and 2."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
              rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
-                                                             data2, quest.txt3, data3, quest.txt4,
-                                                             data4, collapse = "", sep= ""),
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5, collapse = "", sep= ""),
                points.per.q, difficulty, points, hint, feedback)
   options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
   options[corr.ind] <- round(corr.ans, digits = digits)
