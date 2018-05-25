@@ -319,3 +319,13 @@ questions <- questions[((9+answers)):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(ID, ".csv", sep = ""),
             row.names=F, col.names=F)
 
+##### EmpRuleMC1 #####
+
+
+
+##### VarTypeMC1 #####
+
+
+
+##### VarTypeMC2 #####
+
