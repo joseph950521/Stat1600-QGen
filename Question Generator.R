@@ -31,14 +31,15 @@ points.per.q <- 4
 difficulty <- 1
 quest.txt <- "What is the mean of the following dataset?"
 dat.size = 5
+digits = 1
 questions <- data.frame()
 for(i in 1:n)
 {
 points <- sample(c(rep(0,answers-1),100),replace=F)
 corr.ind <- 6 + which.max(points)
-data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = 1)
-corr.ans <- round(mean(data), digits = 1)
-ans.text <- round(rnorm(answers,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.75*rt(answers,df=30)), digits = 1)
+data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = digits)
+corr.ans <- round(mean(data), digits = digits)
+ans.txt <- round(rnorm(answers,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.75*rt(answers,df=30)), digits = digits)
 hint <- "Watch out for negatives!"
 feedback <- "Did you sum the numbers (subtracting any negatives) and divide by the sample size?"
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -48,7 +49,7 @@ content <- c(type, ID, "Find the Mean", paste(quest.txt,
                                                            collapse=", ",sep=""),
                                                      collapse = ""),
              points.per.q, difficulty, points, hint, feedback)
-options <- c(rep("",6), ans.text, rep("",2))
+options <- c(rep("",6), ans.txt, rep("",2))
 options[corr.ind] <- corr.ans
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
@@ -66,17 +67,19 @@ answers <- 4
 points.per.q <- 4
 difficulty <- 1
 quest.txt <- "What is the median of the following dataset?"
+digits = 1
 questions <- data.frame()
 for(i in 1:n)
 {
   dat.size = sample(c(5,6), size = 1)
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = 1)
-  corr.ans <- round(median(data), digits = 1)
-  ans.text <- sample(c(median(data)-15.2, sd(data),
+  data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = digits)
+  corr.ans <- round(median(data), digits = digits)
+  ans.txt <- round(sample(c(median(data)-15.2, sd(data),
                        rnorm(answers-2,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(answers-2,df=30))),
-                     replace = F)
+                     replace = F),
+                   digits = digits)
   hint <- "Sort the data first."
   feedback <- "Sort and find the middle number, or take the average of the two middle numbers."
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -86,7 +89,7 @@ for(i in 1:n)
                                                                  collapse=", ",sep=""),
                                                            collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), ans.text, rep("",2))
+  options <- c(rep("",6), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
@@ -105,16 +108,17 @@ points.per.q <- 4
 difficulty <- 1
 quest.txt <- "What is the SD of the following dataset?"
 dat.size = 5
+digits = 1
 questions <- data.frame()
 for(i in 1:n)
 {
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
   data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = 1)
-  corr.ans <- round(sd(data), digits = 1)
-  ans.text <- round(sample(c(sd(data)^2, sqrt(sd(data)^2*(dat.size-1)),
+  corr.ans <- round(sd(data), digits = digits)
+  ans.txt <- round(sample(c(sd(data)^2, sqrt(sd(data)^2*(dat.size-1)),
                        rnorm(answers-2,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(answers-2,df=30))),
-                     replace = F), digits = 1)
+                     replace = F), digits = digits)
   hint <- "Don't forget to take a square root at the end."
   feedback <- "1: Mean. 2: Squared differences. 3: Sum. 4: Divide. 5. Square Root. "
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -124,7 +128,7 @@ for(i in 1:n)
                                                              collapse=", ",sep=""),
                                                        collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), ans.text, rep("",2))
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
@@ -146,6 +150,7 @@ quest.txt2 <- " and a standard deviation of "
 quest.txt3 <- ". What is the probability that a randomly sampled datapoint will be less than "
 quest.txt4 <- "?"
 dat.size = 1
+digits = 3
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -172,8 +177,8 @@ for(i in 1:n)
                                                                 round(data3, digits = 3), quest.txt4,
                                                                 collapse = "", sep= ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), round(ans.text, digits = 3), rep("",2))
-  options[corr.ind] <- round(corr.ans,digits = 3)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = digits)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
@@ -194,6 +199,7 @@ quest.txt2 <- " and a standard deviation of "
 quest.txt3 <- ". What is the probability that a randomly sampled datapoint will be greater than "
 quest.txt4 <- "?"
 dat.size = 1
+digits = 3
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -220,8 +226,8 @@ for(i in 1:n)
                                                                 round(data3, digits = 3), quest.txt4,
                                                                 collapse = "", sep= ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), round(ans.text, digits = 3), rep("",2))
-  options[corr.ind] <- round(corr.ans,digits = 3)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = digits)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
@@ -242,16 +248,17 @@ quest.txt2 <- " and a standard deviation of "
 quest.txt3 <- ". What is the value x of this dataset where "
 quest.txt4 <- "% of all other data values are "
 dat.size = 1
+digits = 1
 questions <- data.frame()
 for(i in 1:n)
 {
   points <- sample(c(rep(0,answers-1),100), replace=F)
   corr.ind <- 6 + which.max(points)
-  data1 <- round((rnorm(dat.size,mean=rnorm(1,mean=900,sd=300),sd=100) + (0.25*rt(dat.size,df=30))), digits = 1)
-  data2 <- round(runif(dat.size, 65, 150), digits = 1) 
+  data1 <- round((rnorm(dat.size,mean=rnorm(1,mean=900,sd=300),sd=100) + (0.25*rt(dat.size,df=30))), digits = digits)
+  data2 <- round(runif(dat.size, 65, 150), digits = digits) 
   data3 <- round(runif(dat.size, 3, 97), digits = 0)
   data4 <- sample(c("less?", "greater?"), size = 1)
-  corr.ans <- ifelse(data4 == "less?", (data2*round(qnorm(data3/100), digits=2) + data1),
+  corr.ans <- ifelse(data4 == "less?", (data2*round(qnorm(data3/100), digits = 2) + data1),
                      (data2*round(qnorm(data3/100, lower.tail = F), digits = 2) + data1))
   up.min <- corr.ans + data2/3
   down.max <- corr.ans - data2/3
@@ -271,8 +278,8 @@ for(i in 1:n)
                                                                 data2, quest.txt3, data3, quest.txt4,
                                                                 data4, collapse = "", sep= ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), round(ans.text, digits = 1), rep("",2))
-  options[corr.ind] <- round(corr.ans,digits = 1)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans, digits = digits)
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
@@ -291,14 +298,15 @@ difficulty <- 1
 quest.txt1 <- "A researcher wants to estimate the center of her data's distribution with a statistic that is "
 quest.txt2 <- " Which statistic should she select for this purpose?"
 dat.size = 
-  questions <- data.frame()
+digits = 
+questions <- data.frame()
 for(i in 1:n)
 {
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
   data <- sample(c("the least robust.", "the most robust."), size = 1)
   corr.ans <- ifelse(data == "the least robust.", "The mean", "The median")
-  ans.text <- sample(c(ifelse(data == "the least robust", "The median", "The mean"), "The 10% trimmed mean",
+  ans.txt <- sample(c(ifelse(data == "the least robust", "The median", "The mean"), "The 10% trimmed mean",
                        "The first quartile", "The third quartile", "The full range (max - min)", "The middle 50% range (Q3 - Q1)",
                        "The standard deviation", "The maximum", "The minimum", "A relative frequency"),
                      size = answers)
@@ -309,7 +317,7 @@ for(i in 1:n)
   content <- c(type, ID, "Robust Concept", paste(quest.txt1, data, quest.txt2,
                                                           collapse = "", sep = ""),
                points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), ans.text, rep("",2))
+  options <- c(rep("",6), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
