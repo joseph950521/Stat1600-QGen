@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the CSVs so-created.      #####                                                               #####
 
-##### 9/25 Generators for test 1 completed  #####
+##### 10/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -434,7 +434,7 @@ type <- "MC"
 answers <- 2
 points.per.q <- 4
 difficulty <- 1
-quest.txt1 <- "A student decides to take a survey for her class project. She surveys other students and records their "
+quest.txt1 <- "A student decides to take a survey for her class project. She randomly surveys other students and records their "
 quest.txt2 <- ". She decides to use a "
 quest.txt3 <- " to visualize this data. Did she choose a correct graphic?"
 dat.size = 
@@ -445,10 +445,14 @@ for(i in 1:n)
   ID <- paste(title, i, sep = "-")
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  num.data1 <- c("heights in raw inches", "weights in raw lbs", "GPAs in raw points",
-                "time spent sleeping per night in raw hours", "time spent studying per day in raw hours")
+  num.data1 <- c("heights in inches", "weights in lbs", "GPAs in raw points",
+                "hours spent sleeping per night", "hours spent studying per day",
+                "vertical leap in inches", "age in years", "calories consumed per day",
+                "current number of completed STEM courses", "years left before their anticipated graduation-date")
   cat.data1 <- c("heights in ranges (5.0-5.5 ft, 5.5-6 ft, etc)", "weights in ranges (100-125 lbs, 125-150 lbs, etc.)",
-                "racial demographics (white, black, etc.)", "countries of origin", "emotional states (sad, happy, etc.)")
+                "racial demographics", "countries of origin", "emotional states (sad, happy, etc.)",
+                "tax income brackets", "marital statuses", "living arrangements (dorm, off-campus apartment, etc.)",
+                "nationalities", "native language (English, Spanish, etc.)")
   data1 <- sample(c(num.data1, cat.data1), size = 1)
   num.data2 <- c("relative frequency table", "stem & leaf plot", "histogram",
                        "dotplot", "boxplot")
@@ -474,3 +478,6 @@ for(i in 1:n)
 questions <- questions[((9+answers)):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
+
+##### VarTypeMC3 #####
+
