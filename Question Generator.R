@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the CSVs so-created.      #####                                                               #####
 
-##### 11/25 Generators for test 1 completed  #####
+##### 12/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -539,14 +539,14 @@ library(fmsb)
 title <- "StemGraphMC1"
 n = 200
 type <- "MC"
-answers <- 4
+answers <- 5
 points.per.q <- 4
 difficulty <- 1
 quest.txt1 <- "While analyzing a dataset, a researcher makes a stem and leaf plot of one of her variables. The stem and leaf plot she makes is depicted. What is the "
 quest.txt2 <- " value?"
 dat.size = 31
-digits = 0
-hint <- "Pay attention to the key."
+digits = 1
+hint <- "Pay close attention to the key given for the plot."
 feedback <- "Stem and leaf plots are like histograms flipped over. The min is at the top, the middle halfway down, and the max is at the bottom."
 questions <- data.frame()
 for(i in 1:n)
@@ -554,33 +554,36 @@ for(i in 1:n)
   ID <- paste(title, i, sep = "-")
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 7 + which.max(points)
-  left.shape1 <- runif(1,40,50)
-  left.shape2 <- runif(1,1,10)
-  left.data <- rbeta(dat.size, left.shape1, left.shape2)*1000
-  right.shape1 <- runif(1,1,10)
-  right.shape2 <- runif(1,40,50)
-  right.data <- rbeta(dat.size, right.shape1, right.shape2)*1000
-  sym.data <- abs(rnorm(dat.size, rnorm(1, 500, 200), 300))
+  left.data <- c(sample(seq(100, 199, by = 10^(-digits)), size = ceiling(dat.size/5)),
+                 sample(seq(200, 299, by = 10^(-digits)), size = ceiling(2*dat.size/5)),
+                 sample(seq(300, 400, by = 10^(-digits)), size = ceiling(3*dat.size/5)))
+  right.data <- c(sample(seq(300, 400, by = 10^(-digits)), size = ceiling(dat.size/5)),
+                  sample(seq(200, 299, by = 10^(-digits)), size = ceiling(2*dat.size/5)),
+                  sample(seq(100, 199, by = 10^(-digits)), size = ceiling(3*dat.size/5)))
+  sym.data <- c(sample(seq(300, 400, by = 10^(-digits)), size = ceiling(dat.size/5)),
+                sample(seq(200, 299, by = 10^(-digits)), size = ceiling(3*dat.size/5)),
+                sample(seq(100, 199, by = 10^(-digits)), size = ceiling(dat.size/5)))
   data.dec <- sample(c(1,2,3), size = 1)
-  data <- round(if(data.dec == 1){sym.data}
-                else{if(data.dec == 2){left.data}
-                else{right.data}}, digits = digits)
+  data <- sample(round(if(data.dec == 1){sym.data}
+                       else{if(data.dec == 2){left.data}
+                       else{right.data}}, digits = digits),
+                 size = dat.size)
   data1 <- sample(c("smallest", "second smallest", "third smallest", "middle",
                     "third largest", "second largest", "largest"), size = 1)
   corr.ans <- if(data1 == "smallest"){min(data)}
               else{if(data1 == "second smallest"){sort(data)[2]}
                    else{if(data1 == "third smallest"){sort(data)[3]}
-                        else{if(data1 == "middle"){sort(data)[16]}
-                             else{if(data1 == "third largest"){sort(data)[29]}
-                                  else{if(data1 == "second largest"){sort(data)[30]}
+                        else{if(data1 == "middle"){sort(data)[(dat.size+1)/2]}
+                             else{if(data1 == "third largest"){sort(data)[dat.size-2]}
+                                  else{if(data1 == "second largest"){sort(data)[dat.size-1]}
                                        else{if(data1 == "largest"){max(data)}}}}}}}
   ans.txt <- if(corr.ans == min(data)){sample(sort(data)[-1], size = answers)}
              else{if(corr.ans == sort(data)[2]){sample(sort(data)[-2], size = answers)}
                   else{if(corr.ans == sort(data)[3]){sample(sort(data)[-3], size = answers)}
-                       else{if(corr.ans == sort(data)[16]){sample(sort(data)[-16], size = answers)}
-                            else{if(corr.ans == sort(data)[29]){sample(sort(data)[-29], size = answers)}
-                                 else{if(corr.ans == sort(data)[30]){sample(sort(data)[-30], size = answers)}
-                                      else{if(corr.ans == sort(data)[31]){sample(sort(data)[-31], size = answers)}}}}}}}
+                       else{if(corr.ans == sort(data)[16]){sample(sort(data)[-(dat.size+1)/2], size = answers)}
+                            else{if(corr.ans == sort(data)[29]){sample(sort(data)[-(dat.size-2)], size = answers)}
+                                 else{if(corr.ans == sort(data)[30]){sample(sort(data)[-(dat.size-1)], size = answers)}
+                                      else{if(corr.ans == sort(data)[31]){sample(sort(data)[-dat.size], size = answers)}}}}}}}
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
              rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
@@ -599,7 +602,8 @@ questions <- questions[((10+answers)):((9+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-##### Note that I still need to ensure lack of repeats. Simplify random generation for some questions to just a sample function? #####
+##### Note that I still need to ensure lack of repeats for some early generators. #####
+##### One idea is to use sequences as I've done in StemGraphMC1 above.            #####
 
 ##### For Tables #####
 library(ggplot2)
