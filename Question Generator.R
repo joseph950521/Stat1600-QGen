@@ -544,8 +544,8 @@ points.per.q <- 4
 difficulty <- 1
 quest.txt1 <- "While analyzing a dataset, a researcher makes a stem and leaf plot of one of her variables. The stem and leaf plot she makes is depicted. What is the "
 quest.txt2 <- " value?"
-dat.size = 31
-digits = 1
+dat.size = 41
+digits = 0
 hint <- "Pay close attention to the key given for the plot."
 feedback <- "Stem and leaf plots are like histograms flipped over. The min is at the top, the middle halfway down, and the max is at the bottom."
 questions <- data.frame()
@@ -580,10 +580,10 @@ for(i in 1:n)
   ans.txt <- if(corr.ans == min(data)){sample(sort(data)[-1], size = answers)}
              else{if(corr.ans == sort(data)[2]){sample(sort(data)[-2], size = answers)}
                   else{if(corr.ans == sort(data)[3]){sample(sort(data)[-3], size = answers)}
-                       else{if(corr.ans == sort(data)[16]){sample(sort(data)[-(dat.size+1)/2], size = answers)}
-                            else{if(corr.ans == sort(data)[29]){sample(sort(data)[-(dat.size-2)], size = answers)}
-                                 else{if(corr.ans == sort(data)[30]){sample(sort(data)[-(dat.size-1)], size = answers)}
-                                      else{if(corr.ans == sort(data)[31]){sample(sort(data)[-dat.size], size = answers)}}}}}}}
+                       else{if(corr.ans == sort(data)[(dat.size+1)/2]){sample(sort(data)[-((dat.size+1)/2)], size = answers)}
+                            else{if(corr.ans == sort(data)[dat.size-2]){sample(sort(data)[-(dat.size-2)], size = answers)}
+                                 else{if(corr.ans == sort(data)[dat.size-1]){sample(sort(data)[-(dat.size-1)], size = answers)}
+                                      else{if(corr.ans == max(data)){sample(sort(data)[-dat.size], size = answers)}}}}}}}
   param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
              rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
@@ -595,7 +595,7 @@ for(i in 1:n)
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
   jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
-  gstem(data)
+  gstem(data, 2)
   dev.off()
 }
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
