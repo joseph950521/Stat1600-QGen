@@ -479,5 +479,66 @@ questions <- questions[((9+answers)):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-##### VarTypeMC3 #####
+##### SkewTypeMC1 #####
+title <- "SkewTypeMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt <- "While analyzing a dataset, a researcher plots a histogram of one of her variables. The histogram she makes is depicted. What type of skew, if any, is present in the variable's distribution?"
+dat.size = 10000
+digits = 3
+hint <- "Even a small amount of skew counts here!"
+feedback <- "Left Skew: Left tail. Right Skew: Right tail. No Skew: Symmetric tails."
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  left.shape1 <- runif(1,30,50)
+  left.shape2 <- runif(1,1,20)
+  left.data <- rbeta(dat.size, left.shape1, left.shape2)
+  right.shape1 <- runif(1,1,20)
+  right.shape2 <- runif(1,30,50)
+  right.data <- rbeta(dat.size, right.shape1, right.shape2)
+  sym.data <- rnorm(dat.size, 0, 20)
+  data.dec <- sample(c(1,2,3), size = 1)
+  data <- if(data.dec == 1){sym.data}else{if(data.dec == 2){left.data}else{right.data}}
+  corr.ans <- if(identical(data, sym.data)){"No Skew"}else{if(identical(data, right.data)){"Right Skew"}else{"Left Skew"}}
+  ans.txt <- if(corr.ans == "No Skew"){c(sample(c("Right Skew", "Left Skew"), size = answers-2),
+                                              sample(c("All of These", "None of These"), size = answers-2))}
+             else{if(corr.ans == "Left Skew"){c(sample(c("Right Skew", "No Skew"), size = answers-2),
+                                                sample(c("All of These", "None of These"), size = answers-2))}
+                  else{c(sample(c("No Skew", "Left Skew"), size = answers-2),
+                         sample(c("All of These", "None of These"), size = answers-2))}}
+  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+             rep("Option", answers),"Hint","Feedback")
+  content <- c(type, ID, ID, quest.txt, points.per.q, difficulty,
+               paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
+  hist(data, xlim=c(min(data),max(data)), probability=T, 
+       col='lightblue', xlab=' ', ylab=' ', axes=F,
+       main = "Researcher's Histogram")
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
+##### For Tables #####
+library(ggplot2)
+library(gridExtra)
+df <- data.frame(a=1:30, b=1:30)
+
+png("test.png")
+p<-tableGrob(df)
+grid.arrange(p)
+dev.off()
