@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the CSVs so-created.      #####                                                               #####
 
-##### 10/25 Generators for test 1 completed  #####
+##### 11/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -479,8 +479,8 @@ questions <- questions[((9+answers)):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-##### SkewTypeMC1 #####
-title <- "SkewTypeMC1"
+##### HistSkewMC1 #####
+title <- "SkewGraphMC1"
 n = 200
 type <- "MC"
 answers <- 4
@@ -489,7 +489,7 @@ difficulty <- 1
 quest.txt <- "While analyzing a dataset, a researcher plots a histogram of one of her variables. The histogram she makes is depicted. What type of skew, if any, is present in the variable's distribution?"
 dat.size = 10000
 digits = 3
-hint <- "Even a small amount of skew counts here!"
+hint <- "Focus on the tails."
 feedback <- "Left Skew: Left tail. Right Skew: Right tail. No Skew: Symmetric tails."
 questions <- data.frame()
 for(i in 1:n)
@@ -497,13 +497,13 @@ for(i in 1:n)
   ID <- paste(title, i, sep = "-")
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 7 + which.max(points)
-  left.shape1 <- runif(1,30,50)
-  left.shape2 <- runif(1,1,20)
+  left.shape1 <- runif(1,40,50)
+  left.shape2 <- runif(1,1,10)
   left.data <- rbeta(dat.size, left.shape1, left.shape2)
-  right.shape1 <- runif(1,1,20)
-  right.shape2 <- runif(1,30,50)
+  right.shape1 <- runif(1,1,10)
+  right.shape2 <- runif(1,40,50)
   right.data <- rbeta(dat.size, right.shape1, right.shape2)
-  sym.data <- rnorm(dat.size, 0, 20)
+  sym.data <- rnorm(dat.size, 0, 1)
   data.dec <- sample(c(1,2,3), size = 1)
   data <- if(data.dec == 1){sym.data}else{if(data.dec == 2){left.data}else{right.data}}
   corr.ans <- if(identical(data, sym.data)){"No Skew"}else{if(identical(data, right.data)){"Right Skew"}else{"Left Skew"}}
@@ -532,6 +532,74 @@ for(i in 1:n)
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
+
+##### StemGraphMC1 #####
+library(graphics)
+library(fmsb)
+title <- "StemGraphMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "While analyzing a dataset, a researcher makes a stem and leaf plot of one of her variables. The stem and leaf plot she makes is depicted. What is the "
+quest.txt2 <- " value?"
+dat.size = 31
+digits = 0
+hint <- "Pay attention to the key."
+feedback <- "Stem and leaf plots are like histograms flipped over. The min is at the top, the middle halfway down, and the max is at the bottom."
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  left.shape1 <- runif(1,40,50)
+  left.shape2 <- runif(1,1,10)
+  left.data <- rbeta(dat.size, left.shape1, left.shape2)*1000
+  right.shape1 <- runif(1,1,10)
+  right.shape2 <- runif(1,40,50)
+  right.data <- rbeta(dat.size, right.shape1, right.shape2)*1000
+  sym.data <- abs(rnorm(dat.size, rnorm(1, 500, 200), 300))
+  data.dec <- sample(c(1,2,3), size = 1)
+  data <- round(if(data.dec == 1){sym.data}
+                else{if(data.dec == 2){left.data}
+                else{right.data}}, digits = digits)
+  data1 <- sample(c("smallest", "second smallest", "third smallest", "middle",
+                    "third largest", "second largest", "largest"), size = 1)
+  corr.ans <- if(data1 == "smallest"){min(data)}
+              else{if(data1 == "second smallest"){sort(data)[2]}
+                   else{if(data1 == "third smallest"){sort(data)[3]}
+                        else{if(data1 == "middle"){sort(data)[16]}
+                             else{if(data1 == "third largest"){sort(data)[29]}
+                                  else{if(data1 == "second largest"){sort(data)[30]}
+                                       else{if(data1 == "largest"){max(data)}}}}}}}
+  ans.txt <- if(corr.ans == min(data)){sample(sort(data)[-1], size = answers)}
+             else{if(corr.ans == sort(data)[2]){sample(sort(data)[-2], size = answers)}
+                  else{if(corr.ans == sort(data)[3]){sample(sort(data)[-3], size = answers)}
+                       else{if(corr.ans == sort(data)[16]){sample(sort(data)[-16], size = answers)}
+                            else{if(corr.ans == sort(data)[29]){sample(sort(data)[-29], size = answers)}
+                                 else{if(corr.ans == sort(data)[30]){sample(sort(data)[-30], size = answers)}
+                                      else{if(corr.ans == sort(data)[31]){sample(sort(data)[-31], size = answers)}}}}}}}
+  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+             rep("Option", answers),"Hint","Feedback")
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
+  gstem(data)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### Note that I still need to ensure lack of repeats. Simplify random generation for some questions to just a sample function? #####
 
 ##### For Tables #####
 library(ggplot2)
