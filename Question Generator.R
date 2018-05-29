@@ -166,6 +166,10 @@ quest.txt3 <- ". What is the probability that a randomly sampled datapoint will 
 quest.txt4 <- "?"
 dat.size = 1
 digits = 3
+hint <- "You'll need your Z-table for this question."
+feedback <- "1: Calculate Z. 2: Find area below on the Z-table."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -184,10 +188,6 @@ for(i in 1:n)
                       else{c(runif(ceiling(answers/2), -0.05, down.max),
                              runif(ceiling(answers/2), up.min, 1.05))}},
                     size = answers, replace = F)
-  hint <- "You'll need your Z-table for this question."
-  feedback <- "1: Calculate Z. 2: Find area below on the Z-table."
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, round(data1, digits=3), quest.txt2,
                                                                 round(data2, digits=3), quest.txt3, 
                                                                 round(data3, digits = 3), quest.txt4,
@@ -216,6 +216,10 @@ quest.txt3 <- ". What is the probability that a randomly sampled datapoint will 
 quest.txt4 <- "?"
 dat.size = 1
 digits = 3
+hint <- "You'll need your Z-table for this question."
+feedback <- "1: Calculate Z. 2: Find area below on the Z-table. 3: Take 1 - area below."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -234,10 +238,6 @@ for(i in 1:n)
                          else{c(runif(ceiling(answers/2), -0.05, down.max),
                                 runif(ceiling(answers/2), up.min, 1.05))}},
                     size = answers, replace = F)
-  hint <- "You'll need your Z-table for this question."
-  feedback <- "1: Calculate Z. 2: Find area below on the Z-table. 3: Take 1 - area below."
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, round(data1, digits=3), quest.txt2,
                                                                 round(data2, digits=3), quest.txt3, 
                                                                 round(data3, digits = 3), quest.txt4,
@@ -266,6 +266,10 @@ quest.txt3 <- ". What is the value x of this dataset where "
 quest.txt4 <- "% of all other data values are "
 dat.size = 1
 digits = 1
+hint <- "This is an inverted or 'backward' Z-table question. Pick the closest answer."
+feedback <- "1: Find the closest probability on the Z-table. 2: Find the Z value. 3: Calculate the value x."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -285,10 +289,6 @@ for(i in 1:n)
                             else{c(runif(ceiling(answers/2), (data1 - 4*data2), down.max),
                                    runif(ceiling(answers/2), up.min, (data1 + 4*data2)))}},
                     size = answers, replace = F)
-  hint <- "This is an inverted or 'backward' Z-table question. Pick the closest answer."
-  feedback <- "1: Find the closest probability on the Z-table. 2: Find the Z value. 3: Calculate the value x."
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
                                                                 data2, quest.txt3, data3, quest.txt4,
                                                                 data4, collapse = "", sep= ""),
@@ -314,6 +314,10 @@ quest.txt1 <- "A researcher wants to estimate the center of her data's distribut
 quest.txt2 <- " Which statistic should she select for this purpose?"
 dat.size = 
 digits = 
+hint <- "Remember that 'robust' means insensitive to outliers."
+feedback <- "The mean is least robust, and the median is most robust."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -326,10 +330,6 @@ for(i in 1:n)
                        "The first quartile", "The third quartile", "The full range (max - min)", "The middle 50% range (Q3 - Q1)",
                        "The standard deviation", "The maximum", "The minimum", "A relative frequency"),
                      size = answers)
-  hint <- "Remember that 'robust' means insensitive to outliers."
-  feedback <- "The mean is least robust, and the median is most robust."
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data, quest.txt2,
                                                           collapse = "", sep = ""),
                points.per.q, difficulty, points, hint, feedback)
@@ -357,6 +357,10 @@ quest.txt4 <- " endpoint of the interval that is centered on the mean and includ
 quest.txt5 <- "% of all the data?"
 dat.size = 1
 digits = 2
+hint <- "This is an empirical rule question."
+feedback <- "1: Determine if the endpoint is lower or upper. 2: Find the probability centered on the mean (68, 95, or 99.7%). 3: Subtract or add 1, 2, or 3 SDs from the mean depending on steps 1 and 2."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -380,10 +384,6 @@ for(i in 1:n)
                       else{c(runif(ceiling(answers/2), (data1 - 4*data2), down.max),
                              runif(ceiling(answers/2), up.min, (data1 + 4*data2)))}},
                     size = answers, replace = F)
-  hint <- "This is an empirical rule question."
-  feedback <- "1: Determine if the endpoint is lower or upper. 2: Find the probability centered on the mean (68, 95, or 99.7%). 3: Subtract or add 1, 2, or 3 SDs from the mean depending on steps 1 and 2."
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
                                    data2, quest.txt3, data3, quest.txt4,
                                    data4, quest.txt5, collapse = "", sep= ""),
@@ -409,6 +409,10 @@ quest.txt1 <- "A student wants to visualize data that is "
 quest.txt2 <- ". What kind of graph should she select for this purpose?"
 dat.size = 
 digits = 
+hint <- "Focus on the variable type: categorical vs. numeric."
+feedback <- "Categorical: Bar or Pie. Numeric: Stem & Leaf, Histogram, Dot, or Box."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -422,10 +426,6 @@ for(i in 1:n)
   corr.ans <- ifelse(data == "categorical", sample(cat.ans, size = 1), sample(num.ans, size = 1))
   ans.txt <- if(data == "categorical"){sample(num.ans, size = answers)}
              else{c(sample(cat.ans, size = length(cat.ans)), sample(cat.supp, size = length(cat.supp)))}
-  hint <- "Focus on the variable type: categorical vs. numeric."
-  feedback <- "Categorical: Bar or Pie. Numeric: Stem & Leaf, Histogram, Dot, or Box."
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data, quest.txt2,
                                    collapse = "", sep = ""),
                points.per.q, difficulty, points, hint, feedback)
@@ -451,6 +451,10 @@ quest.txt2 <- ". She decides to use a "
 quest.txt3 <- " to visualize this data. Did she choose a correct graphic?"
 dat.size = 
 digits = 
+hint <- "What is the variable's type: categorical or numeric?"
+feedback <- "Categorical: Bar, RF table, or Pie. Numeric: Stem & Leaf, RF table, Histogram, Dot, or Box."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -474,10 +478,6 @@ for(i in 1:n)
                  ((data1 %in% num.data1) & (data2 %in% num.data2))){"Yes"}
               else{"No"}
   ans.txt <- rep(if(corr.ans == "Yes"){"No"}else{"Yes"}, 2)
-  hint <- "What is the variable's type: categorical or numeric?"
-  feedback <- "Categorical: Bar, RF table, or Pie. Numeric: Stem & Leaf, RF table, Histogram, Dot, or Box."
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
                                    collapse = "", sep = ""),
                points.per.q, difficulty, points, hint, feedback)
@@ -503,6 +503,8 @@ dat.size = 10000
 digits = 3
 hint <- "Focus on the tails."
 feedback <- "Left Skew: Left tail. Right Skew: Right tail. No Skew: Symmetric tails."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -525,8 +527,6 @@ for(i in 1:n)
                                                 sample(c("All of These", "None of These"), size = answers-2))}
                   else{c(sample(c("No Skew", "Left Skew"), size = answers-2),
                          sample(c("All of These", "None of These"), size = answers-2))}}
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, quest.txt, points.per.q, difficulty,
                paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
@@ -560,6 +560,8 @@ dat.size = 41
 digits = 0
 hint <- "Pay close attention to the key given for the plot."
 feedback <- "Stem and leaf plots are like histograms flipped over. The min is at the top, the middle halfway down, and the max is at the bottom."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -596,8 +598,6 @@ for(i in 1:n)
                             else{if(corr.ans == sort(data)[dat.size-2]){sample(sort(data)[-(dat.size-2)], size = answers)}
                                  else{if(corr.ans == sort(data)[dat.size-1]){sample(sort(data)[-(dat.size-1)], size = answers)}
                                       else{if(corr.ans == max(data)){sample(sort(data)[-dat.size], size = answers)}}}}}}}
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
-             rep("Option", answers),"Hint","Feedback")
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
                points.per.q, difficulty, paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
@@ -614,12 +614,63 @@ questions <- questions[((10+answers)):((9+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-##### For Tables #####
-library(ggplot2)
+##### RFTableMC1 #####
+library(graphics)
 library(gridExtra)
-df <- data.frame(a=1:30, b=1:30)
-
-png("test.png")
-p<-tableGrob(df)
-grid.arrange(p)
-dev.off()
+title <- "RFTableMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "For her class project in statistics, a student researcher decides to survey other students and track the number of ramen noddle eaters she can find in various majors. She decides to summarize her findings in the depicted (incomplete) relative frequency table. What is the relative frequency of ramen noodle eaters who major in "
+quest.txt2 <- "?"
+majors <- c("Physics", "Statistics", "Speech Pathology", "Psychology", "Music", "Philosophy",
+            "Mathematics", "Fine Arts", "Chemistry", "Sociology", "Education", "Business",
+            "Accounting", "Geology", "Occupational Therapy", "Nursing", "Medicine",
+            "Electrical Engineering", "Mechanical Engineering", "Civil Engineering",
+            "English", "Spanish", "French", "Arabic", "Economics", "Applied Mathematics")
+dat.size = 5:15
+digits = 2
+hint <- "Read the Data Presentation chapter of your coursepack."
+feedback <- "For the specified category, calculate frequency over total and multiply by 100%."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  dat.size1 <- sample(dat.size, size = 1)
+  Majors <- sample(majors, size = dat.size1)
+  data1 <- sample(Majors, size = 1)
+  RamenEaters <- sample(seq(100, 400, by = 3), size = dat.size1)
+  RF.calc <- round(RamenEaters/sum(RamenEaters)*100, digits = digits)
+  RF <- paste(RF.calc, "%", sep = "")
+  data.calc <- data.frame(Majors, RF.calc)
+  data <- data.frame(Majors, RamenEaters, RF, stringsAsFactors = FALSE)
+  data <- rbind(data, c("Total", sum(RamenEaters), "100%"))
+  corr.ans <- RF[Majors == data1]
+  data[Majors == data1, 3] <- NA
+  ans.txt <- c(sample(c(paste(seq((RF.calc[Majors == data1] + 1), 100, by = 10^-digits), "%", sep = ""),
+                        paste(seq(0, (RF.calc[Majors == data1] - 1), by = 10^-digits), "%", sep = "")),
+                      size = answers-1),
+               sample(c("None of These", "All of These"), size = 1))
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 120*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
