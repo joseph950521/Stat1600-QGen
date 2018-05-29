@@ -32,6 +32,10 @@ difficulty <- 1
 quest.txt <- "What is the mean of the following dataset?"
 dat.size = 5
 digits = 1
+hint <- "Take note that this question is asking for the mean, not the median."
+feedback <- "Did you sum the numbers (subtracting any negatives) and divide by the sample size?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -40,15 +44,16 @@ points <- sample(c(rep(0,answers-1),100),replace=F)
 corr.ind <- 6 + which.max(points)
 data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = digits)
 corr.ans <- round(mean(data), digits = digits)
-ans.txt <- round(rnorm(answers,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.75*rt(answers,df=30)), digits = digits)
-hint <- "Watch out for negatives!"
-feedback <- "Did you sum the numbers (subtracting any negatives) and divide by the sample size?"
-param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-           rep("Option", answers),"Hint","Feedback")
-content <- c(type, ID, ID, paste(quest.txt,
-                                                     paste(as.character(data),
-                                                           collapse=", ",sep=""),
-                                                     collapse = ""),
+up.min <- corr.ans + sd(data)/4
+down.max <- corr.ans - sd(data)/4
+ans.txt <- round(sample(c(sum(data), sum(data)/(dat.size-1),
+                          runif(ceiling(3*answers/5), corr.ans - 4*sd(data), down.max),
+                          runif(ceiling(3*answers/5), up.min, corr.ans + 4*sd(data))),
+                        size = answers),
+                 digits = digits)
+content <- c(type, ID, ID, paste(quest.txt, paste(as.character(data),
+                                                  collapse=", ",sep=""),
+                                 collapse = ""),
              points.per.q, difficulty, points, hint, feedback)
 options <- c(rep("",6), ans.txt, rep("",2))
 options[corr.ind] <- corr.ans
@@ -69,27 +74,31 @@ points.per.q <- 4
 difficulty <- 1
 quest.txt <- "What is the median of the following dataset?"
 digits = 1
+dat.size <- c(5,6)
+hint <- "Sort the data first."
+feedback <- "Sort and find the middle number, or take the average of the two middle numbers."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
   ID <- paste(title, i, sep = "-")
-  dat.size = sample(c(5,6), size = 1)
+  dat.size1 = sample(dat.size, size = 1)
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = digits)
+  data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
   corr.ans <- round(median(data), digits = digits)
-  ans.txt <- round(sample(c(median(data)-15.2, sd(data),
-                       rnorm(answers-2,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(answers-2,df=30))),
-                     replace = F),
+  up.min <- corr.ans + sd(data)/4
+  down.max <- corr.ans - sd(data)/4
+  ans.txt <- round(sample(c(if((dat.size1 %% 2) == 0){sort(data)[ceiling((dat.size1+1)/2)]}else{sort(data)[1+(dat.size1+1)/2]},
+                            if((dat.size1 %% 2) == 0){sort(data)[floor((dat.size1+1)/2)]}else{sort(data)[(dat.size1+1)/2-1]},
+                            runif(ceiling(answers/2), corr.ans - 4*sd(data), down.max),
+                            runif(ceiling(answers/2), up.min, corr.ans + 4*sd(data))),
+                          size = answers),
                    digits = digits)
-  hint <- "Sort the data first."
-  feedback <- "Sort and find the middle number, or take the average of the two middle numbers."
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
-  content <- c(type, ID, ID, paste(quest.txt,
-                                                           paste(as.character(data),
-                                                                 collapse=", ",sep=""),
-                                                           collapse = ""),
+  content <- c(type, ID, ID, paste(quest.txt, paste(as.character(data),
+                                                    collapse=", ",sep=""),
+                                   collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
   options <- c(rep("",6), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
@@ -108,9 +117,13 @@ type <- "MC"
 answers <- 4
 points.per.q <- 4
 difficulty <- 1
-quest.txt <- "What is the SD of the following dataset?"
+quest.txt <- "What is the standard deviation of the following dataset?"
 dat.size = 5
 digits = 1
+hint <- "Don't forget to take a square root at the end."
+feedback <- "1: Mean. 2: Squared differences. 3: Sum. 4: Divide. 5. Square Root. "
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
 for(i in 1:n)
 {
@@ -119,17 +132,16 @@ for(i in 1:n)
   corr.ind <- 6 + which.max(points)
   data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = 1)
   corr.ans <- round(sd(data), digits = digits)
-  ans.txt <- round(sample(c(sd(data)^2, sqrt(sd(data)^2*(dat.size-1)),
-                       rnorm(answers-2,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(answers-2,df=30))),
-                     replace = F), digits = digits)
-  hint <- "Don't forget to take a square root at the end."
-  feedback <- "1: Mean. 2: Squared differences. 3: Sum. 4: Divide. 5. Square Root. "
-  param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-             rep("Option", answers),"Hint","Feedback")
-  content <- c(type, ID, ID, paste(quest.txt,
-                                                       paste(as.character(data),
-                                                             collapse=", ",sep=""),
-                                                       collapse = ""),
+  up.min <- corr.ans + sd(data)/4
+  down.max <- corr.ans - sd(data)/4
+  ans.txt <- round(sample(c(sd(data)^2, sqrt(sd(data)^2*(dat.size-1)), sqrt((data-mean(data))^2/dat.size),
+                            runif(ceiling(answers/2), corr.ans - 4*sd(data), down.max),
+                            runif(ceiling(answers/2), up.min, corr.ans + 4*sd(data))),
+                          size = answers),
+                   digits = digits)
+  content <- c(type, ID, ID, paste(quest.txt, paste(as.character(data),
+                                                    collapse=", ",sep=""),
+                                   collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
   options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
   options[corr.ind] <- corr.ans
@@ -568,12 +580,12 @@ for(i in 1:n)
                        else{if(data.dec == 2){left.data}
                        else{right.data}}, digits = digits),
                  size = dat.size)
-  data1 <- sample(c("smallest", "second smallest", "third smallest", "middle",
+  data1 <- sample(c("smallest", "second smallest", "third smallest", "median",
                     "third largest", "second largest", "largest"), size = 1)
   corr.ans <- if(data1 == "smallest"){min(data)}
               else{if(data1 == "second smallest"){sort(data)[2]}
                    else{if(data1 == "third smallest"){sort(data)[3]}
-                        else{if(data1 == "middle"){sort(data)[(dat.size+1)/2]}
+                        else{if(data1 == "median"){sort(data)[(dat.size+1)/2]}
                              else{if(data1 == "third largest"){sort(data)[dat.size-2]}
                                   else{if(data1 == "second largest"){sort(data)[dat.size-1]}
                                        else{if(data1 == "largest"){max(data)}}}}}}}
@@ -601,9 +613,6 @@ for(i in 1:n)
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
-
-##### Note that I still need to ensure lack of repeats for some early generators. #####
-##### One idea is to use sequences as I've done in StemGraphMC1 above.            #####
 
 ##### For Tables #####
 library(ggplot2)
