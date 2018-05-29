@@ -6,9 +6,9 @@
 
 ##### These will help streamline test writing, requiring only that one runs the #####
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
-##### process is waiting on the e-learning uploads of the CSVs so-created.      #####                                                               #####
+##### process is waiting on the e-learning uploads of the images and CSVs.      #####                                                               #####
 
-##### 12/25 Generators for test 1 completed  #####
+##### 13/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -424,8 +424,9 @@ for(i in 1:n)
   cat.supp <- c("None of These", "All of These")
   num.ans <- c("Stem & Leaf Plot", "Histogram", "Dot Plot", "Box Plot")
   corr.ans <- ifelse(data == "categorical", sample(cat.ans, size = 1), sample(num.ans, size = 1))
-  ans.txt <- if(data == "categorical"){sample(num.ans, size = answers)}
-             else{c(sample(cat.ans, size = length(cat.ans)), sample(cat.supp, size = length(cat.supp)))}
+  ans.txt <- if(data == "categorical"){sample(c(num.ans, "Ordinal", "Nominal"), size = answers)}
+             else{c(cat.ans, sample(c("Interval", "Ratio"), size = answers - 3), 
+                    sample(cat.supp, size = 1))}
   content <- c(type, ID, ID, paste(quest.txt1, data, quest.txt2,
                                    collapse = "", sep = ""),
                points.per.q, difficulty, points, hint, feedback)
@@ -491,14 +492,15 @@ questions <- questions[((9+answers)):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-##### HistSkewMC1 #####
+set.seed(11452)
+##### SkewGraphMC1 #####
 title <- "SkewGraphMC1"
 n = 200
 type <- "MC"
 answers <- 4
 points.per.q <- 4
 difficulty <- 1
-quest.txt <- "While analyzing a dataset, a researcher plots a histogram of one of her variables. The histogram she makes is depicted. What type of skew, if any, is present in the variable's distribution?"
+quest.txt <- "While analyzing a dataset, a researcher plots a histogram of one of her variables. The histogram she makes is depicted. What type of skewness, if any, is present in the variable's distribution?"
 dat.size = 10000
 digits = 3
 hint <- "Focus on the tails."
@@ -521,14 +523,14 @@ for(i in 1:n)
   data.dec <- sample(c(1,2,3), size = 1)
   data <- if(data.dec == 1){sym.data}else{if(data.dec == 2){left.data}else{right.data}}
   corr.ans <- if(identical(data, sym.data)){"No Skew"}else{if(identical(data, right.data)){"Right Skew"}else{"Left Skew"}}
-  ans.txt <- if(corr.ans == "No Skew"){c(sample(c("Right Skew", "Left Skew"), size = answers-2),
-                                              sample(c("All of These", "None of These"), size = answers-2))}
-             else{if(corr.ans == "Left Skew"){c(sample(c("Right Skew", "No Skew"), size = answers-2),
-                                                sample(c("All of These", "None of These"), size = answers-2))}
-                  else{c(sample(c("No Skew", "Left Skew"), size = answers-2),
-                         sample(c("All of These", "None of These"), size = answers-2))}}
+  ans.txt <- if(corr.ans == "No Skew"){c(sample(c("Right Skew", "Left Skew", "Curve Skew", "Histographic Skew"), size = answers-1),
+                                              sample(c("All of These", "None of These"), size = 1))}
+             else{if(corr.ans == "Left Skew"){c(sample(c("Right Skew", "No Skew", "Curve Skew", "Histographic Skew"), size = answers-1),
+                                                sample(c("All of These", "None of These"), size = 1))}
+                  else{c(sample(c("No Skew", "Left Skew", "Curve Skew", "Histographic Skew"), size = answers-1),
+                         sample(c("All of These", "None of These"), size = 1))}}
   content <- c(type, ID, ID, quest.txt, points.per.q, difficulty,
-               paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
@@ -579,8 +581,9 @@ for(i in 1:n)
                 sample(seq(100, 199, by = 10^(-digits)), size = ceiling(dat.size/5)))
   data.dec <- sample(c(1,2,3), size = 1)
   data <- sample(round(if(data.dec == 1){sym.data}
-                       else{if(data.dec == 2){left.data}
-                       else{right.data}}, digits = digits),
+                          else{if(data.dec == 2){left.data}
+                               else{right.data}},
+                       digits = digits),
                  size = dat.size)
   data1 <- sample(c("smallest", "second smallest", "third smallest", "median",
                     "third largest", "second largest", "largest"), size = 1)
@@ -599,7 +602,7 @@ for(i in 1:n)
                                  else{if(corr.ans == sort(data)[dat.size-1]){sample(sort(data)[-(dat.size-1)], size = answers)}
                                       else{if(corr.ans == max(data)){sample(sort(data)[-dat.size], size = answers)}}}}}}}
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
@@ -607,7 +610,7 @@ for(i in 1:n)
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
   jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
-  gstem(data, 2)
+  gstem(data, 3)
   dev.off()
 }
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
@@ -650,15 +653,15 @@ for(i in 1:n)
   RF <- paste(RF.calc, "%", sep = "")
   data.calc <- data.frame(Majors, RF.calc)
   data <- data.frame(Majors, RamenEaters, RF, stringsAsFactors = FALSE)
-  data <- rbind(data, c("Total", sum(RamenEaters), "100%"))
   corr.ans <- RF[Majors == data1]
   data[Majors == data1, 3] <- NA
-  ans.txt <- c(sample(c(paste(seq((RF.calc[Majors == data1] + 1), 100, by = 10^-digits), "%", sep = ""),
+  data <- rbind(data, c("Total", sum(RamenEaters), "100%"))
+  ans.txt <- c(sample(c(paste(seq((RF.calc[Majors == data1] + 1), 40, by = 10^-digits), "%", sep = ""),
                         paste(seq(0, (RF.calc[Majors == data1] - 1), by = 10^-digits), "%", sep = "")),
                       size = answers-1),
                sample(c("None of These", "All of These"), size = 1))
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
@@ -674,3 +677,5 @@ for(i in 1:n)
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
+
+##### BoxMC1 #####
