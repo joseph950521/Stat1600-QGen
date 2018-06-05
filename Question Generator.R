@@ -679,3 +679,68 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### BoxMC1 #####
+library(graphics)
+title <- "BoxMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "While analyzing a dataset, a researcher makes a boxplot of one of her variables. The boxplot is depicted above. What is the value of the "
+quest.txt2 <- "?"
+dat.size = 41
+digits = 0
+hint <- "You can read about boxplots in the data presentation chapter of your coursepack."
+feedback <- "From lowest to highest, boxplots have lines at the minimum, Q1, Q2 (median), Q3, and the max."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  left.data <- c(sample(seq(100, 199, by = 10^(-digits)), size = ceiling(dat.size/6)),
+                 sample(seq(200, 299, by = 10^(-digits)), size = ceiling(2*dat.size/6)),
+                 sample(seq(300, 400, by = 10^(-digits)), size = ceiling(3*dat.size/6)))
+  right.data <- c(sample(seq(300, 400, by = 10^(-digits)), size = ceiling(dat.size/6)),
+                  sample(seq(200, 299, by = 10^(-digits)), size = ceiling(2*dat.size/6)),
+                  sample(seq(100, 199, by = 10^(-digits)), size = ceiling(3*dat.size/6)))
+  sym.data <- c(sample(seq(300, 400, by = 10^(-digits)), size = ceiling(1.5*dat.size/6)),
+                sample(seq(200, 299, by = 10^(-digits)), size = ceiling(3*dat.size/6)),
+                sample(seq(100, 199, by = 10^(-digits)), size = ceiling(1.5*dat.size/6)))
+  data.dec <- sample(c(1,2,3), size = 1)
+  data <- sample(round(if(data.dec == 1){sym.data}
+                       else{if(data.dec == 2){left.data}
+                         else{right.data}},
+                       digits = digits),
+                 size = dat.size)
+  data1 <- sample(c("minimum", "first quartile", "second quartile", "third quartile",
+                    "maximum"), size = 1)
+  corr.ans <- if(data1 == "minimum"){min(data)}
+  else{if(data1 == "first quartile"){fivenum(data)[2]}
+    else{if(data1 == "second quartile"){fivenum(data)[3]}
+      else{if(data1 == "third quartile"){fivenum(data)[4]}
+        else{if(data1 == "maximum"){max(data)}}}}}
+  ans.txt <- if(corr.ans == min(data)){sample(sort(data)[4:dat.size], size = answers)}
+  else{if(corr.ans == fivenum(data)[2]){sample(c(sort(data)[1:floor(dat.size/8)], sort(data)[ceiling(3*dat.size/8):dat.size]), size = answers)}
+    else{if(corr.ans == fivenum(data)[3]){sample(c(sort(data)[1:floor(3*dat.size/8)], sort(data)[ceiling(5*dat.size/8):dat.size]), size = answers)}
+      else{if(corr.ans == fivenum(data)[4]){sample(c(sort(data)[1:floor(5*dat.size/8)], sort(data)[ceiling(7*dat.size/8):dat.size]), size = answers)}
+        else{if(corr.ans == max(data)){sample(sort(data)[1:(dat.size-3)], size = answers)}}}}}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
+  boxplot(data, horizontal = T, col = 'lightblue')
+  title("Researcher's Boxplot")
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
