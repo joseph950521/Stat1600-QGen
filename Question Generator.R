@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the images and CSVs.      #####                                                               #####
 
-##### 13/25 Generators for test 1 completed  #####
+##### 14/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -626,7 +626,7 @@ type <- "MC"
 answers <- 5
 points.per.q <- 4
 difficulty <- 1
-quest.txt1 <- "For her class project in statistics, a student researcher decides to survey other students and track the number of ramen noddle eaters she can find in various majors. She decides to summarize her findings in the depicted (incomplete) relative frequency table. What is the relative frequency of ramen noodle eaters who major in "
+quest.txt1 <- "For her class project in statistics, a student researcher decides to survey other students and track the number of ramen noodle eaters she can find in various majors. She decides to summarize her findings in the depicted (incomplete) relative frequency table. What is the relative frequency of ramen noodle eaters who major in "
 quest.txt2 <- "?"
 majors <- c("Physics", "Statistics", "Speech Pathology", "Psychology", "Music", "Philosophy",
             "Mathematics", "Fine Arts", "Chemistry", "Sociology", "Education", "Business",
@@ -744,3 +744,57 @@ questions <- questions[((10+answers)):((9+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
+##### QuartMC1 #####
+title <- "QuartMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "What is the "
+quest.txt2 <- " of the following dataset?    "
+digits = 1
+dat.size <- 14:17
+hint <- "Sort the data first."
+feedback <- "Sort the data, then find either the .25(n + 1)st number (Q1) or the .75(n + 1)st number (Q3)."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  dat.size1 = sample(dat.size, size = 1)
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(c("first quantile", "third quantile"), size = 1)
+  data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
+  corr.ans <- if(data1 == "first quantile"){round(fivenum(data)[2], digits = digits)}
+              else{round(fivenum(data)[4], digits = digits)}
+  up.min <- corr.ans + sd(data)/4
+  down.max <- corr.ans - sd(data)/4
+  ans.txt <- round(sample(c(if((dat.size1 %% 2) == 0){sort(data)[ceiling((dat.size1+1)/2)]}
+                            else{sort(data)[1+(dat.size1+1)/2]},
+                            if((dat.size1 %% 2) == 0){sort(data)[floor((dat.size1+1)/2)]}
+                            else{sort(data)[(dat.size1+1)/2-1]},
+                            runif(ceiling(answers/2), corr.ans - 4*sd(data), down.max),
+                            runif(ceiling(answers/2), up.min, corr.ans + 4*sd(data))),
+                          size = answers),
+                   digits = digits)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   paste(as.character(data), collapse=",  ",sep=""),
+                                   collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### StuDesMC2 #####
+
+
+##### FallacyMC1 #####
