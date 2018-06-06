@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the images and CSVs.      #####                                                               #####
 
-##### 14/25 Generators for test 1 completed  #####
+##### 17/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -754,7 +754,7 @@ difficulty <- 1
 quest.txt1 <- "What is the "
 quest.txt2 <- " of the following dataset?    "
 digits = 1
-dat.size <- 14:17
+dat.size <- 11:15
 hint <- "Sort the data first."
 feedback <- "Sort the data, then find either the .25(n + 1)st number (Q1) or the .75(n + 1)st number (Q3)."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -766,18 +766,27 @@ for(i in 1:n)
   dat.size1 = sample(dat.size, size = 1)
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  data1 <- sample(c("first quantile", "third quantile"), size = 1)
+  data1 <- sample(c("first quartile", "third quartile"), size = 1)
   data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
-  corr.ans <- if(data1 == "first quantile"){round(fivenum(data)[2], digits = digits)}
-              else{round(fivenum(data)[4], digits = digits)}
-  up.min <- corr.ans + sd(data)/4
-  down.max <- corr.ans - sd(data)/4
-  ans.txt <- round(sample(c(if((dat.size1 %% 2) == 0){sort(data)[ceiling((dat.size1+1)/2)]}
-                            else{sort(data)[1+(dat.size1+1)/2]},
-                            if((dat.size1 %% 2) == 0){sort(data)[floor((dat.size1+1)/2)]}
-                            else{sort(data)[(dat.size1+1)/2-1]},
-                            runif(ceiling(answers/2), corr.ans - 4*sd(data), down.max),
-                            runif(ceiling(answers/2), up.min, corr.ans + 4*sd(data))),
+  corr.ans <- if(data1 == "first quartile"){round(mean(c(sort(data)[ceiling((dat.size1+1)/4)],
+                                                         sort(data)[floor((dat.size1+1)/4)])),
+                                   digits = digits)}
+              else{round(mean(c(sort(data)[ceiling(3*(dat.size1+1)/4)],
+                                sort(data)[floor(3*(dat.size1+1)/4)])),
+                         digits = digits)}
+  up.min <- corr.ans + sd(data)/8
+  down.max <- corr.ans - sd(data)/8
+  ans.txt <- round(sample(c(median(data), mean(data),
+                            if(data1 == "first quartile")
+                              {if((dat.size1 %% 2) == 0){c(sort(data)[ceiling((dat.size1+1)/4)],
+                                                           sort(data)[floor((dat.size1+1)/4)])}
+                               else{c(sort(data)[1+(dat.size1+1)/4], sort(data)[(dat.size1+1)/4-1])}},
+                            if(data1 == "third quartile")
+                              {if((dat.size1 %% 2) == 0){c(sort(data)[ceiling(3*(dat.size1+1)/4)],
+                                                           sort(data)[floor(3*(dat.size1+1)/4)])}
+                               else{c(sort(data)[1+3*(dat.size1+1)/4], sort(data)[3*(dat.size1+1)/4-1])}},
+                            runif(ceiling(answers/4), corr.ans - 3*sd(data), down.max),
+                            runif(ceiling(answers/4), up.min, corr.ans + 3*sd(data))),
                           size = answers),
                    digits = digits)
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
@@ -794,7 +803,116 @@ questions <- questions[(9+answers):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-##### StuDesMC2 #####
+##### SDMC2 #####
+library(graphics)
+library(gridExtra)
+title <- "SDMC2"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Ian and his friend Neil like playing the video game Mario Kart together. After racing together many times, they hypothesize that Neil "
+quest.txt2 <- " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics confirm their hypothesis?"
+Names <- c("Ian", "Neil")
+digits = 2
+hint <- "Remember that the mean and SD each measure something very different."
+feedback <- "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  data1 <- sample(c("has more consistent (less variable)", "has less consistent (more variable)"), size = 1)
+  Means <- sample(seq(1, 5, by = .01), size = 2)
+  SDs <- sample(seq(.5, 2, by = .01), size = 2)
+  corr.ans <- if((data1 == "has more consistent (less variable)"))
+                {
+                if(SDs[1] > SDs[2]){"Yes"}else{"No"}
+                }
+              else
+                {
+                if(data1 == "has less consistent (more variable)")
+                  {
+                  if(SDs[2] > SDs[1]){"Yes"}else{"No"}
+                  }
+                }
+  data <- data.frame(Names, Means, SDs, stringsAsFactors = FALSE)
+  ans.txt <- if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 30*nrow(data), width = 55*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
-
-##### FallacyMC1 #####
+##### MeanMC2 #####
+library(graphics)
+library(gridExtra)
+title <- "MeanMC2"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Ian and his friend Neil like playing the video game Mario Kart together. After racing together many times, they hypothesize that Neil averages "
+quest.txt2 <- " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics help affirm their hypothesis?"
+Names <- c("Ian", "Neil")
+digits = 2
+hint <- "Remember that the mean and SD each measure something very different."
+feedback <- "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  data1 <- sample(c("faster", "slower"), size = 1)
+  Means <- sample(seq(1, 5, by = .01), size = 2)
+  SDs <- sample(seq(.5, 2, by = .01), size = 2)
+  corr.ans <- if((data1 == "faster"))
+  {
+    if(Means[1] > Means[2]){"Yes"}else{"No"}
+  }
+  else
+  {
+    if(data1 == "slower")
+    {
+      if(Means[2] > Means[1]){"Yes"}else{"No"}
+    }
+  }
+  data <- data.frame(Names, Means, SDs, stringsAsFactors = FALSE)
+  ans.txt <- if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 30*nrow(data), width = 55*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
