@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the images and CSVs.      #####                                                               #####
 
-##### 17/25 Generators for test 1 completed  #####
+##### 19/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -932,3 +932,126 @@ questions <- questions[((10+answers)):((9+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
+##### MeanMC3 #####
+title <- "MeanMC3"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "While doing some data entry, you realize that you've made a big mistake. Every data value in your mistaken dataset is "
+quest.txt2 <- " than it should have been. The mean of the mistaken dataset was "
+quest.txt3 <- ". You correct the error and recalculate the mean. What is the new corrected mean?  Mistaken Data:  "
+dat.size = c(10:20)
+digits = 1
+hint <- "There is a shortcut here."
+feedback <- "The new mean will be x times the old mean, where x changes depending on the context of the question."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  dat.size1 <- sample(dat.size, size = 1)
+  data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
+  data1 <- sample(c("ten times smaller", "ten times larger", "five times smaller", "five times larger",
+                    "ten points less", "ten points greater", "five points less", "five points greater"),
+                  size = 1)
+  data2 <- round(mean(data), digits = digits)
+  scale <- if(data1 == "ten times smaller"){10}
+           else{if(data1 == "ten times larger"){.1}
+                else{if(data1 == "five times smaller"){5}
+                     else{{.2}}}}
+  constant <- if(data1 == "ten points less"){10}
+              else{if(data1 == "ten points greater"){-10}
+                   else{if(data1 == "five points less"){5}
+                        else{if(data1 == "five points greater"){-5}}}}
+  corr.ans <- if(data1 == "ten times smaller" | data1 == "ten times larger" | 
+                 data1 == "five times smaller" | data1 == "five times larger")
+                {round(scale*data2, digits = digits)}
+              else{round(data2 + constant, digits = digits)}
+  up.min <- corr.ans + sd(data)/8
+  down.max <- corr.ans - sd(data)/8
+  ans.txt <- round(sample(c(if(data1 == "ten times smaller" | data1 == "ten times larger" |
+                               data1 == "five times smaller" | data1 == "five times larger")
+                            {c(sum(scale*data), sum(scale*data)/(dat.size1-1), data2)}
+                            else{c(sum(data + constant), sum(data + constant)/(dat.size1-1), data2)},
+                            runif(ceiling(3*answers/5), corr.ans - 2*sd(data), down.max),
+                            runif(ceiling(3*answers/5), up.min, corr.ans + 2*sd(data))),
+                          size = answers),
+                   digits = digits)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
+                                   paste(as.character(data), collapse=",  ",sep=""),
+                                   collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### SDMC3 #####
+title <- "SDMC3"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "While doing some data entry, you realize that you've made a big mistake. Every data value in your mistaken dataset is "
+quest.txt2 <- " than it should have been. The standard deviation of the mistaken dataset was "
+quest.txt3 <- ". You correct the error and recalculate the standard deviation. What is the new corrected standard deviation?  Mistaken Data:  "
+dat.size = c(10:20)
+digits = 1
+hint <- "There are shortcuts here."
+feedback <- "In the case of multiplication, the new SD will be x times the old SD, where x changes depending on the context of the question. In the case of addition or substraction, the SD will not change."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  dat.size1 <- sample(dat.size, size = 1)
+  data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
+  data1 <- sample(c("ten times smaller", "ten times larger", "five times smaller", "five times larger",
+                    "ten points less", "ten points greater", "five points less", "five points greater"),
+                  size = 1)
+  data2 <- round(sd(data), digits = digits)
+  scale <- if(data1 == "ten times smaller"){10}
+           else{if(data1 == "ten times larger"){.1}
+                else{if(data1 == "five times smaller"){5}
+                     else{if(data1 == "five times larger"){.2}}}}
+  corr.ans <- if(data1 == "ten times smaller" | data1 == "ten times larger" |
+                 data1 == "five times smaller" | data1 == "five times larger")
+                {round(scale*data2, digits = digits)}
+              else{data2}
+  up.min <- corr.ans + sd(data)/8
+  down.max <- corr.ans - sd(data)/8
+  ans.txt <- round(sample(c(if(corr.ans == data2){c(sd(data)^2, sqrt(sd(data)^2*(dat.size1-1)),
+                                                    -data2, sqrt((data-mean(data))^2/dat.size1))}
+                            else{c(sd(scale*data)^2, sqrt(sd(scale*data)^2*(dat.size1-1)),
+                                   -sd(scale*data), sqrt((scale*data-mean(scale*data))^2/dat.size1))},
+                            runif(ceiling(answers/2), corr.ans - 2*sd(data), down.max),
+                            runif(ceiling(answers/2), up.min, corr.ans + 2*sd(data))),
+                          size = answers),
+                   digits = digits)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
+                                   paste(as.character(data), collapse=",  ",sep=""),
+                                   collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
