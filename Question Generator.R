@@ -558,8 +558,9 @@ points.per.q <- 4
 difficulty <- 1
 quest.txt1 <- "While analyzing a dataset, a researcher makes a stem and leaf plot of one of her variables. The stem and leaf plot she makes is depicted. What is the "
 quest.txt2 <- " value?"
-dat.size = 41
-digits = 0
+dat.size = seq(21, 41, by = 2)
+digits = -1
+scale = 1
 hint <- "Pay close attention to the key given for the plot."
 feedback <- "Stem and leaf plots are like histograms flipped over. The min is at the top, the middle halfway down, and the max is at the bottom."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
@@ -570,37 +571,51 @@ for(i in 1:n)
   ID <- paste(title, i, sep = "-")
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 7 + which.max(points)
-  left.data <- c(sample(seq(100, 199, by = 10^(-digits)), size = ceiling(dat.size/5)),
-                 sample(seq(200, 299, by = 10^(-digits)), size = ceiling(2*dat.size/5)),
-                 sample(seq(300, 400, by = 10^(-digits)), size = ceiling(3*dat.size/5)))
-  right.data <- c(sample(seq(300, 400, by = 10^(-digits)), size = ceiling(dat.size/5)),
-                  sample(seq(200, 299, by = 10^(-digits)), size = ceiling(2*dat.size/5)),
-                  sample(seq(100, 199, by = 10^(-digits)), size = ceiling(3*dat.size/5)))
-  sym.data <- c(sample(seq(300, 400, by = 10^(-digits)), size = ceiling(dat.size/5)),
-                sample(seq(200, 299, by = 10^(-digits)), size = ceiling(3*dat.size/5)),
-                sample(seq(100, 199, by = 10^(-digits)), size = ceiling(dat.size/5)))
+  dat.size1 <- sample(dat.size, size = 1)
+  left.data <- c(sample(seq(100, 350, by = 10^(-digits)), size = ceiling(dat.size1/6)),
+                 sample(seq(360, 610, by = 10^(-digits)), size = ceiling(2*dat.size1/6)),
+                 sample(seq(620, 870, by = 10^(-digits)), size = ceiling(3*dat.size1/6)))
+  right.data <- c(sample(seq(620, 870, by = 10^(-digits)), size = ceiling(dat.size1/6)),
+                  sample(seq(360, 610, by = 10^(-digits)), size = ceiling(2*dat.size1/6)),
+                  sample(seq(100, 350, by = 10^(-digits)), size = ceiling(3*dat.size1/6)))
+  sym.data <- c(sample(seq(620, 870, by = 10^(-digits)), size = ceiling(1.5*dat.size1/6)),
+                sample(seq(360, 610, by = 10^(-digits)), size = ceiling(3*dat.size1/6)),
+                sample(seq(100, 350, by = 10^(-digits)), size = ceiling(1.5*dat.size1/6)))
   data.dec <- sample(c(1,2,3), size = 1)
-  data <- sample(round(if(data.dec == 1){sym.data}
-                          else{if(data.dec == 2){left.data}
-                               else{right.data}},
-                       digits = digits),
-                 size = dat.size)
+  data <- sample(if(data.dec == 1){sym.data}
+                   else{if(data.dec == 2){left.data}
+                        else{right.data}},
+                 size = dat.size1)
   data1 <- sample(c("smallest", "second smallest", "third smallest", "median",
                     "third largest", "second largest", "largest"), size = 1)
   corr.ans <- if(data1 == "smallest"){min(data)}
               else{if(data1 == "second smallest"){sort(data)[2]}
                    else{if(data1 == "third smallest"){sort(data)[3]}
-                        else{if(data1 == "median"){sort(data)[(dat.size+1)/2]}
-                             else{if(data1 == "third largest"){sort(data)[dat.size-2]}
-                                  else{if(data1 == "second largest"){sort(data)[dat.size-1]}
+                        else{if(data1 == "median"){median(data)}
+                             else{if(data1 == "third largest"){sort(data)[dat.size1-2]}
+                                  else{if(data1 == "second largest"){sort(data)[dat.size1-1]}
                                        else{if(data1 == "largest"){max(data)}}}}}}}
-  ans.txt <- if(corr.ans == min(data)){sample(sort(data)[-1], size = answers)}
-             else{if(corr.ans == sort(data)[2]){sample(sort(data)[-2], size = answers)}
-                  else{if(corr.ans == sort(data)[3]){sample(sort(data)[-3], size = answers)}
-                       else{if(corr.ans == sort(data)[(dat.size+1)/2]){sample(sort(data)[-((dat.size+1)/2)], size = answers)}
-                            else{if(corr.ans == sort(data)[dat.size-2]){sample(sort(data)[-(dat.size-2)], size = answers)}
-                                 else{if(corr.ans == sort(data)[dat.size-1]){sample(sort(data)[-(dat.size-1)], size = answers)}
-                                      else{if(corr.ans == max(data)){sample(sort(data)[-dat.size], size = answers)}}}}}}}
+  ans.txt <- if(corr.ans == min(data)){c(sample(apply(expand.grid(sort(data)[-1], c(.1, 1, 10)), 1, prod),
+                                                size = answers-1),
+                                         sample(c(10*corr.ans, corr.ans/10), size = 1))}
+             else{if(corr.ans == sort(data)[2]){c(sample(apply(expand.grid(sort(data)[-2], c(.1, 1, 10)), 1, prod),
+                                                         size = answers-1),
+                                                  sample(c(10*corr.ans, corr.ans/10), size = 1))}
+                  else{if(corr.ans == sort(data)[3]){c(sample(apply(expand.grid(sort(data)[-3], c(.1, 1, 10)), 1, prod),
+                                                              size = answers-1),
+                                                       sample(c(10*corr.ans, corr.ans/10), size = 1))}
+                       else{if(corr.ans == median(data)){c(sample(apply(expand.grid(sort(data)[-round((dat.size1+1)/2, digits = 0)], c(.1, 1, 10)), 1, prod),
+                                                                  size = answers-1),
+                                                           sample(c(10*corr.ans, corr.ans/10), size = 1))}
+                            else{if(corr.ans == sort(data)[dat.size1-2]){c(sample(apply(expand.grid(sort(data)[-(dat.size1-2)], c(.1, 1, 10)), 1, prod),
+                                                                                  size = answers-1),
+                                                                           sample(c(10*corr.ans, corr.ans/10), size = 1))}
+                                 else{if(corr.ans == sort(data)[dat.size1-1]){c(sample(apply(expand.grid(sort(data)[-(dat.size1-1)], c(.1, 1, 10)), 1, prod),
+                                                                                       size = answers-1),
+                                                                                sample(c(10*corr.ans, corr.ans/10), size = 1))}
+                                      else{if(corr.ans == max(data)){c(sample(apply(expand.grid(sort(data)[-dat.size1], c(.1, 1, 10)), 1, prod),
+                                                                              size = answers-1),
+                                                                       sample(c(10*corr.ans, corr.ans/10), size = 1))}}}}}}}
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
                points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
@@ -610,7 +625,7 @@ for(i in 1:n)
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
   jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
-  gstem(data, 3)
+  gstem(data, scale = scale)
   dev.off()
 }
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
@@ -916,3 +931,4 @@ for(i in 1:n)
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
+
