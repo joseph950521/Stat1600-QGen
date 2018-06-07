@@ -945,7 +945,7 @@ quest.txt3 <- ". You correct the error and recalculate the mean. What is the new
 dat.size = c(10:20)
 digits = 1
 hint <- "There is a shortcut here."
-feedback <- "The new mean will be x times the old mean, where x changes depending on the context of the question."
+feedback <- "In the case of multiplication, the new mean will be x times the old mean, where x changes depending on the context of the question. In the case of addition or subtraction, the new mean will be the old mean plus or minus x."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
            rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
