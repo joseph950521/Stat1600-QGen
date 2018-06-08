@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the images and CSVs.      #####                                                               #####
 
-##### 19/25 Generators for test 1 completed  #####
+##### 20/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -62,6 +62,130 @@ options[corr.ind] <- corr.ans
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
 questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### MeanMC2 #####
+library(gridExtra)
+title <- "MeanMC2"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Ian and his friend Neil like playing the video game Mario Kart together. After racing together many times, they hypothesize that Neil averages "
+quest.txt2 <- " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics help affirm their hypothesis?"
+Names <- c("Ian", "Neil")
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "Remember that the mean and SD each measure something very different."
+feedback <- "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  data1 <- sample(c("faster", "slower"), size = 1)
+  Means <- sample(seq(1, 5, by = .01), size = 2)
+  SDs <- sample(seq(.5, 2, by = .01), size = 2)
+  corr.ans <- if((data1 == "faster"))
+  {
+    if(Means[1] > Means[2]){"Yes"}else{"No"}
+  }
+  else
+  {
+    if(data1 == "slower")
+    {
+      if(Means[2] > Means[1]){"Yes"}else{"No"}
+    }
+  }
+  data <- data.frame(Names, Means, SDs, stringsAsFactors = FALSE)
+  ans.txt <- if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 30*nrow(data), width = 55*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### MeanMC3 #####
+title <- "MeanMC3"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "While doing some data entry, you realize that you've made a big mistake. Every data value in your mistaken dataset is "
+quest.txt2 <- " than it should have been. The mean of the mistaken dataset was "
+quest.txt3 <- ". You correct the error and recalculate the mean. What is the new corrected mean?  Mistaken Data:  "
+dat.size = c(10:20)
+digits = 1
+loc.path <- 
+  e.path <- 
+  hint <- "There is a shortcut here."
+feedback <- "In the case of multiplication, the new mean will be x times the old mean, where x changes depending on the context of the question. In the case of addition or subtraction, the new mean will be the old mean plus or minus x."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  dat.size1 <- sample(dat.size, size = 1)
+  data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
+  data1 <- sample(c("ten times smaller", "ten times larger", "five times smaller", "five times larger",
+                    "ten points less", "ten points greater", "five points less", "five points greater"),
+                  size = 1)
+  data2 <- round(mean(data), digits = digits)
+  scale <- if(data1 == "ten times smaller"){10}
+  else{if(data1 == "ten times larger"){.1}
+    else{if(data1 == "five times smaller"){5}
+      else{{.2}}}}
+  constant <- if(data1 == "ten points less"){10}
+  else{if(data1 == "ten points greater"){-10}
+    else{if(data1 == "five points less"){5}
+      else{if(data1 == "five points greater"){-5}}}}
+  corr.ans <- if(data1 == "ten times smaller" | data1 == "ten times larger" | 
+                 data1 == "five times smaller" | data1 == "five times larger")
+  {round(scale*data2, digits = digits)}
+  else{round(data2 + constant, digits = digits)}
+  up.min <- round(corr.ans + sd(data)/8, digits = digits)
+  down.max <- round(corr.ans - sd(data)/8, digits = digits)
+  ans.txt <- round(sample(c(if(data1 == "ten times smaller" | data1 == "ten times larger" |
+                               data1 == "five times smaller" | data1 == "five times larger")
+  {c(sum(scale*data), sum(scale*data)/(dat.size1-1), data2)}
+  else{c(sum(data + constant), sum(data + constant)/(dat.size1-1), data2)},
+  seq(corr.ans - 2*sd(data), down.max, 10^-digits),
+  seq(up.min, corr.ans + 2*sd(data), 10^-digits)),
+  size = answers),
+  digits = digits)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
+                                   paste(as.character(data), collapse=",  ",sep=""),
+                                   collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
 }
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
@@ -150,6 +274,126 @@ for(i in 1:n)
                                    collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
   options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### SDMC2 #####
+library(gridExtra)
+title <- "SDMC2"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Ian and his friend Neil like playing the video game Mario Kart together. After racing together many times, they hypothesize that Neil "
+quest.txt2 <- " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics confirm their hypothesis?"
+Names <- c("Ian", "Neil")
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "Remember that the mean and SD each measure something very different."
+feedback <- "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  data1 <- sample(c("has more consistent (less variable)", "has less consistent (more variable)"), size = 1)
+  Means <- sample(seq(1, 5, by = .01), size = 2)
+  SDs <- sample(seq(.5, 2, by = .01), size = 2)
+  corr.ans <- if((data1 == "has more consistent (less variable)"))
+  {
+    if(SDs[1] > SDs[2]){"Yes"}else{"No"}
+  }
+  else
+  {
+    if(data1 == "has less consistent (more variable)")
+    {
+      if(SDs[2] > SDs[1]){"Yes"}else{"No"}
+    }
+  }
+  data <- data.frame(Names, Means, SDs, stringsAsFactors = FALSE)
+  ans.txt <- if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 30*nrow(data), width = 55*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### SDMC3 #####
+title <- "SDMC3"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "While doing some data entry, you realize that you've made a big mistake. Every data value in your mistaken dataset is "
+quest.txt2 <- " than it should have been. The standard deviation of the mistaken dataset was "
+quest.txt3 <- ". You correct the error and recalculate the standard deviation. What is the new corrected standard deviation?  Mistaken Data:  "
+dat.size = c(10:20)
+digits = 1
+loc.path <- 
+  e.path <- 
+  hint <- "There are shortcuts here."
+feedback <- "In the case of multiplication, the new SD will be x times the old SD, where x changes depending on the context of the question. In the case of addition or substraction, the SD will not change."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  dat.size1 <- sample(dat.size, size = 1)
+  data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
+  data1 <- sample(c("ten times smaller", "ten times larger", "five times smaller", "five times larger",
+                    "ten points less", "ten points greater", "five points less", "five points greater"),
+                  size = 1)
+  data2 <- round(sd(data), digits = digits)
+  scale <- if(data1 == "ten times smaller"){10}
+  else{if(data1 == "ten times larger"){.1}
+    else{if(data1 == "five times smaller"){5}
+      else{if(data1 == "five times larger"){.2}}}}
+  corr.ans <- if(data1 == "ten times smaller" | data1 == "ten times larger" |
+                 data1 == "five times smaller" | data1 == "five times larger")
+  {round(scale*data2, digits = digits)}
+  else{data2}
+  up.min <- round(corr.ans + sd(data)/8, digits = digits)
+  down.max <- round(corr.ans - sd(data)/8, digits = digits)
+  ans.txt <- round(sample(c(if(corr.ans == data2){c(sd(data)^2, sqrt(sd(data)^2*(dat.size1-1)),
+                                                    -data2, sqrt((data-mean(data))^2/dat.size1))}
+                            else{c(sd(scale*data)^2, sqrt(sd(scale*data)^2*(dat.size1-1)),
+                                   -sd(scale*data), sqrt((scale*data-mean(scale*data))^2/dat.size1))},
+                            seq(corr.ans - 2*sd(data), down.max, 10^-digits),
+                            seq(up.min, corr.ans + 2*sd(data), 10^-digits)),
+                          size = answers),
+                   digits = digits)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
+                                   paste(as.character(data), collapse=",  ",sep=""),
+                                   collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
   questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
@@ -512,6 +756,67 @@ questions <- questions[((9+answers)):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
+##### VarTypeMC3 #####
+title <- "VarTypeMC3"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A study's dataset includes the following variable: "
+quest.txt2 <- ". What is this variable's type and level of measurement?"
+dat.size <- 
+digits <- 
+loc.path <- 
+e.path <- 
+hint <- "Try drawing out a tree of all the possible answers. You might be able to eliminate some."
+feedback <- "If it's just a label, it's categorical and nominal. If it's a label that can be ordered, it's categorical and ordinal. If it has a number-based measurement scale where just differences are meaningful, it's numeric and interval. If the scale has a true zero and ratios are meaningful, it's numeric and ratio."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  rat.data1 <- c("subjects' heights in inches", "subjects' hours spent sleeping per night", "subjects' ages in years",
+                 "subjects' current number of completed STEM courses", "subjects' years since university admission (2, 3, etc.)")
+  ord.data1 <- c("subjects' heights in ranges (5.0-5.5 ft, 5.5-6 ft, etc)",
+                 "subjects' weights in ranges (100-125 lbs, 125-150 lbs, etc.)",
+                 "subjects' tax income brackets", "subjects' military ranks",
+                 "customers' satisfaction (not satisfied, satisfied, etc.)")
+  int.data1 <- c("subjects' GPAs in raw points", "subjects' shoe sizes (8, 9, etc.)", "temperatures in celsius",
+                 "subjects' point grades on statistics tests from different classes (71, 72, etc.)",
+                 "consumers' review scores of a product (0 to 100)")
+  nom.data1 <- c("subjects' racial demographics", "subjects' countries of origin",
+                 "subjects' marital statuses", "subjects' nationalities",
+                 "subjects' native language (English, Spanish, etc.)")
+  data1 <- sample(c(rat.data1, ord.data1, int.data1, nom.data1), size = 1)
+  corr.ans <- if(data1 %in% rat.data1){"Numeric, Ratio"}
+              else{if(data1 %in% ord.data1){"Categorical, Ordinal"}
+                   else{if(data1 %in% int.data1){"Numeric, Interval"}
+                        else{"Categorical, Nominal"}}}
+  ans.bad <- c("Numeric, Ordinal", "Categorical, Interval", "Categorical, Ratio")
+  ans.cat <- c("Categorical, Ordinal", "Categorical, Nominal")
+  ans.num <- c("Numeric, Interval", "Numeric, Ratio")
+  ans.txt <- sample(if(data1 %in% rat.data1){c(ans.bad, ans.cat, "Numeric, Interval")}
+                    else{if(data1 %in% ord.data1){c(ans.bad, ans.num, "Categorical, Nominal")}
+                         else{if(data1 %in% int.data1){c(ans.bad, ans.cat, "Numeric, Ratio")}
+                              else{c(ans.bad, ans.num, "Categorical, Ordinal")}}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[((9+answers)):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
 ##### SkewGraphMC1 #####
 title <- "SkewGraphMC1"
 n = 200
@@ -823,8 +1128,8 @@ for(i in 1:n)
               else{round(mean(c(sort(data)[ceiling(3*(dat.size1+1)/4)],
                                 sort(data)[floor(3*(dat.size1+1)/4)])),
                          digits = digits)}
-  up.min <- corr.ans + sd(data)/8
-  down.max <- corr.ans - sd(data)/8
+  up.min <- round(corr.ans + sd(data)/8, digits = digits)
+  down.max <- round(corr.ans - sd(data)/8, digits = digits)
   ans.txt <- round(sample(c(median(data), mean(data),
                             if(data1 == "first quartile")
                               {if((dat.size1 %% 2) == 0){c(sort(data)[ceiling((dat.size1+1)/4)],
@@ -834,8 +1139,8 @@ for(i in 1:n)
                               {if((dat.size1 %% 2) == 0){c(sort(data)[ceiling(3*(dat.size1+1)/4)],
                                                            sort(data)[floor(3*(dat.size1+1)/4)])}
                                else{c(sort(data)[1+3*(dat.size1+1)/4], sort(data)[3*(dat.size1+1)/4-1])}},
-                            runif(ceiling(answers/4), corr.ans - 3*sd(data), down.max),
-                            runif(ceiling(answers/4), up.min, corr.ans + 3*sd(data))),
+                            seq(corr.ans - 3*sd(data), down.max, 10^-digits),
+                            seq(up.min, corr.ans + 3*sd(data), 10^-digits)),
                           size = answers),
                    digits = digits)
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
@@ -852,246 +1157,3 @@ questions <- questions[(9+answers):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-##### SDMC2 #####
-library(gridExtra)
-title <- "SDMC2"
-n = 200
-type <- "MC"
-answers <- 2
-points.per.q <- 4
-difficulty <- 1
-quest.txt1 <- "Ian and his friend Neil like playing the video game Mario Kart together. After racing together many times, they hypothesize that Neil "
-quest.txt2 <- " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics confirm their hypothesis?"
-Names <- c("Ian", "Neil")
-digits = 2
-loc.path <- "Images/"
-e.path <- "Images/"
-hint <- "Remember that the mean and SD each measure something very different."
-feedback <- "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD."
-param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
-           rep("Option", answers),"Hint","Feedback")
-questions <- data.frame()
-for(i in 1:n)
-{
-  ID <- paste(title, i, sep = "-")
-  points <- sample(c(rep(0,answers-1),100),replace=F)
-  corr.ind <- 7 + which.max(points)
-  data1 <- sample(c("has more consistent (less variable)", "has less consistent (more variable)"), size = 1)
-  Means <- sample(seq(1, 5, by = .01), size = 2)
-  SDs <- sample(seq(.5, 2, by = .01), size = 2)
-  corr.ans <- if((data1 == "has more consistent (less variable)"))
-                {
-                if(SDs[1] > SDs[2]){"Yes"}else{"No"}
-                }
-              else
-                {
-                if(data1 == "has less consistent (more variable)")
-                  {
-                  if(SDs[2] > SDs[1]){"Yes"}else{"No"}
-                  }
-                }
-  data <- data.frame(Names, Means, SDs, stringsAsFactors = FALSE)
-  ans.txt <- if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)}
-  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
-               points, hint, feedback)
-  options <- c(rep("",7), ans.txt, rep("",2))
-  options[corr.ind] <- corr.ans
-  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
-  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
-  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
-  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
-       height = 30*nrow(data), width = 55*ncol(data))
-  p <- tableGrob(data)
-  grid.arrange(p)
-  dev.off()
-}
-questions <- questions[((10+answers)):((9+answers)*(n+1)),]
-write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
-            row.names=F, col.names=F)
-
-##### MeanMC2 #####
-library(gridExtra)
-title <- "MeanMC2"
-n = 200
-type <- "MC"
-answers <- 2
-points.per.q <- 4
-difficulty <- 1
-quest.txt1 <- "Ian and his friend Neil like playing the video game Mario Kart together. After racing together many times, they hypothesize that Neil averages "
-quest.txt2 <- " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics help affirm their hypothesis?"
-Names <- c("Ian", "Neil")
-digits = 2
-loc.path <- "Images/"
-e.path <- "Images/"
-hint <- "Remember that the mean and SD each measure something very different."
-feedback <- "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD."
-param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
-           rep("Option", answers),"Hint","Feedback")
-questions <- data.frame()
-for(i in 1:n)
-{
-  ID <- paste(title, i, sep = "-")
-  points <- sample(c(rep(0,answers-1),100),replace=F)
-  corr.ind <- 7 + which.max(points)
-  data1 <- sample(c("faster", "slower"), size = 1)
-  Means <- sample(seq(1, 5, by = .01), size = 2)
-  SDs <- sample(seq(.5, 2, by = .01), size = 2)
-  corr.ans <- if((data1 == "faster"))
-  {
-    if(Means[1] > Means[2]){"Yes"}else{"No"}
-  }
-  else
-  {
-    if(data1 == "slower")
-    {
-      if(Means[2] > Means[1]){"Yes"}else{"No"}
-    }
-  }
-  data <- data.frame(Names, Means, SDs, stringsAsFactors = FALSE)
-  ans.txt <- if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)}
-  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
-               points, hint, feedback)
-  options <- c(rep("",7), ans.txt, rep("",2))
-  options[corr.ind] <- corr.ans
-  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
-  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
-  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
-  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
-       height = 30*nrow(data), width = 55*ncol(data))
-  p <- tableGrob(data)
-  grid.arrange(p)
-  dev.off()
-}
-questions <- questions[((10+answers)):((9+answers)*(n+1)),]
-write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
-            row.names=F, col.names=F)
-
-##### MeanMC3 #####
-title <- "MeanMC3"
-n = 200
-type <- "MC"
-answers <- 4
-points.per.q <- 4
-difficulty <- 1
-quest.txt1 <- "While doing some data entry, you realize that you've made a big mistake. Every data value in your mistaken dataset is "
-quest.txt2 <- " than it should have been. The mean of the mistaken dataset was "
-quest.txt3 <- ". You correct the error and recalculate the mean. What is the new corrected mean?  Mistaken Data:  "
-dat.size = c(10:20)
-digits = 1
-loc.path <- 
-e.path <- 
-hint <- "There is a shortcut here."
-feedback <- "In the case of multiplication, the new mean will be x times the old mean, where x changes depending on the context of the question. In the case of addition or subtraction, the new mean will be the old mean plus or minus x."
-param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-           rep("Option", answers),"Hint","Feedback")
-questions <- data.frame()
-for(i in 1:n)
-{
-  ID <- paste(title, i, sep = "-")
-  points <- sample(c(rep(0,answers-1),100),replace=F)
-  corr.ind <- 6 + which.max(points)
-  dat.size1 <- sample(dat.size, size = 1)
-  data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
-  data1 <- sample(c("ten times smaller", "ten times larger", "five times smaller", "five times larger",
-                    "ten points less", "ten points greater", "five points less", "five points greater"),
-                  size = 1)
-  data2 <- round(mean(data), digits = digits)
-  scale <- if(data1 == "ten times smaller"){10}
-           else{if(data1 == "ten times larger"){.1}
-                else{if(data1 == "five times smaller"){5}
-                     else{{.2}}}}
-  constant <- if(data1 == "ten points less"){10}
-              else{if(data1 == "ten points greater"){-10}
-                   else{if(data1 == "five points less"){5}
-                        else{if(data1 == "five points greater"){-5}}}}
-  corr.ans <- if(data1 == "ten times smaller" | data1 == "ten times larger" | 
-                 data1 == "five times smaller" | data1 == "five times larger")
-                {round(scale*data2, digits = digits)}
-              else{round(data2 + constant, digits = digits)}
-  up.min <- round(corr.ans + sd(data)/8, digits = digits)
-  down.max <- round(corr.ans - sd(data)/8, digits = digits)
-  ans.txt <- round(sample(c(if(data1 == "ten times smaller" | data1 == "ten times larger" |
-                               data1 == "five times smaller" | data1 == "five times larger")
-                            {c(sum(scale*data), sum(scale*data)/(dat.size1-1), data2)}
-                            else{c(sum(data + constant), sum(data + constant)/(dat.size1-1), data2)},
-                            seq(corr.ans - 2*sd(data), down.max, 10^-digits),
-                            seq(up.min, corr.ans + 2*sd(data), 10^-digits)),
-                          size = answers),
-                   digits = digits)
-  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
-                                   paste(as.character(data), collapse=",  ",sep=""),
-                                   collapse = "", sep = ""),
-               points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), ans.txt, rep("",2))
-  options[corr.ind] <- corr.ans
-  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
-  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
-  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
-}
-questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
-            row.names=F, col.names=F)
-
-##### SDMC3 #####
-title <- "SDMC3"
-n = 200
-type <- "MC"
-answers <- 4
-points.per.q <- 4
-difficulty <- 1
-quest.txt1 <- "While doing some data entry, you realize that you've made a big mistake. Every data value in your mistaken dataset is "
-quest.txt2 <- " than it should have been. The standard deviation of the mistaken dataset was "
-quest.txt3 <- ". You correct the error and recalculate the standard deviation. What is the new corrected standard deviation?  Mistaken Data:  "
-dat.size = c(10:20)
-digits = 1
-loc.path <- 
-e.path <- 
-hint <- "There are shortcuts here."
-feedback <- "In the case of multiplication, the new SD will be x times the old SD, where x changes depending on the context of the question. In the case of addition or substraction, the SD will not change."
-param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
-           rep("Option", answers),"Hint","Feedback")
-questions <- data.frame()
-for(i in 1:n)
-{
-  ID <- paste(title, i, sep = "-")
-  points <- sample(c(rep(0,answers-1),100),replace=F)
-  corr.ind <- 6 + which.max(points)
-  dat.size1 <- sample(dat.size, size = 1)
-  data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
-  data1 <- sample(c("ten times smaller", "ten times larger", "five times smaller", "five times larger",
-                    "ten points less", "ten points greater", "five points less", "five points greater"),
-                  size = 1)
-  data2 <- round(sd(data), digits = digits)
-  scale <- if(data1 == "ten times smaller"){10}
-           else{if(data1 == "ten times larger"){.1}
-                else{if(data1 == "five times smaller"){5}
-                     else{if(data1 == "five times larger"){.2}}}}
-  corr.ans <- if(data1 == "ten times smaller" | data1 == "ten times larger" |
-                 data1 == "five times smaller" | data1 == "five times larger")
-                {round(scale*data2, digits = digits)}
-              else{data2}
-  up.min <- round(corr.ans + sd(data)/8, digits = digits)
-  down.max <- round(corr.ans - sd(data)/8, digits = digits)
-  ans.txt <- round(sample(c(if(corr.ans == data2){c(sd(data)^2, sqrt(sd(data)^2*(dat.size1-1)),
-                                                    -data2, sqrt((data-mean(data))^2/dat.size1))}
-                            else{c(sd(scale*data)^2, sqrt(sd(scale*data)^2*(dat.size1-1)),
-                                   -sd(scale*data), sqrt((scale*data-mean(scale*data))^2/dat.size1))},
-                            seq(corr.ans - 2*sd(data), down.max, 10^-digits),
-                            seq(up.min, corr.ans + 2*sd(data), 10^-digits)),
-                          size = answers),
-                   digits = digits)
-  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
-                                   paste(as.character(data), collapse=",  ",sep=""),
-                                   collapse = "", sep = ""),
-               points.per.q, difficulty, points, hint, feedback)
-  options <- c(rep("",6), ans.txt, rep("",2))
-  options[corr.ind] <- corr.ans
-  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
-  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
-  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
-}
-questions <- questions[(9+answers):((8+answers)*(n+1)),]
-write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
-            row.names=F, col.names=F)
