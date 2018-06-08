@@ -29,9 +29,11 @@ type <- "MC"
 answers <- 4
 points.per.q <- 4
 difficulty <- 1
-quest.txt <- "What is the mean of the following dataset?"
+quest.txt <- "What is the mean of the following dataset?  Data: "
 dat.size = 5
 digits = 1
+loc.path <- 
+e.path <- 
 hint <- "Take note that this question is asking for the mean, not the median."
 feedback <- "Did you sum the numbers (subtracting any negatives) and divide by the sample size?"
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -44,15 +46,15 @@ points <- sample(c(rep(0,answers-1),100),replace=F)
 corr.ind <- 6 + which.max(points)
 data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = digits)
 corr.ans <- round(mean(data), digits = digits)
-up.min <- corr.ans + sd(data)/4
-down.max <- corr.ans - sd(data)/4
+up.min <- round(corr.ans + sd(data)/8, digits = digits)
+down.max <- round(corr.ans - sd(data)/8, digits = digits)
 ans.txt <- round(sample(c(sum(data), sum(data)/(dat.size-1),
-                          runif(ceiling(3*answers/5), corr.ans - 4*sd(data), down.max),
-                          runif(ceiling(3*answers/5), up.min, corr.ans + 4*sd(data))),
+                          seq(corr.ans - 3*sd(data), down.max, 10^-digits),
+                          seq(up.min, corr.ans + 3*sd(data), 10^-digits)),
                         size = answers),
                  digits = digits)
 content <- c(type, ID, ID, paste(quest.txt, paste(as.character(data),
-                                                  collapse=", ",sep=""),
+                                                  collapse=",  ",sep=""),
                                  collapse = ""),
              points.per.q, difficulty, points, hint, feedback)
 options <- c(rep("",6), ans.txt, rep("",2))
@@ -72,9 +74,11 @@ type <- "MC"
 answers <- 4
 points.per.q <- 4
 difficulty <- 1
-quest.txt <- "What is the median of the following dataset?"
+quest.txt <- "What is the median of the following dataset?  Data: "
 digits = 1
 dat.size <- c(5,6)
+loc.path <- 
+e.path <- 
 hint <- "Sort the data first."
 feedback <- "Sort and find the middle number, or take the average of the two middle numbers."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -88,16 +92,16 @@ for(i in 1:n)
   corr.ind <- 6 + which.max(points)
   data <- round(rnorm(dat.size1,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size1,df=30)), digits = digits)
   corr.ans <- round(median(data), digits = digits)
-  up.min <- corr.ans + sd(data)/4
-  down.max <- corr.ans - sd(data)/4
+  up.min <- round(corr.ans + sd(data)/8, digits = digits)
+  down.max <- round(corr.ans - sd(data)/8, digits = digits)
   ans.txt <- round(sample(c(if((dat.size1 %% 2) == 0){sort(data)[ceiling((dat.size1+1)/2)]}else{sort(data)[1+(dat.size1+1)/2]},
                             if((dat.size1 %% 2) == 0){sort(data)[floor((dat.size1+1)/2)]}else{sort(data)[(dat.size1+1)/2-1]},
-                            runif(ceiling(answers/2), corr.ans - 4*sd(data), down.max),
-                            runif(ceiling(answers/2), up.min, corr.ans + 4*sd(data))),
+                            seq(corr.ans - 2*sd(data), down.max, 10^-digits),
+                            seq(up.min, corr.ans + 2*sd(data), 10^-digits)),
                           size = answers),
                    digits = digits)
   content <- c(type, ID, ID, paste(quest.txt, paste(as.character(data),
-                                                    collapse=", ",sep=""),
+                                                    collapse=",  ",sep=""),
                                    collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
   options <- c(rep("",6), ans.txt, rep("",2))
@@ -117,9 +121,11 @@ type <- "MC"
 answers <- 4
 points.per.q <- 4
 difficulty <- 1
-quest.txt <- "What is the standard deviation of the following dataset?"
+quest.txt <- "What is the standard deviation of the following dataset?  Data: "
 dat.size = 5
 digits = 1
+loc.path <- 
+e.path <- 
 hint <- "Don't forget to take a square root at the end."
 feedback <- "1: Mean. 2: Squared differences. 3: Sum. 4: Divide. 5. Square Root. "
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -132,15 +138,15 @@ for(i in 1:n)
   corr.ind <- 6 + which.max(points)
   data <- round(rnorm(dat.size,mean=rnorm(1,mean=900,sd=400),sd=200) + (0.5*rt(dat.size,df=30)), digits = 1)
   corr.ans <- round(sd(data), digits = digits)
-  up.min <- corr.ans + sd(data)/4
-  down.max <- corr.ans - sd(data)/4
+  up.min <- round(corr.ans + sd(data)/8, digits = digits)
+  down.max <- round(corr.ans - sd(data)/8, digits = digits)
   ans.txt <- round(sample(c(sd(data)^2, sqrt(sd(data)^2*(dat.size-1)), sqrt((data-mean(data))^2/dat.size),
-                            runif(ceiling(answers/2), corr.ans - 4*sd(data), down.max),
-                            runif(ceiling(answers/2), up.min, corr.ans + 4*sd(data))),
+                            seq(corr.ans - 3*sd(data), down.max, 10^-digits),
+                            seq(up.min, corr.ans + 3*sd(data), 10^-digits)),
                           size = answers),
                    digits = digits)
   content <- c(type, ID, ID, paste(quest.txt, paste(as.character(data),
-                                                    collapse=", ",sep=""),
+                                                    collapse=",  ",sep=""),
                                    collapse = ""),
                points.per.q, difficulty, points, hint, feedback)
   options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
@@ -166,6 +172,8 @@ quest.txt3 <- ". What is the probability that a randomly sampled datapoint will 
 quest.txt4 <- "?"
 dat.size = 1
 digits = 3
+loc.path <- 
+e.path <- 
 hint <- "You'll need your Z-table for this question."
 feedback <- "1: Calculate Z. 2: Find area below on the Z-table."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -181,13 +189,13 @@ for(i in 1:n)
   data3 <- sample(c(runif(dat.size, data1 - 180, data1 - 5),
                   runif(dat.size, data1 + 5, data1 + 180)), size = dat.size)
   corr.ans <- pnorm(round(((data3 - data1)/data2), digits = 2))
-  up.min <- corr.ans + .05
-  down.max <- corr.ans - .05
-  ans.txt <- sample(if(corr.ans < .025){runif(answers, up.min, 1.05)}
-                    else{if(corr.ans > .975){runif(answers, -0.05, down.max)}
-                      else{c(runif(ceiling(answers/2), -0.05, down.max),
-                             runif(ceiling(answers/2), up.min, 1.05))}},
-                    size = answers, replace = F)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans <= .05){seq(up.min, 1.05, 10^-digits)}
+                    else{if(corr.ans >= .95){seq(-0.05, down.max, 10^-digits)}
+                      else{c(seq(-0.05, down.max, 10^-digits),
+                             seq(up.min, 1.05, 10^-digits))}},
+                    size = answers)
   content <- c(type, ID, ID, paste(quest.txt1, round(data1, digits=3), quest.txt2,
                                                                 round(data2, digits=3), quest.txt3, 
                                                                 round(data3, digits = 3), quest.txt4,
@@ -216,6 +224,8 @@ quest.txt3 <- ". What is the probability that a randomly sampled datapoint will 
 quest.txt4 <- "?"
 dat.size = 1
 digits = 3
+loc.path <- 
+e.path <- 
 hint <- "You'll need your Z-table for this question."
 feedback <- "1: Calculate Z. 2: Find area below on the Z-table. 3: Take 1 - area below."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -231,13 +241,13 @@ for(i in 1:n)
   data3 <- sample(c(runif(dat.size, data1 - 180, data1 - 5),
                     runif(dat.size, data1 + 5, data1 + 180)), size = dat.size)
   corr.ans <- 1 - pnorm(round(((data3-data1)/data2), digits = 2))
-  up.min <- corr.ans + .05
-  down.max <- corr.ans - .05
-  ans.txt <- sample(if(corr.ans < .025){runif(answers, up.min, 1.05)}
-                    else{if(corr.ans > .975){runif(answers, -0.05, down.max)}
-                         else{c(runif(ceiling(answers/2), -0.05, down.max),
-                                runif(ceiling(answers/2), up.min, 1.05))}},
-                    size = answers, replace = F)
+  up.min <- round(corr.ans + .05, digits = digits)
+  down.max <- round(corr.ans - .05, digits = digits)
+  ans.txt <- sample(if(corr.ans < .05){seq(up.min, 1.05, 10^-digits)}
+                    else{if(corr.ans > .975){seq(-0.05, down.max, 10^-digits)}
+                         else{c(seq(-0.05, down.max, 10^-digits),
+                                seq(up.min, 1.05, 10^-digits))}},
+                    size = answers)
   content <- c(type, ID, ID, paste(quest.txt1, round(data1, digits=3), quest.txt2,
                                                                 round(data2, digits=3), quest.txt3, 
                                                                 round(data3, digits = 3), quest.txt4,
@@ -266,6 +276,8 @@ quest.txt3 <- ". What is the value x of this dataset where "
 quest.txt4 <- "% of all other data values are "
 dat.size = 1
 digits = 1
+loc.path <- 
+e.path <- 
 hint <- "This is an inverted or 'backward' Z-table question. Pick the closest answer."
 feedback <- "1: Find the closest probability on the Z-table. 2: Find the Z value. 3: Calculate the value x."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -282,13 +294,13 @@ for(i in 1:n)
   data4 <- sample(c("less?", "greater?"), size = 1)
   corr.ans <- ifelse(data4 == "less?", (data2*round(qnorm(data3/100), digits = 2) + data1),
                      (data2*round(qnorm(data3/100, lower.tail = F), digits = 2) + data1))
-  up.min <- corr.ans + data2/3
-  down.max <- corr.ans - data2/3
-  ans.txt <- sample(if(corr.ans < (data1 - 2*data2)){runif(answers, up.min, (data1 + 4*data2))}
-                       else{if(corr.ans > (data1 + 2*data2)){runif(answers, (data1 - 4*data2), down.max)}
-                            else{c(runif(ceiling(answers/2), (data1 - 4*data2), down.max),
-                                   runif(ceiling(answers/2), up.min, (data1 + 4*data2)))}},
-                    size = answers, replace = F)
+  up.min <- round(corr.ans + data2/3, digits = digits)
+  down.max <- round(corr.ans - data2/3, digits = digits)
+  ans.txt <- sample(if(corr.ans < (data1 - 2*data2)){seq(up.min, (data1 + 4*data2), 10^-digits)}
+                       else{if(corr.ans > (data1 + 2*data2)){seq((data1 - 4*data2), down.max, 10^-digits)}
+                            else{c(seq((data1 - 4*data2), down.max, 10^-digits),
+                                   seq(up.min, (data1 + 4*data2), 10^-digits))}},
+                    size = answers)
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
                                                                 data2, quest.txt3, data3, quest.txt4,
                                                                 data4, collapse = "", sep= ""),
@@ -314,6 +326,8 @@ quest.txt1 <- "A researcher wants to estimate the center of her data's distribut
 quest.txt2 <- " Which statistic should she select for this purpose?"
 dat.size = 
 digits = 
+loc.path <- 
+e.path <- 
 hint <- "Remember that 'robust' means insensitive to outliers."
 feedback <- "The mean is least robust, and the median is most robust."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -357,6 +371,8 @@ quest.txt4 <- " endpoint of the interval that is centered on the mean and includ
 quest.txt5 <- "% of all the data?"
 dat.size = 1
 digits = 2
+loc.path <- 
+e.path <- 
 hint <- "This is an empirical rule question."
 feedback <- "1: Determine if the endpoint is lower or upper. 2: Find the probability centered on the mean (68, 95, or 99.7%). 3: Subtract or add 1, 2, or 3 SDs from the mean depending on steps 1 and 2."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -377,13 +393,13 @@ for(i in 1:n)
                      (data1 + data2*if(data4 == 68){1}
                                     else{if(data4 == 95){2}
                                          else{3}}))
-  up.min <- corr.ans + data2/3
-  down.max <- corr.ans - data2/3
-  ans.txt <- sample(if(corr.ans == data1 - 3*data2){runif(answers, up.min, (data1 + 4*data2))}
-                    else{if(corr.ans == (data1 + 3*data2)){runif(answers, (data1 - 4*data2), down.max)}
-                      else{c(runif(ceiling(answers/2), (data1 - 4*data2), down.max),
-                             runif(ceiling(answers/2), up.min, (data1 + 4*data2)))}},
-                    size = answers, replace = F)
+  up.min <- round(corr.ans + data2/3, digits = digits)
+  down.max <- round(corr.ans - data2/3, digits = digits)
+  ans.txt <- sample(if(corr.ans == data1 - 3*data2){seq(up.min, (data1 + 3*data2), 10^-digits)}
+                    else{if(corr.ans == (data1 + 3*data2)){seq((data1 - 3*data2), down.max, 10^-digits)}
+                      else{c(seq((data1 - 3*data2), down.max, 10^-digits),
+                             seq(up.min, (data1 + 3*data2), 10^-digits))}},
+                    size = answers)
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
                                    data2, quest.txt3, data3, quest.txt4,
                                    data4, quest.txt5, collapse = "", sep= ""),
@@ -409,6 +425,8 @@ quest.txt1 <- "A student wants to visualize data that is "
 quest.txt2 <- ". What kind of graph should she select for this purpose?"
 dat.size = 
 digits = 
+loc.path <- 
+e.path <- 
 hint <- "Focus on the variable type: categorical vs. numeric."
 feedback <- "Categorical: Bar or Pie. Numeric: Stem & Leaf, Histogram, Dot, or Box."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -452,6 +470,8 @@ quest.txt2 <- ". She decides to use a "
 quest.txt3 <- " to visualize this data. Did she choose a correct graphic?"
 dat.size = 
 digits = 
+loc.path <- 
+e.path <- 
 hint <- "What is the variable's type: categorical or numeric?"
 feedback <- "Categorical: Bar, RF table, or Pie. Numeric: Stem & Leaf, RF table, Histogram, Dot, or Box."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -492,7 +512,6 @@ questions <- questions[((9+answers)):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-set.seed(11452)
 ##### SkewGraphMC1 #####
 title <- "SkewGraphMC1"
 n = 200
@@ -503,6 +522,8 @@ difficulty <- 1
 quest.txt <- "While analyzing a dataset, a researcher plots a histogram of one of her variables. The histogram she makes is depicted. What type of skewness, if any, is present in the variable's distribution?"
 dat.size = 10000
 digits = 3
+loc.path <- "Images/"
+e.path <- "Images/"
 hint <- "Focus on the tails."
 feedback <- "Left Skew: Left tail. Right Skew: Right tail. No Skew: Symmetric tails."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
@@ -530,14 +551,14 @@ for(i in 1:n)
                   else{c(sample(c("No Skew", "Left Skew", "Curve Skew", "Histographic Skew"), size = answers-1),
                          sample(c("All of These", "None of These"), size = 1))}}
   content <- c(type, ID, ID, quest.txt, points.per.q, difficulty,
-               paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
-  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""))
   hist(data, xlim=c(min(data),max(data)), probability=T, 
        col='lightblue', xlab=' ', ylab=' ', axes=F,
        main = "Researcher's Histogram")
@@ -548,7 +569,6 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### StemGraphMC1 #####
-library(graphics)
 library(fmsb)
 title <- "StemGraphMC1"
 n = 200
@@ -561,6 +581,8 @@ quest.txt2 <- " value?"
 dat.size = seq(21, 41, by = 2)
 digits = -1
 scale = 1
+loc.path <- "Images/"
+e.path <- "Images/"
 hint <- "Pay close attention to the key given for the plot."
 feedback <- "Stem and leaf plots are like histograms flipped over. The min is at the top, the middle halfway down, and the max is at the bottom."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
@@ -617,14 +639,14 @@ for(i in 1:n)
                                                                               size = answers-1),
                                                                        sample(c(10*corr.ans, corr.ans/10), size = 1))}}}}}}}
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
-  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""))
   gstem(data, scale = scale)
   dev.off()
 }
@@ -633,7 +655,6 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### RFTableMC1 #####
-library(graphics)
 library(gridExtra)
 title <- "RFTableMC1"
 n = 200
@@ -650,6 +671,8 @@ majors <- c("Physics", "Statistics", "Speech Pathology", "Psychology", "Music", 
             "English", "Spanish", "French", "Arabic", "Economics", "Applied Mathematics")
 dat.size = 5:15
 digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
 hint <- "Read the Data Presentation chapter of your coursepack."
 feedback <- "For the specified category, calculate frequency over total and multiply by 100%."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
@@ -676,14 +699,14 @@ for(i in 1:n)
                       size = answers-1),
                sample(c("None of These", "All of These"), size = 1))
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
-  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
        height = 25*nrow(data), width = 120*ncol(data))
   p <- tableGrob(data)
   grid.arrange(p)
@@ -705,6 +728,8 @@ quest.txt1 <- "While analyzing a dataset, a researcher makes a boxplot of one of
 quest.txt2 <- "?"
 dat.size = 41
 digits = 0
+loc.path <- "Images/"
+e.path <- "Images/"
 hint <- "You can read about boxplots in the data presentation chapter of your coursepack."
 feedback <- "From lowest to highest, boxplots have lines at the minimum, Q1, Q2 (median), Q3, and the max."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
@@ -733,24 +758,31 @@ for(i in 1:n)
   data1 <- sample(c("minimum", "first quartile", "second quartile", "third quartile",
                     "maximum"), size = 1)
   corr.ans <- if(data1 == "minimum"){min(data)}
-  else{if(data1 == "first quartile"){fivenum(data)[2]}
-    else{if(data1 == "second quartile"){fivenum(data)[3]}
-      else{if(data1 == "third quartile"){fivenum(data)[4]}
-        else{if(data1 == "maximum"){max(data)}}}}}
+              else{if(data1 == "first quartile"){fivenum(data)[2]}
+                   else{if(data1 == "second quartile"){fivenum(data)[3]}
+                        else{if(data1 == "third quartile"){fivenum(data)[4]}
+                             else{if(data1 == "maximum"){max(data)}}}}}
   ans.txt <- if(corr.ans == min(data)){sample(sort(data)[4:dat.size], size = answers)}
-  else{if(corr.ans == fivenum(data)[2]){sample(c(sort(data)[1:floor(dat.size/8)], sort(data)[ceiling(3*dat.size/8):dat.size]), size = answers)}
-    else{if(corr.ans == fivenum(data)[3]){sample(c(sort(data)[1:floor(3*dat.size/8)], sort(data)[ceiling(5*dat.size/8):dat.size]), size = answers)}
-      else{if(corr.ans == fivenum(data)[4]){sample(c(sort(data)[1:floor(5*dat.size/8)], sort(data)[ceiling(7*dat.size/8):dat.size]), size = answers)}
-        else{if(corr.ans == max(data)){sample(sort(data)[1:(dat.size-3)], size = answers)}}}}}
+             else{if(corr.ans == fivenum(data)[2]){sample(c(sort(data)[1:floor(dat.size/8)],
+                                                            sort(data)[ceiling(3*dat.size/8):dat.size]),
+                                                          size = answers)}
+                  else{if(corr.ans == fivenum(data)[3]){sample(c(sort(data)[1:floor(3*dat.size/8)],
+                                                                 sort(data)[ceiling(5*dat.size/8):dat.size]),
+                                                               size = answers)}
+                       else{if(corr.ans == fivenum(data)[4]){sample(c(sort(data)[1:floor(5*dat.size/8)],
+                                                                      sort(data)[ceiling(7*dat.size/8):dat.size]),
+                                                                    size = answers)}
+                            else{if(corr.ans == max(data)){sample(sort(data)[1:(dat.size-3)],
+                                                                  size = answers)}}}}}
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
-  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""))
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""))
   boxplot(data, horizontal = T, col = 'lightblue')
   title("Researcher's Boxplot")
   dev.off()
@@ -770,6 +802,8 @@ quest.txt1 <- "What is the "
 quest.txt2 <- " of the following dataset?    "
 digits = 1
 dat.size <- 11:15
+loc.path <- 
+e.path <- 
 hint <- "Sort the data first."
 feedback <- "Sort the data, then find either the .25(n + 1)st number (Q1) or the .75(n + 1)st number (Q3)."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -819,7 +853,6 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### SDMC2 #####
-library(graphics)
 library(gridExtra)
 title <- "SDMC2"
 n = 200
@@ -831,6 +864,8 @@ quest.txt1 <- "Ian and his friend Neil like playing the video game Mario Kart to
 quest.txt2 <- " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics confirm their hypothesis?"
 Names <- c("Ian", "Neil")
 digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
 hint <- "Remember that the mean and SD each measure something very different."
 feedback <- "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
@@ -858,14 +893,14 @@ for(i in 1:n)
   data <- data.frame(Names, Means, SDs, stringsAsFactors = FALSE)
   ans.txt <- if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)}
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
-  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
        height = 30*nrow(data), width = 55*ncol(data))
   p <- tableGrob(data)
   grid.arrange(p)
@@ -876,7 +911,6 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### MeanMC2 #####
-library(graphics)
 library(gridExtra)
 title <- "MeanMC2"
 n = 200
@@ -888,6 +922,8 @@ quest.txt1 <- "Ian and his friend Neil like playing the video game Mario Kart to
 quest.txt2 <- " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics help affirm their hypothesis?"
 Names <- c("Ian", "Neil")
 digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
 hint <- "Remember that the mean and SD each measure something very different."
 feedback <- "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
@@ -915,14 +951,14 @@ for(i in 1:n)
   data <- data.frame(Names, Means, SDs, stringsAsFactors = FALSE)
   ans.txt <- if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)}
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
-               points.per.q, difficulty, paste("Images/", paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
   options[corr.ind] <- corr.ans
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
-  jpeg(filename=paste(paste(title, i, sep = "-"), ".jpeg", sep = ""),
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
        height = 30*nrow(data), width = 55*ncol(data))
   p <- tableGrob(data)
   grid.arrange(p)
@@ -944,6 +980,8 @@ quest.txt2 <- " than it should have been. The mean of the mistaken dataset was "
 quest.txt3 <- ". You correct the error and recalculate the mean. What is the new corrected mean?  Mistaken Data:  "
 dat.size = c(10:20)
 digits = 1
+loc.path <- 
+e.path <- 
 hint <- "There is a shortcut here."
 feedback <- "In the case of multiplication, the new mean will be x times the old mean, where x changes depending on the context of the question. In the case of addition or subtraction, the new mean will be the old mean plus or minus x."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -972,14 +1010,14 @@ for(i in 1:n)
                  data1 == "five times smaller" | data1 == "five times larger")
                 {round(scale*data2, digits = digits)}
               else{round(data2 + constant, digits = digits)}
-  up.min <- corr.ans + sd(data)/8
-  down.max <- corr.ans - sd(data)/8
+  up.min <- round(corr.ans + sd(data)/8, digits = digits)
+  down.max <- round(corr.ans - sd(data)/8, digits = digits)
   ans.txt <- round(sample(c(if(data1 == "ten times smaller" | data1 == "ten times larger" |
                                data1 == "five times smaller" | data1 == "five times larger")
                             {c(sum(scale*data), sum(scale*data)/(dat.size1-1), data2)}
                             else{c(sum(data + constant), sum(data + constant)/(dat.size1-1), data2)},
-                            runif(ceiling(3*answers/5), corr.ans - 2*sd(data), down.max),
-                            runif(ceiling(3*answers/5), up.min, corr.ans + 2*sd(data))),
+                            seq(corr.ans - 2*sd(data), down.max, 10^-digits),
+                            seq(up.min, corr.ans + 2*sd(data), 10^-digits)),
                           size = answers),
                    digits = digits)
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
@@ -1008,6 +1046,8 @@ quest.txt2 <- " than it should have been. The standard deviation of the mistaken
 quest.txt3 <- ". You correct the error and recalculate the standard deviation. What is the new corrected standard deviation?  Mistaken Data:  "
 dat.size = c(10:20)
 digits = 1
+loc.path <- 
+e.path <- 
 hint <- "There are shortcuts here."
 feedback <- "In the case of multiplication, the new SD will be x times the old SD, where x changes depending on the context of the question. In the case of addition or substraction, the SD will not change."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
@@ -1032,14 +1072,14 @@ for(i in 1:n)
                  data1 == "five times smaller" | data1 == "five times larger")
                 {round(scale*data2, digits = digits)}
               else{data2}
-  up.min <- corr.ans + sd(data)/8
-  down.max <- corr.ans - sd(data)/8
+  up.min <- round(corr.ans + sd(data)/8, digits = digits)
+  down.max <- round(corr.ans - sd(data)/8, digits = digits)
   ans.txt <- round(sample(c(if(corr.ans == data2){c(sd(data)^2, sqrt(sd(data)^2*(dat.size1-1)),
                                                     -data2, sqrt((data-mean(data))^2/dat.size1))}
                             else{c(sd(scale*data)^2, sqrt(sd(scale*data)^2*(dat.size1-1)),
                                    -sd(scale*data), sqrt((scale*data-mean(scale*data))^2/dat.size1))},
-                            runif(ceiling(answers/2), corr.ans - 2*sd(data), down.max),
-                            runif(ceiling(answers/2), up.min, corr.ans + 2*sd(data))),
+                            seq(corr.ans - 2*sd(data), down.max, 10^-digits),
+                            seq(up.min, corr.ans + 2*sd(data), 10^-digits)),
                           size = answers),
                    digits = digits)
   content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3,
