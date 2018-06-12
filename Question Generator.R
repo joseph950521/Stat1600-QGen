@@ -8,7 +8,7 @@
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
 ##### process is waiting on the e-learning uploads of the images and CSVs.      #####                                                               #####
 
-##### 20/25 Generators for test 1 completed  #####
+##### 23/25 Generators for test 1 completed  #####
 ##### 0/25 Generators for test 2 completed  #####
 ##### 0/25 Generators for test 3 completed  #####
 
@@ -712,6 +712,14 @@ difficulty <- 1
 quest.txt1 <- "A student decides to take a survey for her class project. She randomly surveys other students and records their "
 quest.txt2 <- ". She decides to use a "
 quest.txt3 <- " to visualize this data. Did she choose a correct graphic?"
+num.data1 <- c("heights in inches", "weights in lbs", "GPAs in raw points",
+               "hours spent sleeping per night", "hours spent studying per day",
+               "vertical leap in inches", "age in years", "calories consumed per day",
+               "current number of completed STEM courses", "years left before their anticipated graduation-date")
+cat.data1 <- c("heights in ranges (5.0-5.5 ft, 5.5-6 ft, etc)", "weights in ranges (100-125 lbs, 125-150 lbs, etc.)",
+               "racial demographics", "countries of origin", "emotional states (sad, happy, etc.)",
+               "tax income brackets", "marital statuses", "living arrangements (dorm, off-campus apartment, etc.)",
+               "nationalities", "native language (English, Spanish, etc.)")
 dat.size = 
 digits = 
 loc.path <- 
@@ -726,14 +734,6 @@ for(i in 1:n)
   ID <- paste(title, i, sep = "-")
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  num.data1 <- c("heights in inches", "weights in lbs", "GPAs in raw points",
-                "hours spent sleeping per night", "hours spent studying per day",
-                "vertical leap in inches", "age in years", "calories consumed per day",
-                "current number of completed STEM courses", "years left before their anticipated graduation-date")
-  cat.data1 <- c("heights in ranges (5.0-5.5 ft, 5.5-6 ft, etc)", "weights in ranges (100-125 lbs, 125-150 lbs, etc.)",
-                "racial demographics", "countries of origin", "emotional states (sad, happy, etc.)",
-                "tax income brackets", "marital statuses", "living arrangements (dorm, off-campus apartment, etc.)",
-                "nationalities", "native language (English, Spanish, etc.)")
   data1 <- sample(c(num.data1, cat.data1), size = 1)
   num.data2 <- c("relative frequency table", "stem & leaf plot", "histogram",
                        "dotplot", "boxplot")
@@ -765,6 +765,18 @@ points.per.q <- 4
 difficulty <- 1
 quest.txt1 <- "A study's dataset includes the following variable: "
 quest.txt2 <- ". What is this variable's type and level of measurement?"
+rat.data1 <- c("subjects' heights in inches", "subjects' hours spent sleeping per night", "subjects' ages in years",
+               "subjects' current number of completed STEM courses", "subjects' years since university admission (2, 3, etc.)")
+ord.data1 <- c("subjects' heights in ranges (5.0-5.5 ft, 5.5-6 ft, etc)",
+               "subjects' weights in ranges (100-125 lbs, 125-150 lbs, etc.)",
+               "subjects' tax income brackets", "subjects' military ranks",
+               "customers' satisfaction (not satisfied, satisfied, etc.)")
+int.data1 <- c("subjects' GPAs in raw points", "subjects' shoe sizes (8, 9, etc.)", "temperatures in celsius",
+               "subjects' point grades on statistics tests from different classes (71, 72, etc.)",
+               "consumers' review scores of a product (0 to 100)")
+nom.data1 <- c("subjects' racial demographics", "subjects' countries of origin",
+               "subjects' marital statuses", "subjects' nationalities",
+               "subjects' native language (English, Spanish, etc.)")
 dat.size <- 
 digits <- 
 loc.path <- 
@@ -779,18 +791,6 @@ for(i in 1:n)
   ID <- paste(title, i, sep = "-")
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  rat.data1 <- c("subjects' heights in inches", "subjects' hours spent sleeping per night", "subjects' ages in years",
-                 "subjects' current number of completed STEM courses", "subjects' years since university admission (2, 3, etc.)")
-  ord.data1 <- c("subjects' heights in ranges (5.0-5.5 ft, 5.5-6 ft, etc)",
-                 "subjects' weights in ranges (100-125 lbs, 125-150 lbs, etc.)",
-                 "subjects' tax income brackets", "subjects' military ranks",
-                 "customers' satisfaction (not satisfied, satisfied, etc.)")
-  int.data1 <- c("subjects' GPAs in raw points", "subjects' shoe sizes (8, 9, etc.)", "temperatures in celsius",
-                 "subjects' point grades on statistics tests from different classes (71, 72, etc.)",
-                 "consumers' review scores of a product (0 to 100)")
-  nom.data1 <- c("subjects' racial demographics", "subjects' countries of origin",
-                 "subjects' marital statuses", "subjects' nationalities",
-                 "subjects' native language (English, Spanish, etc.)")
   data1 <- sample(c(rat.data1, ord.data1, int.data1, nom.data1), size = 1)
   corr.ans <- if(data1 %in% rat.data1){"Numeric, Ratio"}
               else{if(data1 %in% ord.data1){"Categorical, Ordinal"}
@@ -1157,3 +1157,226 @@ questions <- questions[(9+answers):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
+##### ErrorMC1 #####
+title <- "ErrorMC1"
+n = 200
+type <- "MC"
+answers <- 3
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Researchers examining "
+quest.txt2 <- " found that there were "
+quest.txt3 <- ". In fact, there were "
+quest.txt4 <- ". What type of error, if any, was committed?"
+studies <- c("differences in mean survival times between two groups of mice",
+             "differences in mean weight loss between groups of people on several diets",
+             "differences in mean scores on a reading comprehension exam given to students who declared separate majors",
+             "differences in the proportion of college graduates between groups of people from two separate countries",
+             "differences in mean credit card debt between separate classes of students")
+type1 <- "significant differences between the groups"
+type2 <- "no significant differences between the groups"
+dat.size = 
+digits = 
+loc.path <- 
+e.path <- 
+hint <- "No Error is not always wrong. It's not a trick answer."
+feedback <- "Type 1: Finding significant differences when there are none. Type 2: Finding no significant differences when there are some. No Error: Finding the truth."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(studies, size = 1)
+  data2 <- sample(c(type1, type2), size = 1)
+  data3 <- sample(c(type1, type2), size = 1)
+  corr.ans <- if((data2 == type1) & (data3 == type2)){"Type 1"}
+              else{if((data2 == type2) & (data3 == type1)){"Type 2"}
+                   else{"No Error"}}
+  decis <- sample(c(1,2), size = 1)
+  ans.txt <- if(which.max(points) == 1)
+               {
+               if((data2 == type1) & (data3 == type2)){c(" ", sample(c("Type 2", "No Error"), size = 2))}
+               else{if((data2 == type2) & (data3 == type1)){c(" ", sample(c("Type 1", "No Error"), size = 2))}
+                    else{c(" ", sample(c("Type 1", "Type 2"), size = 2))}}
+               }
+             else{if((which.max(points) == 2) & (decis == 1))
+                    {
+                    if((data2 == type1) & (data3 == type2)){c("Type 2", " ", "No Error")}
+                    else{if((data2 == type2) & (data3 == type1)){c("Type 1", " ", "No Error")}
+                         else{c("Type 1", " ", "Type 2")}}
+                    }
+                  else{if((which.max(points) == 2) & (decis == 2))  
+                         {
+                         if((data2 == type1) & (data3 == type2)){c("No Error", " ", "Type 2")}
+                         else{if((data2 == type2) & (data3 == type1)){c("No Error", " ", "Type 1")}
+                              else{c("Type 2", " ", "Type 1")}}
+                         }
+                       else{if(which.max(points) == 3)
+                              {
+                              if((data2 == type1) & (data3 == type2)){c(sample(c("Type 2", "No Error"), size = 2), " ")}
+                              else{if((data2 == type2) & (data3 == type1)){c(sample(c("Type 1", "No Error"), size = 2), " ")}
+                                   else{c(sample(c("Type 1", "Type 2"), size = 2), " ")}}
+                              }
+                           }
+                      }
+                 }
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, data3,
+                                   quest.txt4, collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[((9+answers)):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### StuDesMC1 #####
+title <- "StuDesMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A friend of yours wonders, '"
+quest.txt2 <- "' You respond by asking, '"
+quest.txt3 <- "' "
+quest.txt4 <- " just ..."
+wonder1 <- "Which diet, Atkins or Zone, is best?"
+wonder2 <- "Which exercise program, Zumba or Insanity, is most effective?"
+wonder3 <- "Which drugs are most damaging to youths?"
+wonder4 <- "Which type of credit card is the most generous?"
+wonder5 <- "Which language is the most difficult to learn?"
+response1 <- "Which diet results in the greatest reduction in BMI over the first three months?"
+response2 <- "Which program results in the largest muscle mass increase over the first three months?"
+response3 <- "Which drugs (marijuana, alcohol, etc.) are most associated with academic drop-out rates in youths?"
+response4 <- "Which brand of credit card (Visa, Mastercard, etc.) averages the lowest interest rates?"
+response5 <- "Which language (Chinese, Arabic, etc.) takes the longest average learning-time to reach fluency as rated by a native speaker?"
+dat.size = 
+  digits = 
+  loc.path <- 
+  e.path <- 
+  hint <- "The important concepts here are from the Knowledge and Data chapter of your coursepack."
+feedback <- "Coming up with a basic idea using vague, often normative, language is conceptualizing a problem. Attaching a measurable outcome to the question is operationalizing the problem."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(c(wonder1, wonder2, wonder3, wonder4, wonder5), size = 1)
+  data2 <- if(data1 == wonder1){response1}
+           else{if(data1 == wonder2){response2}
+                else{if(data1 == wonder3){response3}
+                     else{if(data1 == wonder4){response4}
+                          else{response5}
+                         }
+                    }
+               }
+  data3 <- sample(c("You", "Your friend"), size = 1)
+  corr.ans <- if(data3 == "You"){"... Operationalized the Problem"}
+              else{"... Conceptualized the Problem"}
+  ans.txt <- if(data3 == "You"){c("... Conceptualized the Problem",
+                                  sample(c("... Designed the Study", "... Committed the Lack of Evidence Fallacy",
+                                           "... Committed the Anecdotal Evidence Fallacy",
+                                           "... Committed the Correlation Equals Causation Fallacy",
+                                           "... Collected the Data", "... Analyzed the Data",
+                                           "... Drew Conclusions from the Study", "... Disseminated Results",
+                                           "... Committed a Type 1 Error", "... Committed a Type 2 Error"),
+                                         size = answers - 1))
+                               }
+             else{c(sample(c("... Designed the Study", "... Committed the Lack of Evidence Fallacy",
+                             "... Committed the Anecdotal Evidence Fallacy",
+                             "... Committed the Correlation Equals Causation Fallacy",
+                             "... Collected the Data", "... Analyzed the Data",
+                             "... Drew Conclusions from the Study", "... Disseminated Results",
+                             "... Committed a Type 1 Error", "... Committed a Type 2 Error"),
+                           size = answers - 1),
+                    "... Operationalized the Problem")
+                 }
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, data3,
+                                   quest.txt4, collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[((9+answers)):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### StuDesMC2 #####
+title <- "StuDesMC2"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "While watching a debate online, you listen as one of the debaters claims, '"
+quest.txt2 <- "' This person has just... "
+listen1 <- "There is no hard evidence that she stole the money, thus we must conclude that she did not steal the money."
+listen2 <- "Since there is no proof that this drug is unsafe, we must conclude that it is safe."
+listen3 <- "We cannot show for certain God exists, so we must conclude that God does not exist."
+listen4 <- "My cousin said this was the best golf club on the market, so it must be the best club on the market."
+listen5 <- "I read that homelessness cannot be solved, so it's insoluble."
+listen6 <- "I just read about a taste test where 90% of participants preferred Coke to Pepsi, so America loves Coke more than Pepsi."
+listen7 <- "You can always find firefighters at fires, so firefighters must cause fires."
+listen8 <- "Old single people are always bitter, so being single makes them bitter."
+listen9 <- "Adults are often more conservative than youths, so conservative values are produced by aging."
+dat.size = 
+digits = 
+loc.path <- 
+e.path <- 
+hint <- "The important concepts here are from the Knowledge and Data chapter of your coursepack."
+feedback <- "Lack of Evidence: Reasoning the contrary is true because of a lack of evidence. Anecdotal Evidence: Generalizing on the grounds of just a few examples. Correlation/Causation: Reasoning that two things happening together means either causes the other."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(c(listen1, listen2, listen3, listen4, listen5,
+                    listen6, listen7, listen8, listen9), size = 1)
+  corr.ans <- if(data1 == listen1 | data1 == listen2 | data1 == listen3){"... Committed the Lack of Evidence Fallacy"}
+              else{if(data1 == listen4 | data1 == listen5 | data1 == listen6){"... Committed the Anecdotal Evidence Fallacy"}
+                   else{if(data1 == listen7 | data1 == listen8 | data1 == listen9){"... Committed the Correlation Equals Causation Fallacy"}}}
+  ans.txt <- if(corr.ans == "... Committed the Lack of Evidence Fallacy")
+               {sample(c("... Conceptualized a Study's Problem", "... Designed a Study",
+                         "... Committed the Anecdotal Evidence Fallacy", "Operationalized a Study's Problem",
+                         "... Committed the Correlation Equals Causation Fallacy", "... Collected Data for a Study",
+                         "... Committed a Type 1 Error", "... Committed a Type 2 Error"),
+                       size = answers)}
+             else{if(corr.ans == "... Committed the Anecdotal Evidence Fallacy")
+                    {sample(c("... Conceptualized a Study's Problem", "... Designed a Study",
+                              "... Committed the Lack of Evidence Fallacy", "... Operationalized a Study's Problem",
+                              "... Committed the Correlation Equals Causation Fallacy", "... Collected Data for a Study",
+                              "... Committed a Type 1 Error", "... Committed a Type 2 Error"),
+                       size = answers)}
+                  else{if(corr.ans == "... Committed the Correlation Equals Causation Fallacy")
+                      {sample(c("... Conceptualized a Study's Problem", "... Designed a Study",
+                                "... Committed the Anecdotal Evidence Fallacy", "... Operationalized a Study's Problem",
+                                "... Committed the Lack of Evidence Fallacy", "... Collected Data for a Study",
+                                "... Committed a Type 1 Error", "... Committed a Type 2 Error"),
+                          size = answers)}}}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, collapse = "", sep = ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[((9+answers)):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
