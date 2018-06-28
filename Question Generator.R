@@ -165,8 +165,8 @@ for(i in 1:n)
       else{if(data1 == "five points greater"){-5}}}}
   corr.ans <- if(data1 == "ten times smaller" | data1 == "ten times larger" | 
                  data1 == "five times smaller" | data1 == "five times larger")
-  {round(scale*data2, digits = digits)}
-  else{round(data2 + constant, digits = digits)}
+                {round(scale*data2, digits = digits)}
+              else{round(data2 + constant, digits = digits)}
   up.min <- round(corr.ans + sd(data)/8, digits = digits)
   down.max <- round(corr.ans - sd(data)/8, digits = digits)
   ans.txt <- round(sample(c(if(data1 == "ten times smaller" | data1 == "ten times larger" |
@@ -1473,6 +1473,9 @@ example2 <- c("other students' academic success", "amount of time students spend
 example3 <- c("beehives", "number of bees in the hive", "survival of the beehive through winter", "availability of nectar in summer")
 example4 <- c("the student debt problem", "amount of debt accrued while in school", "amount of debt remaining ten years later", "choice of major")
 example5 <- c("mental health", "amount of time a patient spends outside", "state of a patients' depression", "patients' occupation")
+example6 <- c("sports health and football", "length of kickoff plays", "number of concussions during kickoff plays", "speed of the players")
+example7 <- c("consumers in the music industry", "location of consumers", "consumers' preferred genre of music", "consumers' education level")
+example8 <- c("the craft brewing industry", "size of beer-brewing companies", "growth of these companies for the year", "average price of their products")
 dat.size = 
 digits = 
 loc.path <- 
@@ -1487,7 +1490,7 @@ for(i in 1:n)
   ID <- paste(title, i, sep = "-")
   points <- sample(c(rep(0,answers-1),100),replace=F)
   corr.ind <- 6 + which.max(points)
-  decis1 <- sample(1:5, size = 1)
+  decis1 <- sample(1:8, size = 1)
   data <- get(paste("example", decis1, sep = ""))
   decis2 <- sample(2:4, size = 1)
   corr.ans <- if(decis2 == 2){"The Probable Cause"}
@@ -1522,3 +1525,213 @@ for(i in 1:n)
 questions <- questions[((9+answers)):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
+
+##### BinomExactMC1 #####
+title <- "BinomExactMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A student must answer "
+quest.txt2 <- " true/false questions for a test, but the student did not study well. If the student randomly guesses on each question, what is the probability that the student answers "
+quest.txt3 <- " questions correctly?"
+dat.size = 1
+digits = 3
+loc.path <- 
+  e.path <- 
+  hint <- "First, you need to find the number of successes, the number of trials, and infer the probability p from the context of this question. Round and select the closest answer."
+feedback <- "1: Find successes x. 2: Find trials n. 3: Infer p = 0.5. 4: Apply exact binomial formula."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(10:20, size = 1)
+  data2 <- sample(1:7, size = 1)
+  corr.ans <- round(dbinom(data2, data1, 0.5), digits = digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans <= .05){seq(up.min, 1.01, 10^-digits)}
+                    else{if(corr.ans >= .95){seq(-0.01, down.max, 10^-digits)}
+                      else{c(seq(-0.01, down.max, 10^-digits),
+                             seq(up.min, 1.01, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = digits)
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### BinomExactMC2 #####
+title <- "BinomExactMC2"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A student must answer "
+quest.txt2 <- " multiple choice questions for a test, but the student did not study well. There are "
+quest.txt3 <- " answers per question but only one is correct. If the student randomly guesses on each question, what is the probability that the student answers "
+quest.txt4 <- " questions correctly?"
+dat.size = 1
+digits = 3
+loc.path <- 
+  e.path <- 
+  hint <- "First, you need to find the number of successes, the number of trials, and infer the probability p from the context of this question. Apply the correct formula and round and select the closest answer."
+feedback <- "1: Find successes x. 2: Find trials n. 3: Infer p. 4: Apply exact binomial formula."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(10:20, size = 1)
+  data2 <- sample(3:6, size = 1)
+  data3 <- sample(1:7, size = 1)
+  corr.ans <- round(dbinom(data3, data1, 1/data2), digits = digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans <= .05){seq(up.min, 1.01, 10^-digits)}
+                    else{if(corr.ans >= .95){seq(-0.01, down.max, 10^-digits)}
+                      else{c(seq(-0.01, down.max, 10^-digits),
+                             seq(up.min, 1.01, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = digits)
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### BinomLessMC1 #####
+title <- "BinomLessMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A student must answer "
+quest.txt2 <- " multiple choice questions for a test, but the student did not study well. There are "
+quest.txt3 <- " answers per question but only one is correct. If the student randomly guesses on each question, what is the probability that the student answers "
+quest.txt4 <- " questions correctly?"
+dat.size = 1
+digits = 3
+loc.path <- 
+  e.path <- 
+  hint <- "First, you need to find the number of successes, the number of trials, and infer the probability p from the context of this question. Apply the correct formula and round and select the closest answer."
+feedback <- "1: Find successes x. 2: Find trials n. 3: Infer p. 4: Apply exact binomial formula."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(6:10, size = 1)
+  data2 <- sample(3:6, size = 1)
+  decis1 <- sample(2:4, size = 1)
+  decis2 <- sample(c("or fewer", "fewer than"), size = 1)
+  data3 <- if(decis2 == "or fewer"){paste(decis1, decis2, sep = " ")}
+           else{paste(decis2, decis1, sep = " ")}
+  corr.ans <- round(if(decis2 == "or fewer"){pbinom(decis1, data1, 1/data2)}
+                    else{pbinom((decis1-1), data1, 1/data2)},
+                    size = digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans <= .05){seq(up.min, 1.01, 10^-digits)}
+                    else{if(corr.ans >= .95){seq(-0.01, down.max, 10^-digits)}
+                      else{c(seq(-0.01, down.max, 10^-digits),
+                             seq(up.min, 1.01, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = digits)
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### BinomMoreMC1 #####
+title <- "BinomMoreMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A student must answer "
+quest.txt2 <- " multiple choice questions for a test, but the student did not study well. There are "
+quest.txt3 <- " answers per question but only one is correct. If the student randomly guesses on each question, what is the probability that the student answers "
+quest.txt4 <- " questions correctly?"
+dat.size = 1
+digits = 3
+loc.path <- 
+  e.path <- 
+  hint <- "First, you need to find the number of successes, the number of trials, and infer the probability p from the context of this question. Apply the correct formula and round and select the closest answer."
+feedback <- "1: Find successes x. 2: Find trials n. 3: Infer p. 4: Apply exact binomial formula."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(6:7, size = 1)
+  data2 <- sample(3:6, size = 1)
+  decis1 <- sample(3:4, size = 1)
+  decis2 <- sample(c("or more", "greater than"), size = 1)
+  data3 <- if(decis2 == "or more"){paste(decis1, decis2, sep = " ")}
+           else{paste(decis2, decis1, sep = " ")}
+  corr.ans <- round(if(decis2 == "or more"){pbinom((decis1-1), data1, 1/data2, lower.tail = F)}
+                    else{pbinom(decis1, data1, 1/data2, lower.tail = F)},
+                    size = digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans <= .05){seq(up.min, 1.01, 10^-digits)}
+                    else{if(corr.ans >= .95){seq(-0.01, down.max, 10^-digits)}
+                      else{c(seq(-0.01, down.max, 10^-digits),
+                             seq(up.min, 1.01, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = digits)
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### BinomApporxMC1 #####
