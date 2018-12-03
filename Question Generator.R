@@ -9,8 +9,8 @@
 ##### process is waiting on the e-learning uploads of the images and CSVs.      #####                                                               #####
 
 ##### 25/25 Generators for test 1 completed  #####
-##### 7/25 Generators for test 2 completed  #####
-##### 0/25 Generators for test 3 completed  #####
+##### 18/25 Generators for test 2 completed  #####
+##### 25/25 Generators for test 3 completed  #####
 
 #### 0/75 Generators wrapped into functions #####
 
@@ -2748,4 +2748,1440 @@ for(i in 1:n)
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
+
+########## Test 3 ##########
+
+##### MeanDistMC1 #####
+title <- "MeanDistMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A student conducts a survey for her class project. She asks "
+quest.txt2 <- " other students a series of questions about their study habits. She knows from previous research that all students study an average of "
+quest.txt3 <- " hours per day. If students in her own sample study an average of "
+quest.txt4 <- " with a standard deviation of "
+quest.txt5 <- " hours per day, then what is the probability of observing this sample mean or less?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "You'll need to correctly distinguish between sample and population when calculating Z for this question. Pick the closest answer."
+feedback <- "Z = (xbar - mu)/(s/sqrt(n)). The probability can be found directly from the Z table."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(5:8, size = 1)
+  data2 <- sample(seq(2,4,10^-digits), size = 1)
+  data3 <- sample(seq(2,4,10^-digits), size = 1)
+  data4 <- sample(seq(1.8,3,10^-digits), size = 1)
+  corr.ans <- round(pnorm(round((data3-data2)/(data4/sqrt(data1)), digits = digits)), digits = digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans <= .05){seq(up.min, 1 + 10^-digits, 10^-digits)}
+                    else{if(corr.ans >= .95){seq(0 - 10^-digits, down.max, 10^-digits)}
+                      else{c(seq(0 - 10^-digits, down.max, 10^-digits),
+                             seq(up.min, 1 + 10^-digits, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = digits)
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### MeanDistMC2 #####
+title <- "MeanDistMC2"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A student conducts a survey for her class project. She asks "
+quest.txt2 <- " other students a series of questions about their study habits. She knows from previous research that all students study an average of "
+quest.txt3 <- " hours per day. If students in her own sample study an average of "
+quest.txt4 <- " with a standard deviation of "
+quest.txt5 <- " hours per day, then what is the probability of observing this sample mean or greater?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "You'll need to correctly distinguish between sample and population when calculating Z for this question. Pick the closest answer."
+feedback <- "Z = (xbar - mu)/(s/sqrt(n)). The probability can be found directly from the Z table."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(5:8, size = 1)
+  data2 <- sample(seq(2,4,10^-digits), size = 1)
+  data3 <- sample(seq(2,4,10^-digits), size = 1)
+  data4 <- sample(seq(1.8,3,10^-digits), size = 1)
+  corr.ans <- 1-round(pnorm(round((data3-data2)/(data4/sqrt(data1)), digits = digits)), digits = digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans <= .05){seq(up.min, 1 + 10^-digits, 10^-digits)}
+                    else{if(corr.ans >= .95){seq(0 - 10^-digits, down.max, 10^-digits)}
+                      else{c(seq(0 - 10^-digits, down.max, 10^-digits),
+                             seq(up.min, 1 + 10^-digits, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), round(ans.txt, digits = digits), rep("",2))
+  options[corr.ind] <- round(corr.ans,digits = digits)
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### MeanCIMC1 #####
+title <- "MeanCIMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "The CDC collects biometric data on the US population. A sample of "
+quest.txt2 <- " US citizens' heights are measured. The average height of the sample is "
+quest.txt3 <- " inches and its standard deviation is "
+quest.txt4 <- " inches. What is the 95% confidence interval for the average height of all US citizens?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "Use your confidence interval formula for one sample mean questions. Pick the closest answer."
+feedback <- "Did you use xbar - 1.96*s/sqrt(n), and xbar + 1.96*s/sqrt(n)?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(seq(20,40), size = 1)
+  data2 <- sample(seq(54,66), size = 1)
+  data3 <- sample(seq(3,18), size = 1)
+  lb <- round(data2 - 1.96*data3/sqrt(data1), digits = digits)
+  ub <- round(data2 + 1.96*data3/sqrt(data1), digits = digits)
+  corr.ans <- paste("(", paste(lb, ub, sep = ", "), ")", sep = "")
+  up.min <- round(ub + .2, digits)
+  down.max <- round(lb - .2, digits)
+  seq1 <- seq(up.min, up.min + 12, 10^-digits)
+  mat1 <- expand.grid(seq1,seq1)
+  mat1 <- mat1[mat1[,1] < mat1[,2], ]
+  seq2 <- seq(down.max - 12, down.max, 10^-digits)
+  mat2 <- expand.grid(seq2,seq2)
+  mat2 <- mat2[mat2[,1] < mat2[,2], ]
+  seq3 <- c(seq(down.max - 12, down.max, 10^-digits), seq(up.min, up.min + 12, 10^-digits))
+  mat3 <- expand.grid(seq3,seq3)
+  mat3 <- mat3[mat3[,1] < mat3[,2], ]
+  if(lb <= 49){ans.txt1 <- mat1[sample(nrow(mat1), size = answers), ]}
+  else{if(ub >= 70){ans.txt1 <- mat2[sample(nrow(mat2), size = answers), ]}
+    else{ans.txt1 <- mat3[sample(nrow(mat3), size = answers), ]}}
+  ans.txt <- c()
+  for(l in 1:answers){ans.txt[l] <- paste("(", paste(ans.txt1[l,1], ans.txt1[l,2], sep = ", "), ")", sep = "")}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### MeanCIMC2 #####
+title <- "MeanCIMC2"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "The CDC conducts biometric research on the US populaton. A sample of "
+quest.txt2 <- " US citizens' heights is collected. Previous CDC research indicates that all US citizens have an average height of "
+quest.txt3 <- ". Using the new sample, the CDC calculates a 95% confidence interval of "
+quest.txt4 <- " for the height of all US citizens. Was the confidence interval successful?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "This is an interpretive question. No calculation is necessary. Consider each bound inclusive."
+feedback <- "Does the CI contain the true population mean?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(20:30, size = 1)
+  data2 <- sample(seq(54, 66, 10^-digits), size = 1)
+  samp <- sample(seq(54, 66, 10^-digits), size = 1)
+  lb <- samp - 1.96*sample(6:10, size = 1)/sqrt(data1)
+  ub <- samp + 1.96*sample(6:10, size = 1)/sqrt(data1)
+  data3 <- paste("(", paste(round(lb, digits = digits),
+                            round(ub, digits = digits),
+                            sep = ", "), ")",
+                 sep = "")
+  corr.ans <- if((data2 <= ub) & (data2 >= lb)){"Yes"}else{"No"}
+  ans.txt <- c(if(corr.ans == "Yes"){rep("No", 2)}else{rep("Yes", 2)})
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanCIMC1 #####
+title <- "2MeanCIMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "NASA compares the ages of stars in two distinct clusters. A sample from the first cluster has an average age of "
+quest.txt2 <- " billion years with a standard deviation of "
+quest.txt3 <- " billion years. A sample from the second cluster has an average age of "
+quest.txt4 <- " years with a standard deviation of "
+quest.txt5 <- " billion years. NASA samples "
+quest.txt6 <- " stars from the first cluster, and "
+quest.txt7 <- " stars from the second cluster. What is the 95% CI for the difference between mean ages of the first cluster vs. the second cluster?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "Is this a 1 or 2 sample mean CI? Are the groups independent or not? Pick the closest answer."
+feedback <- "Did you use xbar1 - xbar2 +/- 1.96*sqrt((s1)^2/(n1) + (s2)^2/(n2))?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(seq(2, 7, 10^-digits), size = 1)
+  data2 <- sample(seq(.5, 3, 10^-digits), size = 1)
+  data3 <- sample(seq(1, 6, 10^-digits), size = 1)
+  data4 <- sample(seq(.5, 3, 10^-digits), size = 1)
+  data5 <- sample(100:200, size = 1)
+  data6 <- sample(100:200, size = 1)
+  lb <- round(data1 - data3 - 1.96*sqrt(data2^2/data5 + data4^2/data6),
+              digits = digits)
+  ub <- round(data1 - data3 + 1.96*sqrt(data2^2/data5 + data4^2/data6),
+              digits = digits)
+  corr.ans <- paste("(", paste(lb, ub, sep = ", "), ")", sep = "")
+  up.min <- round(ub + .1, digits)
+  down.max <- round(lb - .1, digits)
+  if(lb <= -4){
+    seq1 <- round(seq(up.min, up.min + 3, 10^-digits), digits)
+    mat1 <- expand.grid(seq1,seq1)
+    mat1 <- mat1[mat1[,1] < mat1[,2], ]
+    ans.txt1 <- mat1[sample(nrow(mat1), size = answers), ]}
+  else{if(ub >= 6){
+    seq2 <- round(seq(down.max - 3, down.max, 10^-digits), digits)
+    mat2 <- expand.grid(seq2,seq2)
+    mat2 <- mat2[mat2[,1] < mat2[,2], ]
+    ans.txt1 <- mat2[sample(nrow(mat2), size = answers), ]}
+    else{
+      seq3 <- round(c(seq(down.max - 3, down.max, 10^-digits), seq(up.min, up.min + 3, 10^-digits)), digits)
+      mat3 <- expand.grid(seq3,seq3)
+      mat3 <- mat3[mat3[,1] < mat3[,2], ]
+      ans.txt1 <- mat3[sample(nrow(mat3), size = answers), ]}}
+  ans.txt <- c()
+  for(l in 1:answers){ans.txt[l] <- paste("(", paste(ans.txt1[l,1], ans.txt1[l,2], sep = ", "), ")", sep = "")}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5, data5, quest.txt6,
+                                   data6, quest.txt7,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanCIMC2 #####
+title <- "2MeanCIMC2"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher compares means from two independent samples. She calculates a 95% confidence interval of "
+quest.txt2 <- " for the difference between the two means. Which of the following statistical inferences should she make?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "This is an interpretive question. No calculation is necessary. Consider each bound inclusive."
+feedback <- "Does the CI contain 0?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  lb <- sample(seq(-.2, .11, 10^-digits), size = 1)
+  ub <- sample(seq(lb + .03, .2), size = 1)
+  data1 <- paste("(", paste(round(lb, digits = digits),
+                            round(ub, digits = digits),
+                            sep = ", "), ")",
+                 sep = "")
+  corr.ans <- if((lb <= 0) & (ub >= 0)){"The difference between the true means is insignificant at the 95% confidence level."}
+  else{"The difference between the true means is significant at the 95% confidence level."}
+  ans.txt <- if(corr.ans == "The difference between the true means is insignificant at the 95% confidence level.")
+  {c("The difference between the true means is significant at the 95% confidence level.",
+     "The difference between the sample means is not contained within the confidence interval.",
+     "Zero is not contained within the confidence interval.",
+     "The result is significant, thus the p-value is less than 0.05.")}
+  else{c("The difference between the true means is insignificant at the 95% confidence level.",
+         "The difference between the sample means is contained within the confidence interval.",
+         "Zero is contained within the confidence interval.",
+         "The result is insignificant, thus the p-value is greater than 0.05.")}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanCIMC3 #####
+title <- "2MeanCIMC3"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher compares means from two dependent samples. She calculates a 95% confidence interval of "
+quest.txt2 <- " for the average difference. Which of the following statistical inferences should she make?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "This is an interpretive question. No calculation is necessary. Consider each bound inclusive."
+feedback <- "Does the CI contain 0?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  lb <- sample(seq(-.2, .11, 10^-digits), size = 1)
+  ub <- sample(seq(lb + .03, .2), size = 1)
+  data1 <- paste("(", paste(round(lb, digits = digits),
+                            round(ub, digits = digits),
+                            sep = ", "), ")",
+                 sep = "")
+  corr.ans <- if((lb <= 0) & (ub >= 0)){"The difference between the true means is insignificant at the 95% confidence level."}
+  else{"The difference between the true means is significant at the 95% confidence level."}
+  ans.txt <- if(corr.ans == "The difference between the true means is insignificant at the 95% confidence level.")
+  {c("The difference between the true means is significant at the 95% confidence level.",
+     "The difference between the sample means is not contained within the confidence interval.",
+     "Zero is not contained within the confidence interval.",
+     "The result is significant, thus the p-value is less than 0.05.")}
+  else{c("The difference between the true means is insignificant at the 95% confidence level.",
+         "The difference between the sample means is contained within the confidence interval.",
+         "Zero is contained within the confidence interval.",
+         "The result is insignificant, thus the p-value is greater than 0.05.")}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanCIMC4 #####
+title <- "2MeanCIMC4"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "The CDC collects biometric data on the US population. Two weight measurements (12 months apart) are taken on a sample of "
+quest.txt2 <- " US citizens. The average difference of weights in the sample is "
+quest.txt3 <- " lbs and its standard deviation is "
+quest.txt4 <- " lbs. What is the 95% confidence interval for the average difference in weight of all US citizens?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "Are the two samples independent or dependent? Pick the closest answer."
+feedback <- "Did you use Dbar - 1.96*s/sqrt(n), and Dbar + 1.96*s/sqrt(n)?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(seq(20,40), size = 1)
+  data2 <- sample(seq(-10, 10), size = 1)
+  data3 <- sample(seq(4,9), size = 1)
+  lb <- round(data2 - 1.96*data3/sqrt(data1), digits = digits)
+  ub <- round(data2 + 1.96*data3/sqrt(data1), digits = digits)
+  corr.ans <- paste("(", paste(lb, ub, sep = ", "), ")", sep = "")
+  up.min <- round(ub + .2, digits)
+  down.max <- round(lb - .2, digits)
+  seq1 <- seq(up.min, up.min + 12, 10^-digits)
+  mat1 <- expand.grid(seq1,seq1)
+  mat1 <- mat1[mat1[,1] < mat1[,2], ]
+  seq2 <- seq(down.max - 12, down.max, 10^-digits)
+  mat2 <- expand.grid(seq2,seq2)
+  mat2 <- mat2[mat2[,1] < mat2[,2], ]
+  seq3 <- c(seq(down.max - 12, down.max, 10^-digits), seq(up.min, up.min + 12, 10^-digits))
+  mat3 <- expand.grid(seq3,seq3)
+  mat3 <- mat3[mat3[,1] < mat3[,2], ]
+  if(lb <= 49){ans.txt1 <- mat1[sample(nrow(mat1), size = answers), ]}
+  else{if(ub >= 70){ans.txt1 <- mat2[sample(nrow(mat2), size = answers), ]}
+    else{ans.txt1 <- mat3[sample(nrow(mat3), size = answers), ]}}
+  ans.txt <- c()
+  for(l in 1:answers){ans.txt[l] <- paste("(", paste(ans.txt1[l,1], ans.txt1[l,2], sep = ", "), ")", sep = "")}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanPESEMC1 #####
+library(gridExtra)
+title <- "2MeanPESEMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Both a new cardiovascular medication and placebo were administered to two separate groups of subjects. The subjects' heartrates (bpm) were monitored and recorded in the above table. The standard deviation of the medicated group is "
+quest.txt2 <- ", and the standard deviation of the placebo group is "
+quest.txt3 <- ". What is the "
+quest.txt4 <- " of the difference between the mean heartrate of medication vs.the mean heartrate of placebo groups?"
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "Are the groups independent or dependent? Are you looking for center or spread? Pick the closest answer."
+feedback <- "Point Estimate = mean(medication) - mean(placebo). SE = sqrt(smed^2/nmean + splac^2/nplac."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis <- sample(6:8, size = 1)
+  Medication <- sample(80:140, size = decis)
+  Placebo <- sample(90:160, size = decis)
+  data <- data.frame(Medication, Placebo, stringsAsFactors = FALSE)
+  data1 <- round(sd(Medication), digits)
+  data2 <- round(sd(Placebo), digits)
+  data3 <- sample(c("point estimate", "standard error"), size = 1)
+  corr.ans <- if(data3 == "point estimate"){round(mean(Medication) - mean(Placebo),
+                                              digits = digits)}
+  else{round(sqrt(data1^2/decis + data2^2/decis),
+             digits = digits)}
+  up.min <- corr.ans + .2
+  down.max <- corr.ans - .2
+  ans.txt <- sample(if(corr.ans <= -15){seq(up.min, up.min + 5, 10^-digits)}
+                    else{if(corr.ans >= 15){seq(down.max - 5, down.max, 10^-digits)}
+                      else{c(seq(down.max - 5, down.max, 10^-digits),
+                             seq(up.min, up.min + 5, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, data3, quest.txt4, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 80*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanPESEMC2 #####
+library(gridExtra)
+title <- "2MeanPESEMC2"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A new cardiovascular medication was administered to a single group of subjects. The subjects' heartrates (bpm) were monitored and recorded twice: once before administering the medicine and once after. The standard deviation of the average differences between heartrates at the two times was "
+quest.txt2 <- ". What is the "
+quest.txt3 <- " of the average difference in heartrates between the two times (Before - After)?"
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "Are the groups independent or dependent? Are you looking for center or spread? Pick the closest answer."
+feedback <- "Point Estimate = mean(Before - After). SE = sd/sqrt(n)."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis <- sample(6:8, size = 1)
+  Before <- sample(80:140, size = decis)
+  After <- sample(90:160, size = decis)
+  data <- data.frame(Before, After, stringsAsFactors = FALSE)
+  data1 <- round(sd(Before - After), digits)
+  data2 <- sample(c("point estimate", "standard error"), size = 1)
+  corr.ans <- if(data2 == "point estimate"){round(mean(Before - After),
+                                                  digits = digits)}
+  else{round(data1/sqrt(decis),
+             digits = digits)}
+  up.min <- corr.ans + .2
+  down.max <- corr.ans - .2
+  ans.txt <- sample(if(corr.ans <= -15){seq(up.min, up.min + 5, 10^-digits)}
+                    else{if(corr.ans >= 15){seq(down.max - 5, down.max, 10^-digits)}
+                      else{c(seq(down.max - 5, down.max, 10^-digits),
+                             seq(up.min, up.min + 5, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 65*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### MeanPESEMC1 #####
+library(gridExtra)
+title <- "MeanPESEMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A new cardiovascular medication was administered to a single group of subjects. The subjects' heartrates (bpm) were recorded above after the medication was administered. The standard deviation of the heartrates was "
+quest.txt2 <- ". What is the "
+quest.txt3 <- " of the average heartrate for all patients who receive this medicine?"
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "Is this a one or two sample problem? Are you looking for center or spread? Pick the closest answer."
+feedback <- "Point Estimate = mean(bpm). SE = s/sqrt(n)"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis <- sample(6:8, size = 1)
+  BPM <- sample(80:140, size = decis)
+  data <- data.frame(BPM, stringsAsFactors = FALSE)
+  data1 <- round(sd(BPM), digits)
+  data2 <- sample(c("point estimate", "standard error"), size = 1)
+  corr.ans <- if(data2 == "point estimate"){round(mean(BPM),
+                                                  digits = digits)}
+  else{round(data1/sqrt(decis),
+             digits = digits)}
+  up.min <- corr.ans + .2
+  down.max <- corr.ans - .2
+  ans.txt <- sample(if((corr.ans <= 90) & (data2 == "point estimate")){seq(up.min, up.min + 20, 10^-digits)}
+                    else{if((corr.ans >= 130) & (data2 == "point estimate")){seq(down.max - 20, down.max, 10^-digits)}
+                      else{if((corr.ans <= 6) & (data2 == "standard error")){seq(up.min, up.min + 5, 10^-digits)}
+                        else{if((corr.ans >= 10) & (data2 == "standard error")){seq(down.max - 5, down.max, 10^-digits)}
+                          else{if((corr.ans > 6) & (corr.ans < 10) & (data2 == "standard error")){
+                            c(seq(down.max - 5, down.max, 10^-digits), seq(up.min, up.min + 5, 10^-digits))}
+                      else{c(seq(down.max - 20, down.max, 10^-digits),
+                             seq(up.min, up.min + 20, 10^-digits))}}}}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 65*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### ChisqMC1 #####
+library(gridExtra)
+title <- "ChisqMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "The above table contains frequency data across two categorical variables. What is the expected count for the "
+quest.txt2 <- " cell?"
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "You need the formula for expected counts from your chapter on chi squares. Pick the closest answer."
+feedback <- "row total * col total / grand total"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis1 <- sample(3:7, size = 1)
+  decis2 <- sample(3:7, size = 1)
+  rn <- c()
+  cn <- c()
+  for(d in 1:decis1){rn[d] <- paste("Group", d)}
+  for(e in 1:decis2){cn[e] <- paste("Level", e)}
+  data <- matrix(sample(20:200, size = decis1*decis2), nrow = decis1, ncol = decis2,
+              dimnames = list(rn, cn))
+  data <- addmargins(data, FUN = list(Total = sum), quiet = TRUE)
+  decis3 <- c(sample(1:decis1, size = 1), sample(1:decis2, size = 1))
+  data1 <- paste(rn[decis3[1]], cn[decis3[2]], sep = ", ")
+  corr.ans <- round((data[decis3[1], decis2 + 1])*(data[decis1 + 1, decis3[2]])/sum(data[-(decis1 + 1), decis2 + 1]),
+                    digits = digits)
+  up.min <- corr.ans + .2
+  down.max <- corr.ans - .2
+  ans.txt <- sample(if(corr.ans <= 40){seq(up.min, up.min + 20, 10^-digits)}
+                    else{if(corr.ans >= 180){seq(down.max - 20, down.max, 10^-digits)}
+                      else{c(seq(down.max - 20, down.max, 10^-digits),
+                             seq(up.min, up.min + 20, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 65*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### ChisqMC2 #####
+library(gridExtra)
+title <- "ChisqMC2"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "The above table contains frequency data across two categorical variables. What are the degrees of freedom for the chi square test of association between the two variables?"
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "You need the formula for degrees of freedom from your chapter on chi squares."
+feedback <- "df = (#rows - 1)*(#cols - 1)"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis1 <- sample(3:7, size = 1)
+  decis2 <- sample(3:7, size = 1)
+  rn <- c()
+  cn <- c()
+  for(d in 1:decis1){rn[d] <- paste("Group", d)}
+  for(e in 1:decis2){cn[e] <- paste("Level", e)}
+  data <- matrix(sample(20:200, size = decis1*decis2), nrow = decis1, ncol = decis2,
+                 dimnames = list(rn, cn))
+  data <- addmargins(data, FUN = list(Total = sum), quiet = TRUE)
+  corr.ans <- (decis1 - 1)*(decis2 - 1)
+  df <- 2:7
+  ans.txt <- sample(unique(apply(expand.grid(df, df), 1, prod))[unique(apply(expand.grid(df, df), 1, prod)) != corr.ans],
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 65*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### ChisqMC3 #####
+library(gridExtra)
+title <- "ChisqMC3"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Researchers collect data on two variables, the country of origin and religion of their subjects. There are "
+quest.txt2 <- " countries and "
+quest.txt3 <- " religions in the study. The researchers run a chi square test of association between country and religion. Using the table above, determine the critical value for this test."
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "You need the formula for degrees of freedom from your chapter on chi squares."
+feedback <- "df = (#countries - 1)*(#religions - 1)"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  data1 <- sample(2:4, size = 1)
+  data2 <- sample(2:4, size = 1)
+  DF <- 1:10
+  CV <- round(qchisq(.95, 1:10), digits = digits)
+  data <- rbind(DF, CV)
+  corr.ans <- CV[(data1-1)*(data2-1)]
+  ans.txt <- sample(CV[CV != corr.ans], size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, sep = ""),
+               points.per.q, difficulty, paste(e.path, title, ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, title, ".jpeg", sep = ""),
+       height = 22*nrow(data), width = 43*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### ChisqMC4 #####
+library(gridExtra)
+title <- "ChisqMC4"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Researchers collect data on two variables, the country of origin and religion of their subjects. There are "
+quest.txt2 <- " countries and "
+quest.txt3 <- " religions in the study. The researchers run a chi square test of association between country and religion. They calculate a chi square test statistic of "
+quest.txt4 <- " Using all the above information, interpret the result of the chi square test of association."
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "You need the formula for degrees of freedom from your chapter on chi squares. You'll need to draw a comparison between the calculated test statistic and the critical value."
+feedback <- "df = (#countries - 1)*(#religions - 1). To conclude association, the test statistic > the critical value."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  data1 <- sample(2:4, size = 1)
+  data2 <- sample(2:4, size = 1)
+  DF <- 1:10
+  CV <- round(qchisq(.95, 1:10), digits = digits)
+  data <- rbind(DF, CV)
+  data3 <- sample(seq(1, 20, 10^-digits), size = 1)
+  corr.ans <- if(data3 > CV[(data1-1)*(data2-1)]){"Religion and Country are associated with more than 95% confidence."}
+              else{"Religion and Country are not associated with more than 95% confidence."}
+  ans.txt <- if(corr.ans == "Religion and Country are associated with more than 95% confidence."){rep("Religion and Country are not associated with more than 95% confidence.", 2)}
+             else{rep("Religion and Country are associated with more than 95% confidence.", 2)}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, data3, quest.txt4, sep = ""),
+               points.per.q, difficulty, paste(e.path, title, ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, title, ".jpeg", sep = ""),
+       height = 22*nrow(data), width = 43*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### ChisqMC5 #####
+library(gridExtra)
+title <- "ChisqMC5"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "The above table contains frequency data across two categorical variables. Given that the "
+quest.txt2 <- " cell's expected count is "
+quest.txt3 <- ", calculate that cell's contribution to the summation in a chi square test statistic."
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "You need the formula for the chi square test statistic from your chapter on chi squares. You don't need to calculate the entire chi square test statistic. Pick the closest answer."
+feedback <- "(E - O)^2/E"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis1 <- sample(3:7, size = 1)
+  decis2 <- sample(3:7, size = 1)
+  rn <- c()
+  cn <- c()
+  for(d in 1:decis1){rn[d] <- paste("Group", d)}
+  for(e in 1:decis2){cn[e] <- paste("Level", e)}
+  data <- matrix(sample(20:200, size = decis1*decis2), nrow = decis1, ncol = decis2,
+                 dimnames = list(rn, cn))
+  data <- addmargins(data, FUN = list(Total = sum), quiet = TRUE)
+  decis3 <- c(sample(1:decis1, size = 1), sample(1:decis2, size = 1))
+  data1 <- paste(rn[decis3[1]], cn[decis3[2]], sep = ", ")
+  data2 <- round((data[decis3[1], decis2 + 1])*(data[decis1 + 1, decis3[2]])/sum(data[-(decis1 + 1), decis2 + 1]), digits = digits)
+  o <- data[decis3[1], decis3[2]]
+  corr.ans <- round((data2 - o)^2/data2, digits = digits)
+  up.min <- corr.ans + .3
+  down.max <- corr.ans - .3
+  ans.txt <- sample(if(corr.ans <= 10){seq(up.min, up.min + 10, 10^-digits)}
+                    else{if(corr.ans >= 40){seq(down.max - 20, down.max, 10^-digits)}
+                      else{c(seq(down.max - 10, down.max, 10^-digits),
+                             seq(up.min, up.min + 20, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 65*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### CorrMC1 #####
+title <- "CorrMC1"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "Four scatterplots of two variables Y vs. X are depicted above. Determine which image depicts the strongest correlation between Y and X."
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "No calculation is necessary. Just interpret the above graph."
+feedback <- "Lines tilted up from left to right are positive, tilted down are negative, and flat liens are zero."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  X <- sample(1:30, size = 20); X1 <- X; X2 <- X; X3 <- X; X4 <- X
+  decis <- sample(1:4, size = 1)
+  if(decis == 1)
+  {
+  Y1 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,25)
+  Y2 <- sample(10:20, size = 1) + sample(seq(-6, -3, 1), size = 1)*X + rnorm(length(X),0,2)
+  Y3 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,25)
+  Y4 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 25)
+  }
+  else{if(decis == 2)
+         {
+         Y2 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,25)
+         Y3 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,2)
+         Y4 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,25)
+         Y1 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 25)
+         }
+         else{if(decis == 3)
+                {
+                Y3 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,25)
+                Y4 <- sample(10:20, size = 1) + sample(seq(-6, -3, 1), size = 1)*X + rnorm(length(X),0,2)
+                Y1 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,25)
+                Y2 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 25)
+                }
+                else{if(decis == 4)
+                {
+                Y4 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,25)
+                Y1 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,2)
+                Y2 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,25)
+                Y3 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 25)
+                }}}}
+  r1 <- cor(X1, Y1); r2 <- cor(X2, Y2); r3 <- cor(X3, Y3); r4 <- cor(X4, Y4)
+  r <- abs(c(r1,r2,r3,r4))
+  corr.ans <- which.max(r)
+  ans.txt <- 1:4
+  ans.txt <- c(ans.txt[ans.txt != corr.ans], "None of the Above")
+  content <- c(type, ID, ID, quest.txt1,
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""))
+  par(mfrow=c(2,2))
+  plot(X1, Y1, xlim=c(0,length(X)), ylim = c(-200, 200)); title(1)
+  plot(X2, Y2, xlim=c(0,length(X)), ylim = c(-200, 200)); title(2)
+  plot(X3, Y3, xlim=c(0,length(X)), ylim = c(-200, 200)); title(3)
+  plot(X4, Y4, xlim=c(0,length(X)), ylim = c(-200, 200)); title(4);
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### CorrMC2 #####
+title <- "CorrMC2"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher compares the correlation coefficients between six pairs of variables. She calculates them as follows: "
+quest.txt2 <- ". Which of the correlations is the strongest?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "This is an interpretive question. No calculation is necessary."
+feedback <- "Stronger correlations are closer to -1 or 1. Weaker correlations are closer to 0."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  r <- sample(seq(-1,1,10^-digits), size = 6)
+  data1 <- paste(r[1], r[2], r[3], r[4], r[5], r[6], sep = ", ")
+  corr.ans <- r[which.max(abs(r))]
+  ans.txt <- r[-which.max(abs(r))]
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### CorrMC3 #####
+title <- "CorrMC3"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher compares the correlation coefficients between six pairs of variables. She calculates them as follows: "
+quest.txt2 <- ". Which of the correlations is the weakest?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "This is an interpretive question. No calculation is necessary."
+feedback <- "Stronger correlations are closer to -1 or 1. Weaker correlations are closer to 0."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  r <- sample(seq(-1,1,10^-digits), size = 6)
+  data1 <- paste(r[1], r[2], r[3], r[4], r[5], r[6], sep = ", ")
+  corr.ans <- r[which.min(abs(r))]
+  ans.txt <- r[-which.min(abs(r))]
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### CorrMC4 #####
+library(gridExtra)
+title <- "CorrMC4"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "The Z-scores = (X- mean)/SD for two variables X and Y are given above. Calculate the correlation coefficient r between the two variables."
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "You'll need to follow the last couple steps of calculating correlation coefficients. Pick the closest answer."
+feedback <- "r = sum(Zx*Zy)/(n-1)"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis <- sample(6:8, size = 1)
+  X <- sample(80:140, size = decis)
+  Y <- sample(90:160, size = decis)
+  Zx <- round((X-mean(X))/sd(X), digits)
+  Zy <- round((Y-mean(Y))/sd(Y), digits)
+  data <- data.frame(Zx, Zy, stringsAsFactors = FALSE)
+  corr.ans <- round(sum(Zx*Zy)/(decis-1), digits)
+  up.min <- corr.ans + .1
+  down.max <- corr.ans - .1
+  ans.txt <- sample(if(corr.ans <= -.8){seq(up.min, up.min + 1, 10^-digits)}
+                    else{if(corr.ans >= .8){seq(down.max - 1, down.max, 10^-digits)}
+                      else{c(seq(down.max - .25, down.max, 10^-digits),
+                             seq(up.min, up.min + .25, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, quest.txt1,
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 60*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### RegMC1 #####
+library(gridExtra)
+title <- "RegMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A new cardiovascular medication was administered to a group of subjects. The subjects' heartrates (bpm) and weights (lbs) were recorded above after the medication was administered. The standard deviation of the heartrates was "
+quest.txt2 <- ", and the standard deviation of the weights was "
+quest.txt3 <- ". The correlation coefficient between heartrate and weight was "
+quest.txt4 <- ". What is the "
+quest.txt5 <- " of the regression line heartrate (y) vs. weight (x) for all who receive this medicine?"
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "You'll need a formula from your chapter on regression. Pick the closest answer."
+feedback <- "Slope = r*sy/sx. Intercept = mean(bpm) - mean(lbs)*slope"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis <- sample(6:10, size = 1)
+  BPM <- sample(80:140, size = decis)
+  LBS <- sample(110:230, size = decis)
+  data <- data.frame(BPM, LBS, stringsAsFactors = FALSE)
+  data1 <- round(sd(BPM), digits)
+  data2 <- round(sd(LBS), digits)
+  data3 <- round(cor(BPM, LBS), digits)
+  data4 <- sample(c("slope", "intercept"), size = 1)
+  corr.ans <- if(data4 == "slope"){round(data3*data1/data2,
+                                                  digits = digits)}
+              else{round(mean(BPM)-(mean(LBS)*data3*data1/data2),
+                         digits = digits)}
+  up.min <- corr.ans + .12
+  down.max <- corr.ans - .12
+  ans.txt <- sample(if((corr.ans <= -.1) & (data4 == "slope")){seq(up.min, up.min + .4, 10^-digits)}
+                    else{if((corr.ans >= .3) & (data4 == "slope")){seq(down.max - .4, down.max, 10^-digits)}
+                      else{if((corr.ans <= 70) & (data4 == "intercept")){seq(up.min, up.min + 50, 10^-digits)}
+                        else{if((corr.ans >= 180) & (data4 == "intercept")){seq(down.max - 50, down.max, 10^-digits)}
+                          else{if((corr.ans > 180) & (corr.ans < 70) & (data4 == "intercept")){
+                            c(seq(down.max - 50, down.max, 10^-digits), seq(up.min, up.min + 50, 10^-digits))}
+                            else{c(seq(down.max - .4, down.max, 10^-digits),
+                                   seq(up.min, up.min + .4, 10^-digits))}}}}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, data3, quest.txt4, data4, quest.txt5, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 65*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### RegMC2 #####
+title <- "RegMC2"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "The regression of two variables Y vs. X is depicted above. Determine whether the slope is positive, negative, or zero."
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "No calculation is necessary. Just interpret the above graph."
+feedback <- "Lines tilted up from left to right are positive, tilted down are negative, and flat liens are zero."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis <- sample(1:3, size = 1)
+  X <- sample(1:40, size = 10)
+  Y <- if(decis == 1){sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(10,0,3)}
+       else{if(decis == 2){sample(10:20, size = 1) - sample(3:6, size = 1)*X + rnorm(10,0,3)}
+            else{rep(sample(10:20, size = 1), length(X))}}
+  corr.ans <- if(decis == 1){"Positive"}else{if(decis == 2){"Negative"}else{"Zero"}}
+  ans.txt <- if(decis == 1){c("Negative", "Zero")}else{if(decis == 2){c("Positive", "Zero")}else{c("Positive", "Negative")}}
+  content <- c(type, ID, ID, quest.txt1,
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""))
+  plot(X, Y); abline(lm(Y~X)); title("Y vs. X");
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### RegPESEMC1 #####
+library(gridExtra)
+title <- "RegPESEMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A new cardiovascular medication was administered to a group of subjects. The subjects' heartrates (bpm) and weights (lbs) were recorded above after the medication was administered. The standard deviation of the heartrates was "
+quest.txt2 <- ", and the standard deviation of the weights was "
+quest.txt3 <- ". The correlation coefficient between heartrate and weight was "
+quest.txt4 <- ". What is the "
+quest.txt5 <- " for the slope of the regression line heartrate (y) vs. weight (x) for all who receive this medicine?"
+digits = 2
+loc.path <- "Images/"
+e.path <- "Images/"
+hint <- "You'll need a formula from your chapter on regression. Are you looking for center or spread? Pick the closest answer."
+feedback <- "Point Estimate = r*sy/sx. SE = sqrt((1-r^2)/(n-2))*sy/sx"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 7 + which.max(points)
+  decis <- sample(6:10, size = 1)
+  BPM <- sample(80:140, size = decis)
+  LBS <- sample(110:230, size = decis)
+  data <- data.frame(BPM, LBS, stringsAsFactors = FALSE)
+  data1 <- round(sd(BPM), digits)
+  data2 <- round(sd(LBS), digits)
+  data3 <- round(cor(BPM, LBS), digits)
+  data4 <- sample(c("point estimate", "standard error"), size = 1)
+  corr.ans <- if(data4 == "point estimate"){round(data3*data1/data2,
+                                                  digits = digits)}
+              else{round(sqrt((1-data3^2)/(decis-2))*(data1/data2),
+                         digits = digits)}
+  up.min <- corr.ans + .12
+  down.max <- corr.ans - .12
+  ans.txt <- sample(if((corr.ans <= -.1) & (data4 == "point estimate")){seq(up.min, up.min + .4, 10^-digits)}
+                    else{if((corr.ans >= .3) & (data4 == "point estimate")){seq(down.max - .4, down.max, 10^-digits)}
+                      else{if((corr.ans <= .1) & (data4 == "standard error")){seq(up.min, up.min + .4, 10^-digits)}
+                        else{if((corr.ans >= .3) & (data4 == "standard error")){seq(down.max - .4, down.max, 10^-digits)}
+                          else{if((corr.ans > .1) & (corr.ans < .3) & (data4 == "standard error")){
+                            c(seq(down.max - .4, down.max, 10^-digits), seq(up.min, up.min + .4, 10^-digits))}
+                            else{c(seq(down.max - .4, down.max, 10^-digits),
+                                   seq(up.min, up.min + .4, 10^-digits))}}}}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, data2, quest.txt3, data3, quest.txt4, data4, quest.txt5, sep = ""),
+               points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+               points, hint, feedback)
+  options <- c(rep("",7), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),1] <- param
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
+  questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
+  jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
+       height = 25*nrow(data), width = 65*ncol(data))
+  p <- tableGrob(data)
+  grid.arrange(p)
+  dev.off()
+}
+questions <- questions[((10+answers)):((9+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### RegCIMC1 #####
+title <- "RegCIMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "NASA compares the ages of stars (in billions of years) to their surface temperatures (in thousands of degrees Kelvin). A sample of "
+quest.txt2 <- " stars has a standard deviation in age of "
+quest.txt3 <- " billion years, and a standard deviation in temperature of "
+quest.txt4 <- " thousands of degrees. The sample's age and temperature have a correlation coefficient of "
+quest.txt5 <- ". What is the 95% CI for the slope of the regression line temperature (y) vs. age (x)?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "You need to use the given statistics to find slope, standard error, and the lower and upper bounds."
+feedback <- "Did you use r*sy/sx +/- 1.96*sqrt((1-r^2)/(n-2))*(sy/sx)?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(50:150, size = 1)
+  data2 <- sample(seq(2, 4, 10^-digits), size = 1)
+  data3 <- sample(seq(5, 7, 10^-digits), size = 1)
+  data4 <- sample(seq(-1, 1, 10^-digits), size = 1)
+  lb <- round(data4*data3/data2 - 1.96*sqrt((1-data4^2)/(data1-2))*(data3/data2),
+              digits = digits)
+  ub <- round(data4*data3/data2 + 1.96*sqrt((1-data4^2)/(data1-2))*(data3/data2),
+              digits = digits)
+  corr.ans <- paste("(", paste(lb, ub, sep = ", "), ")", sep = "")
+  up.min <- round(ub + .1, digits)
+  down.max <- round(lb - .1, digits)
+  if(lb <= -1.9){
+    seq1 <- round(seq(up.min, up.min + 2, 10^-digits), digits)
+    mat1 <- expand.grid(seq1,seq1)
+    mat1 <- mat1[mat1[,1] < mat1[,2], ]
+    ans.txt1 <- mat1[sample(nrow(mat1), size = answers), ]}
+  else{if(ub >= 1.9){
+    seq2 <- round(seq(down.max - 2, down.max, 10^-digits), digits)
+    mat2 <- expand.grid(seq2,seq2)
+    mat2 <- mat2[mat2[,1] < mat2[,2], ]
+    ans.txt1 <- mat2[sample(nrow(mat2), size = answers), ]}
+    else{
+      seq3 <- round(c(seq(down.max - 2, down.max, 10^-digits), seq(up.min, up.min + 2, 10^-digits)), digits)
+      mat3 <- expand.grid(seq3,seq3)
+      mat3 <- mat3[mat3[,1] < mat3[,2], ]
+      ans.txt1 <- mat3[sample(nrow(mat3), size = answers), ]}}
+  ans.txt <- c()
+  for(l in 1:answers){ans.txt[l] <- paste("(", paste(ans.txt1[l,1], ans.txt1[l,2], sep = ", "), ")", sep = "")}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### RegCIMC2 #####
+title <- "RegCIMC2"
+n = 200
+type <- "MC"
+answers <- 4
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher compares variables x and y using linear regression. She calculates a 95% confidence interval of "
+quest.txt2 <- " for the slope of the regression line. Which of the following statistical inferences should she make?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "This is an interpretive question. No calculation is necessary. Consider each bound inclusive."
+feedback <- "Does the CI contain 0?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  lb <- sample(seq(-.2, .11, 10^-digits), size = 1)
+  ub <- sample(seq(lb + .03, .2), size = 1)
+  data1 <- paste("(", paste(round(lb, digits = digits),
+                            round(ub, digits = digits),
+                            sep = ", "), ")",
+                 sep = "")
+  corr.ans <- if((lb <= 0) & (ub >= 0)){"The slope is insignificant at the 95% confidence level."}
+  else{"The slope is significant at the 95% confidence level."}
+  ans.txt <- if(corr.ans == "The slope is insignificant at the 95% confidence level.")
+  {c("The slope is significant at the 95% confidence level.",
+     "The sample slope is not contained within the confidence interval.",
+     "Zero is not contained within the confidence interval.",
+     "The result is significant, thus the p-value is less than 0.05.")}
+  else{c("The slope is insignificant at the 95% confidence level.",
+         "The sample slope is contained within the confidence interval.",
+         "Zero is contained within the confidence interval.",
+         "The result is insignificant, thus the p-value is greater than 0.05.")}
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### AssocCorrCauseMC1 #####
+
+
+##### AssocCorrCauseMC2 #####
 
