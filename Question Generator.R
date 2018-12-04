@@ -3487,7 +3487,7 @@ for(i in 1:n)
   df <- 2:7
   ans.txt <- sample(unique(apply(expand.grid(df, df), 1, prod))[unique(apply(expand.grid(df, df), 1, prod)) != corr.ans],
                     size = answers)
-  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2, sep = ""),
+  content <- c(type, ID, ID, quest.txt1,
                points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
   options <- c(rep("",7), ans.txt, rep("",2))
