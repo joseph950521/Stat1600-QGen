@@ -3984,7 +3984,7 @@ for(i in 1:n)
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
   jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""))
-  plot(X, Y, xlim = c(-7,7), ylim = c(3,28), type = "l"); abline(lm(Y~X)); title("Y vs. X");
+  plot(X, Y, xlim = c(-7,7), ylim = c(3,28), type = "n"); abline(lm(Y~X)); title("Y vs. X");
   dev.off()
 }
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
