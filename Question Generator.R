@@ -3970,8 +3970,8 @@ for(i in 1:n)
   corr.ind <- 7 + which.max(points)
   decis <- sample(1:3, size = 1)
   X <- sample(1:40, size = 10)
-  Y <- if(decis == 1){sample(10:20, size = 1) + sample(1:5, size = 1)*X + rnorm(10,0,3)}
-       else{if(decis == 2){sample(10:20, size = 1) - sample(1:5, size = 1)*X + rnorm(10,0,3)}
+  Y <- if(decis == 1){sample(10:20, size = 1) + sample(seq(0.25, 5, by = 0.25), size = 1)*X + rnorm(10,0,3)}
+       else{if(decis == 2){sample(10:20, size = 1) - sample(seq(0.25, 5, by = 0.25), size = 1)*X + rnorm(10,0,3)}
             else{rep(sample(10:20, size = 1), length(X))}}
   corr.ans <- if(decis == 1){"Positive"}else{if(decis == 2){"Negative"}else{"Zero"}}
   ans.txt <- if(decis == 1){c("Negative", "Zero", "Neither of These")}else{if(decis == 2){c("Positive", "Zero", "Neither of These")}else{c("Positive", "Negative", "Neither of These")}}
