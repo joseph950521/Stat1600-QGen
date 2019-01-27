@@ -883,12 +883,12 @@ points.per.q <- 4
 difficulty <- 1
 quest.txt1 <- "While analyzing a dataset, a researcher makes a stem and leaf plot of one of her variables. The stem and leaf plot she makes is depicted. What is the "
 quest.txt2 <- " value?"
-dat.size = seq(21, 41, by = 2)
-digits = -1
-scale = 1
+dat.size = seq(21, 31, by = 2)
+digits = -2
+scale = 2
 loc.path <- "Images/"
 e.path <- "Images/"
-hint <- "Pay close attention to the key given for the plot."
+hint <- "Pay close attention to the key given for the plot. As an example, if the key read 'the decimal point is 1 digit to the right of the |, and the number of interest was labeled 1 | 2, then the answer would be 12."
 feedback <- "Stem and leaf plots are like histograms flipped over. The min is at the top, the middle halfway down, and the max is at the bottom."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
            rep("Option", answers),"Hint","Feedback")
@@ -896,18 +896,18 @@ questions <- data.frame()
 for(i in 1:n)
 {
   ID <- paste(title, i, sep = "-")
-  points <- sample(c(rep(0,answers-1),100),replace=F)
+  points <- sample(c(rep(0, answers-1), 100), replace=F)
   corr.ind <- 7 + which.max(points)
   dat.size1 <- sample(dat.size, size = 1)
-  left.data <- c(sample(seq(100, 350, by = 10^(-digits)), size = ceiling(dat.size1/6)),
-                 sample(seq(360, 610, by = 10^(-digits)), size = ceiling(2*dat.size1/6)),
-                 sample(seq(620, 870, by = 10^(-digits)), size = ceiling(3*dat.size1/6)))
-  right.data <- c(sample(seq(620, 870, by = 10^(-digits)), size = ceiling(dat.size1/6)),
-                  sample(seq(360, 610, by = 10^(-digits)), size = ceiling(2*dat.size1/6)),
-                  sample(seq(100, 350, by = 10^(-digits)), size = ceiling(3*dat.size1/6)))
-  sym.data <- c(sample(seq(620, 870, by = 10^(-digits)), size = ceiling(1.5*dat.size1/6)),
-                sample(seq(360, 610, by = 10^(-digits)), size = ceiling(3*dat.size1/6)),
-                sample(seq(100, 350, by = 10^(-digits)), size = ceiling(1.5*dat.size1/6)))
+  left.data <- c(sample(seq(1000, 3500, by = 10^(-digits)), size = ceiling(dat.size1/6)),
+                 sample(seq(3600, 6100, by = 10^(-digits)), size = ceiling(2*dat.size1/6)),
+                 sample(seq(6200, 7900, by = 10^(-digits)), size = ceiling(3*dat.size1/6)))
+  right.data <- c(sample(seq(6200, 8700, by = 10^(-digits)), size = ceiling(dat.size1/6)),
+                  sample(seq(3600, 6100, by = 10^(-digits)), size = ceiling(2*dat.size1/6)),
+                  sample(seq(2000, 3500, by = 10^(-digits)), size = ceiling(3*dat.size1/6)))
+  sym.data <- c(sample(seq(6200, 7900, by = 10^(-digits)), size = ceiling(1.5*dat.size1/6)),
+                sample(seq(3600, 6100, by = 10^(-digits)), size = ceiling(3*dat.size1/6)),
+                sample(seq(2000, 3500, by = 10^(-digits)), size = ceiling(1.5*dat.size1/6)))
   data.dec <- sample(c(1,2,3), size = 1)
   data <- sample(if(data.dec == 1){sym.data}
                    else{if(data.dec == 2){left.data}
@@ -2978,7 +2978,7 @@ difficulty <- 1
 quest.txt1 <- "NASA compares the ages of stars in two distinct clusters. A sample from the first cluster has an average age of "
 quest.txt2 <- " billion years with a standard deviation of "
 quest.txt3 <- " billion years. A sample from the second cluster has an average age of "
-quest.txt4 <- " years with a standard deviation of "
+quest.txt4 <- " billion years with a standard deviation of "
 quest.txt5 <- " billion years. NASA samples "
 quest.txt6 <- " stars from the first cluster, and "
 quest.txt7 <- " stars from the second cluster. What is the 95% CI for the difference between mean ages of the first cluster vs. the second cluster?"
@@ -3278,7 +3278,7 @@ type <- "MC"
 answers <- 5
 points.per.q <- 4
 difficulty <- 1
-quest.txt1 <- "A new cardiovascular medication was administered to a single group of subjects. The subjects' heartrates (bpm) were monitored and recorded twice: once before administering the medicine and once after. The standard deviation of the average differences between heartrates at the two times was "
+quest.txt1 <- "A new cardiovascular medication was administered to a single group of subjects. The subjects' heartrates (bpm) were monitored and recorded twice: once before administering the medicine and once after. The standard deviation of the differences between heartrates at the two times was "
 quest.txt2 <- ". What is the "
 quest.txt3 <- " of the average difference in heartrates between the two times (Before - After)?"
 digits = 2
@@ -3565,7 +3565,7 @@ difficulty <- 1
 quest.txt1 <- "Researchers collect data on two variables, the country of origin and religion of their subjects. There are "
 quest.txt2 <- " countries and "
 quest.txt3 <- " religions in the study. The researchers run a chi square test of association between country and religion. They calculate a chi square test statistic of "
-quest.txt4 <- " Using all the above information, interpret the result of the chi square test of association."
+quest.txt4 <- ". Using all the above information, interpret the result of the chi square test of association."
 digits = 2
 loc.path <- "Images/"
 e.path <- "Images/"
@@ -3682,7 +3682,7 @@ digits = 2
 loc.path <- "Images/"
 e.path <- "Images/"
 hint <- "No calculation is necessary. Just interpret the above graph."
-feedback <- "Lines tilted up from left to right are positive, tilted down are negative, and flat liens are zero."
+feedback <- "Strongest correlations have points closest to a line of best fit."
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty", "Image",
            rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
@@ -3695,31 +3695,31 @@ for(i in 1:n)
   decis <- sample(1:4, size = 1)
   if(decis == 1)
   {
-  Y1 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,25)
+  Y1 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,30)
   Y2 <- sample(10:20, size = 1) + sample(seq(-6, -3, 1), size = 1)*X + rnorm(length(X),0,2)
-  Y3 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,25)
-  Y4 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 25)
+  Y3 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,30)
+  Y4 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 30)
   }
   else{if(decis == 2)
          {
-         Y2 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,25)
+         Y2 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,30)
          Y3 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,2)
-         Y4 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,25)
-         Y1 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 25)
+         Y4 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,30)
+         Y1 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 30)
          }
          else{if(decis == 3)
                 {
-                Y3 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,25)
+                Y3 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,30)
                 Y4 <- sample(10:20, size = 1) + sample(seq(-6, -3, 1), size = 1)*X + rnorm(length(X),0,2)
-                Y1 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,25)
-                Y2 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 25)
+                Y1 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,30)
+                Y2 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 30)
                 }
                 else{if(decis == 4)
                 {
-                Y4 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,25)
+                Y4 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,30)
                 Y1 <- sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(length(X),0,2)
-                Y2 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,25)
-                Y3 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 25)
+                Y2 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(-4, -3, 1), size = 1)*X + rnorm(length(X),0,30)
+                Y3 <- sample(seq(-20, -10, 1), size = 1) + sample(seq(2, 3, 1), size = 1)*X + rnorm(length(X), 0, 30)
                 }}}}
   r1 <- cor(X1, Y1); r2 <- cor(X2, Y2); r3 <- cor(X3, Y3); r4 <- cor(X4, Y4)
   r <- abs(c(r1,r2,r3,r4))
@@ -3736,10 +3736,10 @@ for(i in 1:n)
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
   jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""))
   par(mfrow=c(2,2))
-  plot(X1, Y1, xlim=c(0,length(X)), ylim = c(-200, 200)); title(1)
-  plot(X2, Y2, xlim=c(0,length(X)), ylim = c(-200, 200)); title(2)
-  plot(X3, Y3, xlim=c(0,length(X)), ylim = c(-200, 200)); title(3)
-  plot(X4, Y4, xlim=c(0,length(X)), ylim = c(-200, 200)); title(4);
+  plot(X1, Y1, xlim=c(0,30), ylim = c(-200, 200)); title(1)
+  plot(X2, Y2, xlim=c(0,30), ylim = c(-200, 200)); title(2)
+  plot(X3, Y3, xlim=c(0,30), ylim = c(-200, 200)); title(3)
+  plot(X4, Y4, xlim=c(0,30), ylim = c(-200, 200)); title(4);
   dev.off()
 }
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
@@ -3951,7 +3951,7 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
 title <- "RegMC2"
 n = 200
 type <- "MC"
-answers <- 2
+answers <- 3
 points.per.q <- 4
 difficulty <- 1
 quest.txt1 <- "The regression of two variables Y vs. X is depicted above. Determine whether the slope is positive, negative, or zero."
@@ -3970,11 +3970,11 @@ for(i in 1:n)
   corr.ind <- 7 + which.max(points)
   decis <- sample(1:3, size = 1)
   X <- sample(1:40, size = 10)
-  Y <- if(decis == 1){sample(10:20, size = 1) + sample(3:6, size = 1)*X + rnorm(10,0,3)}
-       else{if(decis == 2){sample(10:20, size = 1) - sample(3:6, size = 1)*X + rnorm(10,0,3)}
+  Y <- if(decis == 1){sample(10:20, size = 1) + sample(1:5, size = 1)*X + rnorm(10,0,3)}
+       else{if(decis == 2){sample(10:20, size = 1) - sample(1:5, size = 1)*X + rnorm(10,0,3)}
             else{rep(sample(10:20, size = 1), length(X))}}
   corr.ans <- if(decis == 1){"Positive"}else{if(decis == 2){"Negative"}else{"Zero"}}
-  ans.txt <- if(decis == 1){c("Negative", "Zero")}else{if(decis == 2){c("Positive", "Zero")}else{c("Positive", "Negative")}}
+  ans.txt <- if(decis == 1){c("Negative", "Zero", "Neither of These")}else{if(decis == 2){c("Positive", "Zero", "Neither of These")}else{c("Positive", "Negative", "Neither of These")}}
   content <- c(type, ID, ID, quest.txt1,
                points.per.q, difficulty, paste(e.path, paste(title, i, sep = "-"), ".jpeg", sep = ""),
                points, hint, feedback)
@@ -3984,7 +3984,7 @@ for(i in 1:n)
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),2] <- content
   questions[(1+(9+answers)*i):((9+answers)*(i+1)),3] <- options
   jpeg(filename=paste(loc.path, paste(title, i, sep = "-"), ".jpeg", sep = ""))
-  plot(X, Y); abline(lm(Y~X)); title("Y vs. X");
+  plot(X, Y, xlim = c(-7,7), ylim = c(3,28), type = "l"); abline(lm(Y~X)); title("Y vs. X");
   dev.off()
 }
 questions <- questions[((10+answers)):((9+answers)*(n+1)),]
