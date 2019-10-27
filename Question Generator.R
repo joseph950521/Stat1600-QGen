@@ -4180,8 +4180,112 @@ questions <- questions[(9+answers):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
-##### AssocCorrCauseMC1 #####
+##### 2PropTestMC1 #####
+title <- "2PropTestMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A new pesticide is tested on a group of crop-destroying beetles. The sample data shows that "
+quest.txt2 <- " of this first group dies as a result. A second group of beetles is dosed with a standard pesticide, and "
+quest.txt3 <- " of this second group dies as a result. "
+quest.txt4 <- " beetles are in the first test-pesticide group and "
+quest.txt5 <- " beetles are in the second standard-pesticide group. What is the Z test statistic for a hypothesis test on the difference between proportions?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "You need to calculate the absolute value of the Z test statistic. Pick the closest answer."
+feedback <- "Did you use (phat1 - phat2)/SE, and take its absolute value?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(seq(.4, .5, 10^-digits), size = 1)
+  data2 <- sample(seq(.35,.45, 10^-digits), size = 1)
+  data3 <- sample(100:200, size = 1)
+  data4 <- sample(100:200, size = 1)
+  corr.ans <- round((data1-data2)/sqrt(data1*(1-data1)/data3+data2*(1-data2)/data4), digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans < -.8){seq(up.min, 4, 10^-digits)}
+                    else{if(corr.ans > 2.85){seq(-1, down.max, 10^-digits)}
+                      else{c(seq(-1, down.max, 10^-digits),
+                             seq(up.min, 4, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
+##### 2PropTestMC2 #####
+title <- "2PropTestMC2"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A new pesticide is tested on a group of crop-destroying beetles. The sample data shows that "
+quest.txt2 <- " of this first group dies as a result. A second group of beetles is dosed with a standard pesticide, and "
+quest.txt3 <- " of this second group dies as a result. "
+quest.txt4 <- " beetles are in the first test-pesticide group and "
+quest.txt5 <- " beetles are in the second standard-pesticide group. What is the p-value for a hypothesis test on the difference between proportions?"
+dat.size = 1
+digits = 4
+loc.path <- 
+  e.path <- 
+  hint <- "You need to use your Z-table. Pick the closest answer."
+feedback <- "Did you use 2*(1-area below absolute value of Z)?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(seq(.43, .51, 10^-digits), size = 1)
+  data2 <- sample(seq(.34,.42, 10^-digits), size = 1)
+  data3 <- sample(100:250, size = 1)
+  data4 <- sample(100:250, size = 1)
+  z <- round((data1-data2)/sqrt(data1*(1-data1)/data3+data2*(1-data2)/data4), digits)
+  area <- round(pnorm(abs(z)), digits = digits)
+  corr.ans <- round(2*(1-area), digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans < .05){seq(up.min, 1.05, 10^-digits)}
+                    else{if(corr.ans > .95){seq(-.05, down.max, 10^-digits)}
+                      else{c(seq(-.05, down.max, 10^-digits),
+                             seq(up.min, 1.05, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
 
-##### AssocCorrCauseMC2 #####
-
+##### 2PropTestMC3 #####
