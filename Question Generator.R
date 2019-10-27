@@ -4289,3 +4289,85 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### 2PropTestMC3 #####
+title <- "2PropTestMC3"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher runs a hypothesis test on the difference between two proportions. She finds the p-value of the test is "
+quest.txt2 <- " What is the appropriate decision at the 5% significance level?"
+dat.size = 1
+digits = 4
+loc.path <- 
+  e.path <- 
+  hint <- "Is the p-value bigger or smaller than 0.05?"
+feedback <- "Reject when p-value <= 0.05."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  dec <- sample(1:2, 1)
+  if(dec == 1){data1 <- round(sample(seq(0.0001, .05, 10^-digits), size = 1), digits)}
+  else{data1 <- round(sample(seq(0.06, 1, 10^-digits), size = 1), digits)}
+  corr.ans <- if(data1 > 0.05){"Fail to reject the null hypothesis."}
+              else{"Reject the null hypothesis."}
+  ans.txt <- rep(if(corr.ans == "Fail to reject the null hypothesis."){"Reject the null hypothesis."}else{"Fail to reject the null hypothesis."}, answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2PropTestMC4 #####
+title <- "2PropTestMC4"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher runs a hypothesis test on the difference between two proportions. She finds the Z test statistic is "
+quest.txt2 <- " What is the appropriate decision at the 5% significance level?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "Is the test statistic bigger or smaller than 1.959964?"
+feedback <- "Reject when the test statistic is >= 1.959964."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  dec <- sample(1:2, 1)
+  if(dec == 1){data1 <- round(sample(seq(1.96, 10, 10^-digits), size = 1), digits)}
+  else{data1 <- round(sample(seq(-1.9, 1.9, 10^-digits), size = 1), digits)}
+  corr.ans <- if(data1 >= 1.96){"Reject the null hypothesis."}
+              else{"Fail to reject the null hypothesis."}
+  ans.txt <- rep(if(corr.ans == "Fail to reject the null hypothesis."){"Reject the null hypothesis."}else{"Fail to reject the null hypothesis."}, answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
