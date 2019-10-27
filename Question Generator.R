@@ -4191,13 +4191,13 @@ quest.txt1 <- "A new pesticide is tested on a group of crop-destroying beetles. 
 quest.txt2 <- " of this first group dies as a result. A second group of beetles is dosed with a standard pesticide, and "
 quest.txt3 <- " of this second group dies as a result. "
 quest.txt4 <- " beetles are in the first test-pesticide group and "
-quest.txt5 <- " beetles are in the second standard-pesticide group. What is the Z test statistic for a hypothesis test on the difference between proportions?"
+quest.txt5 <- " beetles are in the second standard-pesticide group. What is the Z test statistic for a hypothesis test on the difference between proportions (first group - second)?"
 dat.size = 1
 digits = 2
 loc.path <- 
   e.path <- 
-  hint <- "You need to calculate the absolute value of the Z test statistic. Pick the closest answer."
-feedback <- "Did you use (phat1 - phat2)/SE, and take its absolute value?"
+  hint <- "You need to calculate the Z test statistic. Don't take the absolute value. Pick the closest answer."
+feedback <- "Did you use (phat1 - phat2)/SE?"
 param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
            rep("Option", answers),"Hint","Feedback")
 questions <- data.frame()
@@ -4371,3 +4371,58 @@ for(i in 1:n)
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
+
+
+##### 2PropTestMC5 #####
+title <- "2PropTestMC5"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "You want to see whether you or your friend is the better cook, so you ask your mutual friends to repeatedly sample both of your meals and decide whether they are 'great' or 'not great'. You cook "
+quest.txt2 <- " great meals. Your friend cooks "
+quest.txt3 <- " great meals. You cooked a total of "
+quest.txt4 <- " meals, and your friend cooked a total of "
+quest.txt5 <- " meals. What is the Z test statistic for a hypothesis test on the difference between proportions of great meals (yours - your friend's)?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "You need to calculate the Z test statistic. Don't take the absolute value. Pick the closest answer."
+feedback <- "Did you use (phat1 - phat2)/SE?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(60:75, size = 1)
+  data2 <- sample(50:65, size = 1)
+  data3 <- sample(80:150, size = 1)
+  data4 <- sample(80:150, size = 1)
+  corr.ans <- abs(round((data1/data3-data2/data4)/sqrt(data1/data3*(1-data1/data3)/data3+data2/data4*(1-data2/data4)/data4), digits))
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans < -6){seq(up.min, 12, 10^-digits)}
+                    else{if(corr.ans > 12){seq(-6, down.max, 10^-digits)}
+                      else{c(seq(-6.9, down.max, 10^-digits),
+                             seq(up.min, 12.8, 10^-digits))}},
+                    size = answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
