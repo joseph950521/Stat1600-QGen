@@ -6,7 +6,7 @@
 
 ##### These will help streamline test writing, requiring only that one runs the #####
 ##### code and occasionally re-uploads the test banks. The longest part of the  #####
-##### process is waiting on the e-learning uploads of the images and CSVs.      #####                                                               #####
+##### process is waiting on the e-learning uploads of the images and CSVs.      #####
 
 ##### 25/25 Generators for test 1 completed  #####
 ##### 18/25 Generators for test 2 completed  #####
