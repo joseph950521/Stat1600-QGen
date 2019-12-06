@@ -4403,7 +4403,7 @@ for(i in 1:n)
   data2 <- sample(50:65, size = 1)
   data3 <- sample(80:150, size = 1)
   data4 <- sample(80:150, size = 1)
-  corr.ans <- abs(round((data1/data3-data2/data4)/sqrt(data1/data3*(1-data1/data3)/data3+data2/data4*(1-data2/data4)/data4), digits))
+  corr.ans <- round((data1/data3-data2/data4)/sqrt(data1/data3*(1-data1/data3)/data3+data2/data4*(1-data2/data4)/data4), digits)
   up.min <- round(corr.ans + .05, digits)
   down.max <- round(corr.ans - .05, digits)
   ans.txt <- sample(if(corr.ans < -6){seq(up.min, 12, 10^-digits)}
@@ -4425,4 +4425,207 @@ for(i in 1:n)
 questions <- questions[(9+answers):((8+answers)*(n+1)),]
 write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
+
+##### 2MeanTestMC1 #####
+title <- "2MeanTestMC1"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher collects numeric data across two groups of subjects. The first group is composed of "
+quest.txt2 <- " subjects, and the second group of "
+quest.txt3 <- " subjects. The sample mean of the first group is "
+quest.txt4 <- " and its standard deviation is "
+quest.txt5 <- ". The sample mean of the second group is "
+quest.txt6 <- " and its standard deviation is "
+quest.txt7 <- ". What is the Z test statistic of a hypothesis test on the difference between the two means (first group - second group)?"
+dat.size = 1
+digits = 3
+loc.path <- 
+  e.path <- 
+  hint <- "You need to calculate the Z test statistic. Don't take the absolute value. Pick the closest answer."
+feedback <- "Did you use (xbar1 - xbar2)/SE?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(15:30, size = 1)
+  data2 <- sample(15:30, size = 1)
+  data3 <- sample(80:100, size = 1)
+  data4 <- sample(20:30, size = 1)
+  data5 <- sample(80:100, size = 1)
+  data6 <- sample(20:30, size = 1)
+  corr.ans <- round((data3 - data5)/sqrt(data4^2/data1 + data6^2/data2), digits)
+  up.min <- round(corr.ans + .25, digits)
+  down.max <- round(corr.ans - .25, digits)
+  ans.txt <- sample(if(corr.ans < -1.9){seq(up.min, 2.5, 10^-digits)}
+                    else{if(corr.ans > 1.9){seq(-2.5, down.max, 10^-digits)}
+                      else{c(seq(-2.5, down.max, 10^-digits),
+                             seq(up.min, 2.5, 10^-digits))}},
+                    size = answers)
+  ans.txt <- round(ans.txt, digits = digits)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5, data5, quest.txt6,
+                                   data6, quest.txt7,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanTestMC2 #####
+title <- "2MeanTestMC2"
+n = 200
+type <- "MC"
+answers <- 5
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher collects numeric data across two groups of subjects. The first group is composed of "
+quest.txt2 <- " subjects, and the second group of "
+quest.txt3 <- " subjects. The sample mean of the first group is "
+quest.txt4 <- " and its standard deviation is "
+quest.txt5 <- ". The sample mean of the second group is "
+quest.txt6 <- " and its standard deviation is "
+quest.txt7 <- ". What is the P-Value of a hypothesis test on the difference between the two means (first group - second group)?"
+dat.size = 1
+digits = 4
+loc.path <- 
+  e.path <- 
+  hint <- "You need to calculate the two-tailed P-Value. Pick the closest answer."
+feedback <- "Did you calculate Z = (xbar1 - xbar2)/SE, take the absolute value, then calculate twice the area above this value?"
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  data1 <- sample(15:30, size = 1)
+  data2 <- sample(15:30, size = 1)
+  data3 <- sample(80:100, size = 1)
+  data4 <- sample(20:30, size = 1)
+  data5 <- sample(80:100, size = 1)
+  data6 <- sample(20:30, size = 1)
+  corr.ans <- round(2*pnorm(round(abs((data3 - data5)/sqrt(data4^2/data1 + data6^2/data2)), digits = 2), lower.tail = F), digits)
+  up.min <- round(corr.ans + .05, digits)
+  down.max <- round(corr.ans - .05, digits)
+  ans.txt <- sample(if(corr.ans < .1){seq(up.min, 1.001, 10^-digits)}
+                    else{if(corr.ans > .9){seq(-0.001, down.max, 10^-digits)}
+                      else{c(seq(-0.001, down.max, 10^-digits),
+                             seq(up.min, 1.001, 10^-digits))}},
+                    size = answers)
+  ans.txt <- round(ans.txt, digits = digits)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   data2, quest.txt3, data3, quest.txt4,
+                                   data4, quest.txt5, data5, quest.txt6,
+                                   data6, quest.txt7,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanTestMC3 #####
+title <- "2PropTestMC3"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher runs a hypothesis test on the difference between two means. She finds the p-value of the test is "
+quest.txt2 <- " What is the appropriate decision at the 5% significance level?"
+dat.size = 1
+digits = 4
+loc.path <- 
+  e.path <- 
+  hint <- "Is the p-value bigger or smaller than 0.05?"
+feedback <- "Reject when p-value <= 0.05."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  dec <- sample(1:2, 1)
+  if(dec == 1){data1 <- round(sample(seq(0.0001, .05, 10^-digits), size = 1), digits)}
+  else{data1 <- round(sample(seq(0.06, 1, 10^-digits), size = 1), digits)}
+  corr.ans <- if(data1 > 0.05){"Fail to reject the null hypothesis."}
+  else{"Reject the null hypothesis."}
+  ans.txt <- rep(if(corr.ans == "Fail to reject the null hypothesis."){"Reject the null hypothesis."}else{"Fail to reject the null hypothesis."}, answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
+##### 2MeanTestMC4 #####
+title <- "2PropTestMC4"
+n = 200
+type <- "MC"
+answers <- 2
+points.per.q <- 4
+difficulty <- 1
+quest.txt1 <- "A researcher runs a hypothesis test on the difference between two means. She finds the Z test statistic is "
+quest.txt2 <- " What is the appropriate decision at the 5% significance level?"
+dat.size = 1
+digits = 2
+loc.path <- 
+  e.path <- 
+  hint <- "Is the test statistic bigger or smaller than 1.959964?"
+feedback <- "Reject when the test statistic is >= 1.959964."
+param <- c("NewQuestion","ID","Title","QuestionText","Points","Difficulty",
+           rep("Option", answers),"Hint","Feedback")
+questions <- data.frame()
+for(i in 1:n)
+{
+  ID <- paste(title, i, sep = "-")
+  points <- sample(c(rep(0,answers-1),100),replace=F)
+  corr.ind <- 6 + which.max(points)
+  dec <- sample(1:2, 1)
+  if(dec == 1){data1 <- round(sample(seq(1.96, 10, 10^-digits), size = 1), digits)}
+  else{data1 <- round(sample(seq(-1.9, 1.9, 10^-digits), size = 1), digits)}
+  corr.ans <- if(data1 >= 1.96){"Reject the null hypothesis."}
+  else{"Fail to reject the null hypothesis."}
+  ans.txt <- rep(if(corr.ans == "Fail to reject the null hypothesis."){"Reject the null hypothesis."}else{"Fail to reject the null hypothesis."}, answers)
+  content <- c(type, ID, ID, paste(quest.txt1, data1, quest.txt2,
+                                   collapse = "", sep= ""),
+               points.per.q, difficulty, points, hint, feedback)
+  options <- c(rep("",6), ans.txt, rep("",2))
+  options[corr.ind] <- corr.ans
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),1] <- param
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),2] <- content
+  questions[(1+(8+answers)*i):((8+answers)*(i+1)),3] <- options
+}
+questions <- questions[(9+answers):((8+answers)*(n+1)),]
+write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
+            row.names=F, col.names=F)
+
 
