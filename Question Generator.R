@@ -4545,7 +4545,7 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### 2MeanTestMC3 #####
-title <- "2PropTestMC3"
+title <- "2MeanTestMC3"
 n = 200
 type <- "MC"
 answers <- 2
@@ -4587,7 +4587,7 @@ write.table(questions, sep=",", file=paste(title, ".csv", sep = ""),
             row.names=F, col.names=F)
 
 ##### 2MeanTestMC4 #####
-title <- "2PropTestMC4"
+title <- "2MeanTestMC4"
 n = 200
 type <- "MC"
 answers <- 2
