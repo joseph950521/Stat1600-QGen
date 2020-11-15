@@ -12,7 +12,7 @@ quest.txt2 = " value?", # The above question text is the static text for the ful
 dat.size = seq(21, 31, by = 2), # This is the sequence of number of values to be randomly generated for the dataset
 digits = -2, # This is the number of decimal places to round off the data
 scale = 2, # parameter to control plot length of the graph
-loc.path = "Images/", # This is the local path used to store any randomly generated image files
+loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/StemGraphMC1 images/", # This is the local path used to store any randomly generated image files
 e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
 hint = "Pay close attention to the key given for the plot. As an example, if the key read 'the decimal point is 1 digit to the right of the |, and the number of interest was labeled 1 | 2, then the answer would be 12.", # This is a student hint, visible to them during the exam on e-learning
 feedback = "Stem and leaf plots are like histograms flipped over. The min is at the top, the middle halfway down, and the max is at the bottom." # This is student feedback, visible after the exam

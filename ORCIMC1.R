@@ -10,7 +10,7 @@ ORCIMC1= function(
   quest.txt1 = "Both a new medication and placebo were administered to two separate groups of subjects. The subjects were monitored for recovery from an illness and the results were recorded in the 2x2 contingency table above. What is the 95% CI for the odds ratio given recovery in subjects who received the medication vs. those who received the placebo?", # The above text is the static text for the question
   Treatments = c("Medication", "Placebo"), #creating a vector of the treatment characters in the question
   digits = 2, # This is the number of decimal places to round off the data
-  loc.path = "Images/", # This is the local path used to store any randomly generated image files
+  loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/ORCIMC1 images/", # This is the local path used to store any randomly generated image files
   e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
   hint = "You can follow your a, b, c, d formula given in lectures and the coursepack.", # This is a student hint, visible to them during the exam on e-learning
   feedback = "OR = ad/(bc). SE = sqrt(1/a + 1/b + 1/c + 1/d). ME for ln(OR) = 1.96*SE." # This is student feedback, visible after the exam

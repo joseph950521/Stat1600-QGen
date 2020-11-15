@@ -13,7 +13,7 @@ quest.txt3 = ". The correlation coefficient between heartrate and weight was ",
 quest.txt4 = ". What is the ",
 quest.txt5 = " of the regression line heartrate (y) vs. weight (x) for all who receive this medicine?", # The above 5 question texts are static text for the full question
 digits = 2, # This is the number of decimal places to round off the data
-loc.path = "Images/", # This is the local path used to store any randomly generated image files
+loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/RegMC1 images/", # This is the local path used to store any randomly generated image files
 e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
 hint = "You'll need a formula from your chapter on regression. Pick the closest answer.", # This is a student hint, visible to them during the exam on e-learning
 feedback = "Slope = r*sy/sx. Intercept = mean(bpm) - mean(lbs)*slope" # This is student feedback, visible after the exam

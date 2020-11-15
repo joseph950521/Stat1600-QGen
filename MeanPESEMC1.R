@@ -11,7 +11,7 @@ MeanPESEMC1=function(
   quest.txt2 = ". What is the ",
   quest.txt3 = " of the average heartrate for all patients who receive this medicine?", # The above 3 question texts are static text for the full question
   digits = 2, # This is the number of decimal places to round off the data
-  loc.path = "Images/", # This is the local path used to store any randomly generated image files
+  loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/MeanPESEMC1 images/", # This is the local path used to store any randomly generated image files
   e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
   hint = "Is this a one or two sample problem? Are you looking for center or spread? Pick the closest answer.", # This is a student hint, visible to them during the exam on e-learning
   feedback = "Point Estimate = mean(bpm). SE = s/sqrt(n)" # This is student feedback, visible after the exam

@@ -9,7 +9,7 @@ points.per.q = 4, # Number of points the question is worth (on the test)
 difficulty = 1, # An easily viewable difficulty level on e-learning
 quest.txt1 = "The Z-scores = (X- mean)/SD for two variables X and Y are given above. Calculate the correlation coefficient r between the two variables.", # The above text is static text for the question
 digits = 2, # This is the number of decimal places to round off the data
-loc.path = "Images/", # This is the local path used to store any randomly generated image files
+loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/CorrMC4 images/", # This is the local path used to store any randomly generated image files
 e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
 hint = "You'll need to follow the last couple steps of calculating correlation coefficients. Pick the closest answer.", # This is a student hint, visible to them during the exam on e-learning
 feedback = "r = sum(Zx*Zy)/(n-1)" # This is student feedback, visible after the exam

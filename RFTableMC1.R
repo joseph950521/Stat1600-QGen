@@ -16,7 +16,7 @@ majors = c("Physics", "Statistics", "Speech Pathology", "Psychology", "Music", "
             "English", "Spanish", "French", "Arabic", "Economics", "Applied Mathematics"), # This is a vector of major for the question
 dat.size = 5:15, # This is the number of values to be randomly generated for the dataset
 digits = 2, # This is the number of decimal places to round off the data
-loc.path = "Images/", # This is the local path used to store any randomly generated image files
+loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/RFTableMC1 images/", # This is the local path used to store any randomly generated image files
 e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
 hint = "Read the Data Presentation chapter of your coursepack.", # This is a student hint, visible to them during the exam on e-learning
 feedback = "For the specified category, calculate frequency over total and multiply by 100%." # This is student feedback, visible after the exam

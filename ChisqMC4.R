@@ -12,7 +12,7 @@ quest.txt2 = " countries and ",
 quest.txt3 = " religions in the study. The researchers run a chi square test of association between country and religion. They calculate a chi square test statistic of ",
 quest.txt4 = ". Using all the above information, interpret the result of the chi square test of association.", # The above 3 question texts are the static text for the full question
 digits = 2, # This is the number of decimal places to round off the data
-loc.path = "Images/", # This is the local path used to store any randomly generated image files
+loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/ChisqMC4 images/", # This is the local path used to store any randomly generated image files
 e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
 hint = "You need the formula for degrees of freedom from your chapter on chi squares. You'll need to draw a comparison between the calculated test statistic and the critical value.", # This is a student hint, visible to them during the exam on e-learning
 feedback = "df = (#countries - 1)*(#religions - 1). To conclude association, the test statistic > the critical value." # This is student feedback, visible after the exam

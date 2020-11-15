@@ -11,7 +11,7 @@ quest.txt1 = "Both a new medication and placebo were administered to two separat
 quest.txt2 = " for recovery in subjects who received the medication vs. those who received the placebo?", # The above 2 question texts are static text for the full question
 Treatments = c("Medication", "Placebo"), #creating a vector of the treatment characters in the question
 digits = 2, # This is the number of decimal places to round off the data
-loc.path = "Images/", # This is the local path used to store any randomly generated image files
+loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/RRPESEMC1 images/", # This is the local path used to store any randomly generated image files
 e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
 hint = "You can follow your a, b, c, d formula given in lectures and the coursepack.", # This is a student hint, visible to them during the exam on e-learning
 feedback = "RR = (a/(a+b))/(c/(c+d)). SE = sqrt(1/a + 1/b - 1/(a+b) - 1/(c+d))" # This is student feedback, visible after the exam
@@ -25,7 +25,7 @@ for(i in 1:n)
   ID <- paste(title, i, sep = "-") # The ID of the specific question within the bank, title + question number in the loop
   points <- sample(c(rep(0,answers-1),100),replace=F) # The proportion of points assigned to each possible answer, 1 if correct or 0 if incorrect
   corr.ind <- 7 + which.max(points) # This is the row index of the correct answer
-  data1 <- sample(c("risk ratio", "standard error of the natural log of the risk ratio"), size = 1) randomly generating risk ratio statistics terms for the question
+  data1 <- sample(c("risk ratio", "standard error of the natural log of the risk ratio"), size = 1) #randomly generating risk ratio statistics terms for the question
   Recovered <- c(sample(50:100, size = 1), sample(25:75, size = 1))
   Unrecovered <- sample(100:200, size = 2)
   data <- data.frame(Treatments, Recovered, Unrecovered, stringsAsFactors = FALSE) # This is how we're randomly generating data frame for this question

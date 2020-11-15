@@ -8,8 +8,8 @@ MeanDistMC2= function(
   difficulty = 1, # An easily viewable difficulty level on e-learning
   quest.txt1 = "A student conducts a survey for her class project. She asks ",
   quest.txt2 = " other students a series of questions about their study habits. She knows from previous research that all students study an average of ",
-  quest.txt3 = " hours per day. If students in her own sample study an average of ",
-  quest.txt4 = " with a standard deviation of ",
+  quest.txt3 = " hours per day with a standard deviation of ",
+  quest.txt4 = ". If students in her own sample study an average of ",
   quest.txt5 = " hours per day, then what is the probability of observing this sample mean or greater?", # The above 5 question texts are static texts for the full question
   dat.size = 1, # This is the number of values to be randomly generated for the dataset
   digits = 2, # This is the number of decimal places to round off the data
@@ -27,11 +27,11 @@ MeanDistMC2= function(
   ID <- paste(title, i, sep = "-") # The ID of the specific question within the bank, title + question number in the loop
   points <- sample(c(rep(0,answers-1),100),replace=F) # The proportion of points assigned to each possible answer, 1 if correct or 0 if incorrect
   corr.ind <- 6 + which.max(points) # This is the row index of the correct answer
-  data1 <- sample(5:8, size = 1)
-  data2 <- sample(seq(2,4,10^-digits), size = 1)
-  data3 <- sample(seq(2,4,10^-digits), size = 1)
-  data4 <- sample(seq(1.8,3,10^-digits), size = 1)
-  corr.ans <- 1-round(pnorm(round((data3-data2)/(data4/sqrt(data1)), digits = digits)), digits = digits) # this is the correct answer to the question
+  data1 <- sample(5:8, size = 1) # Sample size
+  data2 <- sample(seq(2,4,10^-digits), size = 1) # Population mean
+  data3 <- sample(seq(1.8,3,10^-digits), size = 1) # Population SD
+  data4 <- sample(seq(2,4,10^-digits), size = 1) # Sample mean
+  corr.ans <- 1-round(pnorm(round((data4-data2)/(data3/sqrt(data1)), digits = digits)), digits = digits) # this is the correct answer to the question
   up.min <- round(corr.ans + .05, digits) # This is the minimum value for incorrect answers above the correct answer
   down.max <- round(corr.ans - .05, digits) # This is the maximum value for incorrect answers below the correct answer
   ans.txt <- sample(if(corr.ans <= .05){seq(up.min, 1 + 10^-digits, 10^-digits)} # These are randomly generated incorrect answers.

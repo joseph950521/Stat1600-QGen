@@ -11,7 +11,7 @@ MeanMC2= function(
   quest.txt2 = " race times than Ian. To test their hypothesis, they monitor 50 consecutive races and record the above means and standard deviations of their race times (in minutes). Do these summary statistics help affirm their hypothesis?", # The above 2 question texts are static text for the full question
   Names = c("Ian", "Neil"), #creating a vector of the characters in the question
   digits = 2, # This is the number of decimal places to round off the data
-  loc.path = "Images/", # This is the local path used to store any randomly generated image files
+  loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/MeanMC2 images/", # This is the local path used to store any randomly generated image files
   e.path ="Images/", # This is the path on e-learning used to store any above-implemented image files
   hint = "Remember that the mean and SD each measure something very different.", # This is a student hint, visible to them during the exam on e-learning
   feedback = "Means measure center, and SDs measure spread. So, a higher mean = longer race times, a higher SD = less consistent or more variable race times, and vice versa for both mean and SD." # This is student feedback, visible after the exam

@@ -11,7 +11,7 @@ quest.txt1 = "Researchers collect data on two variables, the country of origin a
 quest.txt2 = " countries and ",
 quest.txt3 = " religions in the study. The researchers run a chi square test of association between country and religion. Using the table above, determine the critical value for this test.", # The above 3 question texts are the static text for the full question
 digits = 2, # This is the number of decimal places to round off the data
-loc.path = "Images/", # This is the local path used to store any randomly generated image files
+loc.path = "/Users/josephyang/Desktop/School Stuff/STAT 1600/Course Development/Question Generators/Stat1600-QGen/ChisqMC3 images/", # This is the local path used to store any randomly generated image files
 e.path = "Images/", # This is the path on e-learning used to store any above-implemented image files
 hint = "You need the formula for degrees of freedom from your chapter on chi squares.", # This is a student hint, visible to them during the exam on e-learning
 feedback = "df = (#countries - 1)*(#religions - 1)" # This is student feedback, visible after the exam
